@@ -72,6 +72,7 @@ namespace JiraService
                 issue.URL = BROWSER_URL + issue.Key;
                 issue.Field.Severity = ParseSeverityFromTheme(issue.Field.Labels);
                 AppendCommentsForIssue(issue);
+                Attachment[] a = AppendAttachmentForIssue(issue);
             }
 
             return vers;
@@ -90,6 +91,20 @@ namespace JiraService
         }
 
         /// <summary>
+        /// Adds the jira attachments to the given issue
+        /// </summary>
+        /// <param name="issue">Issue to add attachments to </param>
+        /// <returns>Jira attachments for the given issue</returns>
+        public Attachment[] AppendAttachmentForIssue(Issue issue)
+        {
+            Issue i = GetIssue(issue.Key);
+
+            issue.Field.Attachment = i.Field.Attachment;
+
+            return issue.Field.Attachment;
+        }
+
+        /// <summary>
         /// Parse the Issue epic theme to Severity. Always return the 1st severity from Labels
         /// </summary>
         /// <param name="issueLabels">Issue labels</param>
@@ -98,13 +113,10 @@ namespace JiraService
         {
             foreach (string label in issueLabels)
             {
-                try
+                Severity s = Severity.None;
+                if (Enum.TryParse(label.Trim().ToUpper(), out s))
                 {
-                    return (Severity)Enum.Parse(typeof(Severity), label.Trim(), true);
-                }
-                catch
-                {
-                    continue;
+                    return s;
                 }
             }
             return Severity.None;

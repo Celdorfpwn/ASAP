@@ -67,6 +67,9 @@ namespace JiraService
         [DataMember(Name = "comment")]
         public Comment Comment { get; set; }
 
+        [DataMember(Name = "attachment")]
+        public Attachment[] Attachment { get; set; }
+
         [DataMember(Name = "created")]
         public string CreatedDate
         {
@@ -79,7 +82,6 @@ namespace JiraService
                 _createdDate = value;
             }
         }
-
 
         [DataMember(Name = "updated")]
         public string UpdatedDate
@@ -97,6 +99,46 @@ namespace JiraService
 
         private string _createdDate;
         private string _updatedDate;
+    }
+
+    [DataContract]
+    public class Attachment
+    {
+        [DataMember(Name = "id")]
+        public int Id { get; set; }
+
+        [DataMember(Name = "filename")]
+        public string Filename { get; set; }
+
+        [DataMember(Name = "author")]
+        public Person Author { get; set; }
+
+        [DataMember(Name = "mimeType")]
+        public string MimeType { get; set; }
+
+        [DataMember(Name = "content")]
+        public string Content { get; set; }
+
+        [DataMember(Name = "thumbnail")]
+        public string Thumbnail { get; set; }
+
+        [DataMember(Name = "size")]
+        public int Size { get; set; }
+
+        [DataMember(Name = "created")]
+        public string CreatedDate
+        {
+            get
+            {
+                return _createdDate.Substring(0, 10);
+            }
+            set
+            {
+                _createdDate = value;
+            }
+        }
+
+        private string _createdDate;
     }
 
     [DataContract]
