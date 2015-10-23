@@ -1,5 +1,4 @@
-﻿
-namespace JiraService
+﻿namespace JiraService
 {
     interface IJira
     {
@@ -35,5 +34,12 @@ namespace JiraService
         /// </summary>
         /// <param name="version">The version used to search for FixVersion</param>
         SearchResult SearchIssues(Version version);
+
+        /// <summary>
+        /// Adds the jira comments to the given issue
+        /// </summary>
+        /// <param name="issue">Issue to add comments to</param>
+        /// <returns>Comments for the given issue</returns>
+        Comment AppendCommentsForIssue(Issue issue);
     }
 }

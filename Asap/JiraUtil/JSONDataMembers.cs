@@ -104,6 +104,54 @@ namespace JiraService
     {
         [DataMember(Name = "total")]
         public int Total { get; set; }
+
+        [DataMember(Name = "comments")]
+        public Comments[] IssueComments { get; set; }
+    }
+
+    [DataContract]
+    public class Comments
+    {
+        [DataMember(Name = "id")]
+        public int Id { get; set; }
+
+        [DataMember(Name = "author")]
+        public Person Author { get; set; }
+
+        [DataMember(Name = "body")]
+        public string Body { get; set; }
+
+        [DataMember(Name = "updateAuthor")]
+        public Person UpdateAuthor { get; set; }
+
+        [DataMember(Name = "created")]
+        public string CreatedDate
+        {
+            get
+            {
+                return _createdDate.Substring(0, 10);
+            }
+            set
+            {
+                _createdDate = value;
+            }
+        }
+
+        [DataMember(Name = "updated")]
+        public string UpdatedDate
+        {
+            get
+            {
+                return _updatedDate.Substring(0, 10);
+            }
+            set
+            {
+                _updatedDate = value;
+            }
+        }
+
+        private string _createdDate;
+        private string _updatedDate;
     }
 
     [DataContract]
