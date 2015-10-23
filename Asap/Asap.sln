@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UI", "UI\UI.csproj", "{9F2C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JiraService", "JiraUtil\JiraService.csproj", "{4784B69E-CE08-4750-9B26-485345BC97E8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JenkinsUtil", "JenkinsUtil\JenkinsUtil.csproj", "{6EFBB774-B01B-49C3-B0BF-A3BEF6258F4A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JenkinsService", "JenkinsUtil\JenkinsService.csproj", "{6EFBB774-B01B-49C3-B0BF-A3BEF6258F4A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
