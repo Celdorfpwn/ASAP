@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Runtime.Serialization;
 
 namespace FishEyeService
@@ -31,9 +27,6 @@ namespace FishEyeService
         [DataMember(Name = "permaId")]
         public IdType PermaId { get; set; }
 
-        [DataMember(Name = "permaIdHistory")]
-        public string[] PermaIdHistory { get; set; }
-
         [DataMember(Name = "summary")]
         public string Summary { get; set; }
 
@@ -46,17 +39,18 @@ namespace FishEyeService
         [DataMember(Name = "allowReviewersToJoin")]
         public bool AllowReviewersToJoin { get; set; }
 
-        [DataMember(Name = "metricsVersion")]
-        public int MetricsVersion { get; set; }
-
         [DataMember(Name = "createDate")]
         public DateTime CreateDate { get; set; }
 
-        [DataMember(Name = "dueDate")]
-        public DateTime DueDate { get; set; }
-
         [DataMember(Name = "jiraIssueKey")]
         public string JiraIssueKey { get; set; }
+    }
+
+    [DataContract]
+    public class ReviewArray
+    {
+        [DataMember(Name = "reviewData")]
+        public ReviewData[] ReviewData { get; set; }
     }
 
     [DataContract]
@@ -98,30 +92,11 @@ namespace FishEyeService
         [DataMember(Name = "reviewData")]
         public ReviewData ReviewData { get; set; }
 
-        [DataMember(Name = "patch")]
-        public string Patch { get; set; }
-
-        [DataMember(Name = "anchor")]
-        public Anchor Anchor { get; set; }
-
         [DataMember(Name = "changesets")]
         public IdType[] ChangeSets { get; set; }
 
         [DataMember(Name = "repository")]
         public string Repository { get; set; }
-    }
-
-    [DataContract]
-    public class Anchor
-    {
-        [DataMember(Name = "anchorPath")]
-        public string AnchorPath { get; set; }
-
-        [DataMember(Name = "anchorRepository")]
-        public string AnchorRepository { get; set; }
-
-        [DataMember(Name = "stripCount")]
-        public int StripCount { get; set; }
     }
 
     [DataContract]
@@ -167,7 +142,7 @@ namespace FishEyeService
         public bool ShowAsDiff { get; set; }
 
         [DataMember(Name = "commitDate")]
-        public DateTime CommitDate { get; set; }
+        public string CommitDate { get; set; }
     }
 
     [DataContract]
@@ -202,7 +177,7 @@ namespace FishEyeService
         public UserData User { get; set; }
 
         [DataMember(Name = "createDate")]
-        public DateTime CreateDate { get; set; }
+        public string CreateDate { get; set; }
 
         [DataMember(Name = "messageAsHtml")]
         public string MessageAsHtml { get; set; }
@@ -273,5 +248,28 @@ namespace FishEyeService
 
         [DataMember(Name = "value")]
         public int Value { get; set; }
+    }
+
+    [DataContract]
+    public class Reviewer
+    {
+        [DataMember(Name = "userName")]
+        public string UserName { get; set; }
+
+        [DataMember(Name = "displayName")]
+        public string DisplayName { get; set; }
+
+        [DataMember(Name = "avatarUrl")]
+        public string AvatarUrl { get; set; }
+
+        [DataMember(Name = "completed")]
+        public bool Completed { get; set; }
+    }
+
+    [DataContract]
+    public class ReviewerArray
+    {
+        [DataMember(Name = "reviewer")]
+        public Reviewer[] Reviewer { get; set; }
     }
 }
