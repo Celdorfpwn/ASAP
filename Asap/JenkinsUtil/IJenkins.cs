@@ -30,6 +30,12 @@ namespace JenkinsService
         Build GetCurrentBuild();
 
         /// <summary>
+        /// Swith the current Jenkins build branch
+        /// </summary>
+        /// <param name="newBranch">The new branch to build</param>
+        void SwitchBranch(string newBranch);
+
+        /// <summary>
         /// Build state change event
         /// </summary>
         event Action<Build> BuildStateChange;

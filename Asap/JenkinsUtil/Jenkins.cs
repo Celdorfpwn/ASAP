@@ -7,6 +7,7 @@ using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace JenkinsService
 {
@@ -28,13 +29,26 @@ namespace JenkinsService
         /// /api/json
         /// </summary>
         private const String JENKINS_URL_SUFFIX = "/api/json";
-        
+
+        /// <summary>
+        /// Job config file
+        /// </summary>
+        private const String JENKINS_CONFIG_FILE = "config.xml";
+
         /// <summary>
         /// http://192.168.9.206:8080/job/TheChromeEurope
         /// </summary>
         private readonly String JENKINS_PREFIX = String.Format("{0}/job/{1}/", JENKINS_SERVER, JENKINS_JOB);
 
+        /// <summary>
+        /// Jenkins URL to the last build
+        /// </summary>
         private readonly String LAST_BUILD_URL = String.Format("{0}/job/{1}/lastBuild/api/json", JENKINS_SERVER, JENKINS_JOB); //"http://192.168.9.206:8080/job/TheChromeEurope/lastBuild/api/json";
+
+        /// <summary>
+        /// Jenkins job config file URL
+        /// </summary>
+        private readonly String JENKINS_CONFIG_URL = String.Format("{0}/job/{1}/{2}", JENKINS_SERVER, JENKINS_JOB, JENKINS_CONFIG_FILE);
         #endregion
 
         #region Fields
@@ -98,6 +112,10 @@ namespace JenkinsService
         /// <returns>Build object with the return</returns>
         public Build NewBuild(string branch)
         {
+            if (!String.IsNullOrWhiteSpace(branch))
+            {
+                SwitchBranch(branch);
+            }
             Build previous = GetLatest();
 
             Build current = new Build();
@@ -124,6 +142,22 @@ namespace JenkinsService
             return new Build(retData);
         }
 
+        /// <summary>
+        /// Swith the current Jenkins build branch
+        /// </summary>
+        /// <param name="newBranch">The new branch to build</param>
+        public void SwitchBranch(string newBranch)
+        {
+            string configXML = RunQuery(JENKINS_CONFIG_URL);
+
+            XmlDocument conf = new XmlDocument();
+            conf.LoadXml(configXML);
+
+            XmlNode branchName = conf.DocumentElement.SelectSingleNode("/project/scm/branches/hudson.plugins.git.BranchSpec/name");
+            branchName.InnerText = "*/" + newBranch;
+
+            RunQuery(JENKINS_CONFIG_URL, conf.InnerXml, "POST");
+        }
         #endregion
 
         #region Private methods
@@ -155,6 +189,11 @@ namespace JenkinsService
 
             url = String.Format("{0}{1}{2}", JENKINS_PREFIX, argument, JENKINS_URL_SUFFIX);
 
+            if (argument.EndsWith(JENKINS_CONFIG_URL))
+            {
+                url = argument;
+            }
+
             //System.Net.ServicePointManager.Expect100Continue = false;
             HttpWebRequest request = WebRequest.Create(url) as HttpWebRequest;
             request.ContentType = "application/json";
@@ -162,7 +201,14 @@ namespace JenkinsService
 
             if (data != null)
             {
-                request.Method = "PUT";
+                if (String.IsNullOrWhiteSpace(method))
+                {
+                    request.Method = "PUT";
+                }
+                else
+                {
+                    request.Method = method;
+                }
                 using (StreamWriter writer = new StreamWriter(request.GetRequestStream()))
                 {
                     writer.Write(data);
