@@ -64,5 +64,11 @@ namespace SushiPikant.UI.TaskViews
         {
             Popup.IsOpen = false;
         }
+
+
+        public void PopUpLastComment()
+        {
+
+        }
     }
 }

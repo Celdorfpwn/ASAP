@@ -80,6 +80,17 @@ namespace SushiPikant.UI.ViewModels
             var source = (itemsSource as ObservableCollection<TaskView>);
 
             source.AddInOrder(item);
+
+            AfterDrop(item, itemsSource);
+
+        }
+
+        private void AfterDrop(TaskView item, IEnumerable itemsSource)
+        {
+            if (itemsSource.Equals(_done))
+            {
+
+            }
         }
 
         private void RemoveItemFromCollections(TaskView item)

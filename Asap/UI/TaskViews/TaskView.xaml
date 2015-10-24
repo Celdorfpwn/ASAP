@@ -123,6 +123,49 @@
                         </Border>
                     </Popup>
 
+
+                    <Popup x:Name="Popup"  PlacementTarget="{Binding ElementName=CommentButton}" Placement="Bottom" MaxHeight="400"  Width="300" MinHeight="30" Margin="0,20,0,0">
+                        <Border BorderBrush="White" BorderThickness="2">
+                            <Border.Background>
+                                <SolidColorBrush Color="#DEDEDE"></SolidColorBrush>
+                            </Border.Background>
+                            <Border.Effect>
+                                <DropShadowEffect BlurRadius="10" Color="Black" Direction="235" Opacity=".5" RenderingBias="Quality" ShadowDepth="5" />
+                            </Border.Effect>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"></RowDefinition>
+                                    <RowDefinition Height="35"></RowDefinition>
+                                </Grid.RowDefinitions>
+                                <ListView Grid.Row="0" Name="Comments" ItemsSource="{Binding Comments,UpdateSourceTrigger=PropertyChanged}">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border BorderBrush="Transparent" BorderThickness="2">
+                                                <Border.Background>
+                                                    <SolidColorBrush Color="White"></SolidColorBrush>
+                                                </Border.Background>
+                                                <Border.Effect>
+                                                    <DropShadowEffect BlurRadius="10" Color="Black" Direction="235" Opacity=".2" RenderingBias="Quality" ShadowDepth="5" />
+                                                </Border.Effect>
+                                                <Grid Margin="2">
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="25"></RowDefinition>
+                                                        <RowDefinition Height="*"></RowDefinition>
+                                                    </Grid.RowDefinitions>
+                                                    <Label Grid.Row="0" Content="{Binding Author.DisplayName}"></Label>
+                                                    <TextBlock Grid.Row="1" Margin="5,0,0,0" Text="{Binding Body}" TextWrapping="Wrap"  />
+                                                </Grid>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListView>
+                                <Border Grid.Row="1" BorderBrush="Green" BorderThickness="0,0,0,0">
+                                    <TextBox x:Name="LastCommetTextBox" Height="25" VerticalAlignment="Center" Margin="5,5,5,5" KeyDown="PopupKeyDown"/>
+                                </Border>
+                            </Grid>
+                        </Border>
+                    </Popup>
+
                 </Grid>
             </Border>
         </Grid>
