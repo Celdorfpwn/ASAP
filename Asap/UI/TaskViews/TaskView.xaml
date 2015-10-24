@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SushiPikant.UI.Security"
              mc:Ignorable="d" 
              d:DesignHeight="100" d:DesignWidth="300" Height="120" MinWidth="200">
     <Border BorderBrush="Transparent" BorderThickness="1" CornerRadius="5">
@@ -17,7 +18,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="30"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="30"></RowDefinition>
+                <RowDefinition Height="25"></RowDefinition>
             </Grid.RowDefinitions>
             <Border Grid.Row="0" BorderThickness="0,0,0,2" BorderBrush="Green">
                 <Grid >
@@ -26,14 +27,192 @@
 
                 </Grid>
             </Border>
+
             <Grid Grid.Row="1">
-                <Label VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Content="{Binding Description}"></Label>
+                <TextBlock Margin="5" Foreground="Black" TextAlignment="Left" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" TextWrapping="Wrap"   Text="{Binding Description}">
+
+                </TextBlock>
             </Grid>
             <Border Grid.Row="2" BorderThickness="0,2,0,0" BorderBrush="Purple">
 
-                <Grid >
+                <Grid>
+                    <Grid.Resources>
+                        <Style TargetType="{x:Type TextBox}">
+                            <Setter Property="local:WaterMarkTextHelper.IsMonitoring" Value="True"/>
+                            <Setter Property="local:WaterMarkTextHelper.WatermarkText" Value="Leave a comment..." />
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type TextBox}">
+                                        <ControlTemplate.Resources>
+                                            <Storyboard x:Key="enterGotFocus" >
+                                                <DoubleAnimation Duration="0:0:0.4" To=".2" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="Message"/>
+                                            </Storyboard>
+                                            <Storyboard x:Key="exitGotFocus" >
+                                                <DoubleAnimation Duration="0:0:0.4" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="Message"/>
+                                            </Storyboard>
+
+                                            <Storyboard x:Key="enterHasText" >
+                                                <DoubleAnimation Duration="0:0:0.4" From=".2" To="0" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="Message"/>
+                                            </Storyboard>
+                                            <Storyboard x:Key="exitHasText" >
+                                                <DoubleAnimation Duration="0:0:0.4" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="Message"/>
+                                            </Storyboard>
+                                        </ControlTemplate.Resources>
+                                        <Border Name="Bd" 
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                                            <Grid>
+                                                <ScrollViewer x:Name="PART_ContentHost" VerticalAlignment="Center" Margin="1" />
+                                                <TextBlock x:Name="Message" Text="{TemplateBinding local:WaterMarkTextHelper.WatermarkText}"
+                                       Foreground="Black" IsHitTestVisible="False" FontFamily="Calibri" Opacity="0.5" HorizontalAlignment="Left" VerticalAlignment="Center"
+                                       Margin="6,0,0,0"/>
+                                            </Grid>
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsEnabled" Value="false">
+                                                <Setter TargetName="Bd" Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
+                                                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                                            </Trigger>
+
+                                            <MultiTrigger>
+                                                <MultiTrigger.Conditions>
+                                                    <Condition Property="local:WaterMarkTextHelper.HasText" Value="False"/>
+                                                    <Condition Property="IsFocused" Value="True"/>
+                                                </MultiTrigger.Conditions>
+                                                <MultiTrigger.EnterActions>
+                                                    <BeginStoryboard Storyboard="{StaticResource enterGotFocus}"/>
+                                                </MultiTrigger.EnterActions>
+                                                <MultiTrigger.ExitActions>
+                                                    <BeginStoryboard Storyboard="{StaticResource exitGotFocus}"/>
+                                                </MultiTrigger.ExitActions>
+                                            </MultiTrigger>
+
+                                            <Trigger Property="local:WaterMarkTextHelper.HasText" Value="True">
+                                                <Trigger.EnterActions>
+                                                    <BeginStoryboard Storyboard="{StaticResource enterHasText}"/>
+                                                </Trigger.EnterActions>
+                                                <Trigger.ExitActions>
+                                                    <BeginStoryboard Storyboard="{StaticResource exitHasText}"/>
+                                                </Trigger.ExitActions>
+                                            </Trigger>
+
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                        <Style TargetType="{x:Type Button}">
+                            <Setter Property="Background" Value="Transparent"></Setter>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type Button}">
+                                        <Border Background="{TemplateBinding Background}">
+                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Background" Value="#3366FF"></Setter>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </Grid.Resources>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="25"></ColumnDefinition>
+                        <ColumnDefinition Width="5*"></ColumnDefinition>
+                        <ColumnDefinition Width="25"></ColumnDefinition>
+                        <ColumnDefinition Width="5"></ColumnDefinition>
+                        <ColumnDefinition Width="25"></ColumnDefinition>
+                        <ColumnDefinition Width="5"></ColumnDefinition>
+                        <ColumnDefinition Width="25"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+
+
+                    <Image Margin="3" Name="SeverityIcon" Grid.Column="0"></Image>
+                    <Label Grid.Column="1" Content="{Binding Severity}" VerticalContentAlignment="Center"></Label>
+
+                    <Button Grid.Column="2" Name="CommentButton" Click="MessageClick" >
+                        <Button.Content>
+                            <Image Margin="4,3,4,3" Source="../Icons/comments.png" Stretch="Fill" />
+                        </Button.Content>
+                    </Button>
+
+                    <Button Grid.Column="6" >
+                        <Button.Content>
+                            <Image Margin="4,3,4,3" Source="../Icons/expand.png" Stretch="Fill" />
+                        </Button.Content>
+                    </Button>
+
+
+                    <Popup x:Name="Popup"  PlacementTarget="{Binding ElementName=CommentButton}" Placement="Bottom" MaxHeight="400"  Width="300" MinHeight="30" Margin="0,20,0,0">
+                        <Border BorderBrush="White" BorderThickness="2">
+                            <Border.Background>
+                                <SolidColorBrush Color="#DEDEDE"></SolidColorBrush>
+                            </Border.Background>
+                            <Border.Effect>
+                                <DropShadowEffect BlurRadius="10" Color="Black" Direction="235" Opacity=".5" RenderingBias="Quality" ShadowDepth="5" />
+                            </Border.Effect>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"></RowDefinition>
+                                    <RowDefinition Height="35"></RowDefinition>
+                                </Grid.RowDefinitions>
+                                <ListView Grid.Row="0" Name="Comments" ItemsSource="{Binding Comments,UpdateSourceTrigger=PropertyChanged}">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border BorderBrush="Transparent" BorderThickness="2">
+                                                <Border.Background>
+                                                    <SolidColorBrush Color="White"></SolidColorBrush>
+                                                </Border.Background>
+                                                <Border.Effect>
+                                                    <DropShadowEffect BlurRadius="10" Color="Black" Direction="235" Opacity=".2" RenderingBias="Quality" ShadowDepth="5" />
+                                                </Border.Effect>
+                                                <Grid Margin="2">
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="25"></RowDefinition>
+                                                        <RowDefinition Height="*"></RowDefinition>
+                                                    </Grid.RowDefinitions>
+                                                    <Label Grid.Row="0" Content="{Binding Author.DisplayName}"></Label>
+                                                    <TextBlock Grid.Row="1" Margin="5,0,0,0" Text="{Binding Body}" TextWrapping="Wrap"  />
+                                                </Grid>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListView>
+                                <Border Grid.Row="1" BorderBrush="Green" BorderThickness="0,0,0,0">
+                                    <TextBox x:Name="PopupTextBox" Height="25" VerticalAlignment="Center" Margin="5,5,5,5" KeyDown="PopupKeyDown"/>
+                                </Border>
+                            </Grid>
+                        </Border>
+                    </Popup>
+
+
+                    <Popup x:Name="LastPopup"  PlacementTarget="{Binding ElementName=CommentButton}" Placement="Bottom" MaxHeight="400"  Width="300" MinHeight="30" Margin="0,20,0,0">
+                        <Border BorderBrush="White" BorderThickness="2">
+                            <Border.Background>
+                                <SolidColorBrush Color="#DEDEDE"></SolidColorBrush>
+                            </Border.Background>
+                            <Border.Effect>
+                                <DropShadowEffect BlurRadius="10" Color="Black" Direction="235" Opacity=".5" RenderingBias="Quality" ShadowDepth="5" />
+                            </Border.Effect>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"></RowDefinition>
+                                    <RowDefinition Height="35"></RowDefinition>
+                                </Grid.RowDefinitions>
+                                <Border Grid.Row="1" BorderBrush="Green" BorderThickness="0,0,0,0">
+                                    <TextBox x:Name="LastCommentTextBox" Height="25" VerticalAlignment="Center" Margin="5,5,5,5" KeyDown="LastCommentKeyDown"/>
+                                </Border>
+                            </Grid>
+                        </Border>
+                    </Popup>
+
                 </Grid>
             </Border>
         </Grid>
+
     </Border>
 </UserControl>
