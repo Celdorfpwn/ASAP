@@ -1,4 +1,5 @@
-﻿namespace JenkinsService
+﻿using System;
+namespace JenkinsService
 {
     public interface IJenkins
     {
@@ -21,5 +22,16 @@
         /// </summary>
         /// <returns></returns>
         Build GetLatest();
+
+        /// <summary>
+        /// Gets the current build associated with this instance
+        /// </summary>
+        /// <returns>Current Build object</returns>
+        Build GetCurrentBuild();
+
+        /// <summary>
+        /// Build state change event
+        /// </summary>
+        event Action<Build> BuildStateChange;
     }
 }
