@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BL.Models;
+using GitService;
 using JiraService;
 
 namespace BL.ModelFactories
@@ -45,6 +46,15 @@ namespace BL.ModelFactories
             }
         }
 
+        public TaskModel Current
+        {
+            get
+            {
+                var branchName = Git.GetCurrentBranch();
+                return Models.FirstOrDefault(model => model.Issue.Key == branchName);
+            }            
+        }
+
         private static TasksFactory Singleton { get;set; }
 
         public static TasksFactory Instance
@@ -60,6 +70,6 @@ namespace BL.ModelFactories
             }
         }
 
-        
+
     }
 }

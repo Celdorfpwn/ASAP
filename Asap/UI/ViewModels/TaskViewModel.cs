@@ -74,9 +74,37 @@ namespace SushiPikant.UI.ViewModels
             Comments.Add(model);
         }
 
+        /// <summary>
+        /// Populates the issue comments
+        /// </summary>
         public void PopulateComments()
         {
             Comments = new ObservableCollection<Comments>(Model.Comments);
         }
+
+        /// <summary>
+        /// Switch or creates to the issue branch
+        /// </summary>
+        public void SwitchToBranch()
+        {
+            Model.CheckoutBranch();
+        }
+
+        /// <summary>
+        /// Saves a branch
+        /// </summary>
+        public void SaveBranch()
+        {
+            Model.CommitBranchInProgress();
+        }
+
+        /// <summary>
+        /// Commits a branch for code review
+        /// </summary>
+        public void CommitBranch()
+        {
+            Model.CommitBranchDone();
+        }
+
     }
 }

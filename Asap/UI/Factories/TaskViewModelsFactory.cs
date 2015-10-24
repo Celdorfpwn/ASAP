@@ -37,6 +37,24 @@ namespace SushiPikant.UI.Factories
             }
         }
 
+        public TaskView CurrentTask
+        {
+            get
+            {
+                var current = TasksFactory.Instance.Current;
+
+                if (current != null)
+                {
+                    return new TaskView(new TaskViewModel(current));
+                }
+                else
+                {
+                    return null;
+                }
+                
+            }
+        }
+
 
 
 

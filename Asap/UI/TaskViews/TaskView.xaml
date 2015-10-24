@@ -140,6 +140,13 @@
                         </Button.Content>
                     </Button>
 
+                    <Button Grid.Column="4" Name="PictureButton" Click="MessageClick" >
+                        <Button.Content>
+                            <Image Margin="4,3,4,3" Source="../Icons/picture.png" Stretch="Fill" />
+                        </Button.Content>
+                    </Button>
+
+
                     <Button Grid.Column="6" >
                         <Button.Content>
                             <Image Margin="4,3,4,3" Source="../Icons/expand.png" Stretch="Fill" />
