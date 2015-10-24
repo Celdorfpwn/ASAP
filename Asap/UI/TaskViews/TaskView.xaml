@@ -18,7 +18,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="30"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="25"></RowDefinition>
+                <RowDefinition Height="30"></RowDefinition>
             </Grid.RowDefinitions>
             <Border Grid.Row="0" BorderThickness="0,0,0,2" BorderBrush="Green">
                 <Grid >
@@ -113,6 +113,7 @@
                                         <ControlTemplate.Triggers>
                                             <Trigger Property="IsMouseOver" Value="True">
                                                 <Setter Property="Background" Value="#3366FF"></Setter>
+                                                <Setter Property="Foreground" Value="White"></Setter>
                                             </Trigger>
                                         </ControlTemplate.Triggers>
                                     </ControlTemplate>
@@ -122,6 +123,7 @@
                     </Grid.Resources>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="25"></ColumnDefinition>
+                        <ColumnDefinition Width="1*"></ColumnDefinition>
                         <ColumnDefinition Width="5*"></ColumnDefinition>
                         <ColumnDefinition Width="25"></ColumnDefinition>
                         <ColumnDefinition Width="5"></ColumnDefinition>
@@ -133,23 +135,26 @@
 
                     <Image Margin="3" Name="SeverityIcon" Grid.Column="0"></Image>
                     <Label Grid.Column="1" Content="{Binding Severity}" VerticalContentAlignment="Center"></Label>
+                  
+  
+                    <Label Name="MessageLabel" Grid.Column="2" Content="{Binding StatusMessage,UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" Foreground="Orange"></Label>
 
-                    <Button Grid.Column="2" Name="CommentButton" Click="MessageClick" >
+                    <Button Grid.Column="3" Name="CommentButton" Click="MessageClick" >
                         <Button.Content>
-                            <Image Margin="4,3,4,3" Source="../Icons/comments.png" Stretch="Fill" />
+                            <Image Margin="4,5,4,5" Source="../Icons/comments.png" Stretch="Fill" />
                         </Button.Content>
                     </Button>
 
-                    <Button Grid.Column="4" Name="PictureButton" Click="MessageClick" >
+                    <Button Grid.Column="5" Name="PictureButton" Click="MessageClick" >
                         <Button.Content>
-                            <Image Margin="4,3,4,3" Source="../Icons/picture.png" Stretch="Fill" />
+                            <Image Margin="4,5,4,5" Source="../Icons/picture.png" Stretch="Fill" />
                         </Button.Content>
                     </Button>
 
 
-                    <Button Grid.Column="6" >
+                    <Button Grid.Column="7" >
                         <Button.Content>
-                            <Image Margin="4,3,4,3" Source="../Icons/expand.png" Stretch="Fill" />
+                            <Image Margin="4,5,4,5" Source="../Icons/expand.png" Stretch="Fill" />
                         </Button.Content>
                     </Button>
 

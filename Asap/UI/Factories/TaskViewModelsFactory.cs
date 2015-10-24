@@ -37,6 +37,18 @@ namespace SushiPikant.UI.Factories
             }
         }
 
+        public IEnumerable<TaskView> Done
+        {
+            get
+            {
+                foreach (var issue in TasksFactory.Instance.TaskModels.Where(model => model.IsDone))
+                {
+                    yield return new TaskView(new TaskViewModel(issue));
+                }
+            }
+
+        }
+
         public TaskView CurrentTask
         {
             get

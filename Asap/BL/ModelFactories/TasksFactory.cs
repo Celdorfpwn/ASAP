@@ -37,6 +37,7 @@ namespace BL.ModelFactories
 
         private void LoadModels()
         {
+            var currentBranch = Git.GetCurrentBranch();
             Models = new List<TaskModel>();
             Issues = Jira.GetIssuesForPerson("ionut.apostol").Issues;
 
@@ -44,6 +45,7 @@ namespace BL.ModelFactories
             {
                 Models.Add(new TaskModel(issue));
             }
+            Git.Checkout(currentBranch);
         }
 
         public TaskModel Current
@@ -51,7 +53,16 @@ namespace BL.ModelFactories
             get
             {
                 var branchName = Git.GetCurrentBranch();
-                return Models.FirstOrDefault(model => model.Issue.Key == branchName);
+                var result = Models.FirstOrDefault(model => model.Issue.Key == branchName);
+                if (result == null)
+                {
+                    Git.Checkout("master");
+                    return null;
+                }
+                else
+                {
+                    return result;
+                }
             }            
         }
 
@@ -70,6 +81,9 @@ namespace BL.ModelFactories
             }
         }
 
-
+        public void SwitchToMaster()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

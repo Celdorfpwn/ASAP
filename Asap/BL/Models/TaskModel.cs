@@ -14,6 +14,8 @@ namespace BL.Models
     /// </summary>
     public class TaskModel
     {
+        private bool _isDone;
+
 
         /// <summary>
         /// Represents the Jira issue informations
@@ -29,6 +31,16 @@ namespace BL.Models
         public TaskModel(Issue issue)
         {
             Issue = issue;
+
+            if (Git.Checkout(Issue.Key) == CommandStatus.OK)
+            {
+                var last = Git.GetLastCommit();
+                _isDone = last.Contains(DoneCommitMessage);
+            }
+            else
+            {
+                _isDone = false;
+            }
         }
 
         /// <summary>
@@ -51,15 +63,61 @@ namespace BL.Models
         {
             get
             {
-
-
+                if (IsDone)
+                {
+                    return false;
+                }
                 var status = Issue.Field.Status.Name;
 
                 return status == "Open" || status == "Reopened";
-
-
             }
         }
+
+        /// <summary>
+        /// Checks if a task is done
+        /// </summary>
+        /// <returns>True or false</returns>
+        public bool IsDone
+        {
+            get
+            {
+                return _isDone;
+            }
+            set
+            {
+                _isDone = value;
+            }
+        }
+
+        /// <summary>
+        /// Updates the jira status
+        /// </summary>
+        public void UpdateJiraStatusInProgress()
+        {
+            if (Issue.Field.Status.Id == (int)JiraItemStatus.Opened || Issue.Field.Status.Id == (int)JiraItemStatus.Reopened)
+            {
+                TasksFactory.Instance.Jira.SetStatus(Issue, JiraTransition.StartProgress);
+            }
+        }
+
+        public void UpdateJiraStatusOpen()
+        {
+            if (Issue.Field.Status.Id == (int)JiraItemStatus.InProgress)
+            {
+                TasksFactory.Instance.Jira.SetStatus(Issue, JiraTransition.StopProgress);
+            }
+        }
+
+        public void UpdateJiraStatusResolved()
+        {
+            if (Issue.Field.Status.Id == (int)JiraItemStatus.InProgress)
+            {
+                TasksFactory.Instance.Jira.SetStatus(Issue, JiraTransition.Resolve);
+            }
+        }
+
+
+
 
         /// <summary>
         /// Checks if the Issue is in progress
@@ -69,6 +127,10 @@ namespace BL.Models
         {
             get
             {
+                if (IsDone)
+                {
+                    return false;
+                }
                 var status = Issue.Field.Status.Name;
 
                 return status == "In Progress";
@@ -79,9 +141,8 @@ namespace BL.Models
         {
             get
             {
-                return Issue.Key + " " + Issue.Field.Description;
+                return Issue.Key + " " + Issue.Field.Summary;
             }
-
         }
 
 
@@ -90,33 +151,51 @@ namespace BL.Models
         /// </summary>
         public void CheckoutBranch()
         {
+            CreateBranchIfDoesntExists();
+            Git.Checkout(Issue.Key);
+        }
+
+
+        private void CreateBranchIfDoesntExists()
+        {
             var checkoutResult = Git.Checkout(Issue.Key);
             if (checkoutResult == CommandStatus.BranchNotFound)
             {
                 Git.Branch(Issue.Key);
-                Git.Checkout(Issue.Key);
             }
         }
-
 
         /// <summary>
         /// Commits and push a branch in order to save the progress 
         /// </summary>
         public void CommitBranchInProgress()
         {
+            CreateBranchIfDoesntExists();
+            Git.AddAll();
             Git.Commit(Issue.Key + "  work in progress " +DateTime.Today.ToShortDateString());
             Git.Push(Issue.Key);
             Git.Checkout("master");
         }
 
+
         /// <summary>
         /// Commits a branch done
         /// </summary>
-        public void CommitBranchDone()
+        public bool CommitBranchDone()
         {
-            Git.Commit(DoneCommitMessage);
+            CreateBranchIfDoesntExists();
+            Git.AddAll();
+            var result = Git.Commit(DoneCommitMessage);
+
+            if (result != CommandStatus.OK)
+            {
+                return false;
+            }
+
+
             Git.Push(Issue.Key);
             Git.Checkout("master");
+            return true;
         }
     }
 }
