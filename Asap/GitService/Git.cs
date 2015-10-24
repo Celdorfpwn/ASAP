@@ -12,7 +12,7 @@ namespace GitService
         static string _userName = "ahito";
         static string _password = "testAsap1";
         static string _email = "test@test.com";
-        static string _repositoryPath = "";
+        static string _repositoryPath = "E:/TestGit/TestRepo/TestRepo";
 
         /// <summary>
         /// Represents the git UserName.

@@ -56,31 +56,47 @@ namespace SushiPikant.UI.ViewModels
 
         private void Initialize()
         {
+            Current = TaskViewModelsFactory.Instance.CurrentTask;
             _inProgress = new ObservableCollection<TaskView>(TaskViewModelsFactory.Instance.InProgress);
             _toDo = new ObservableCollection<TaskView>(TaskViewModelsFactory.Instance.ToDoTaskViews);
-            _done = new ObservableCollection<TaskView>();
+            _done = new ObservableCollection<TaskView>(TaskViewModelsFactory.Instance.Done);
 
-            Collections = new List<ObservableCollection<TaskView>>() { _inProgress, _toDo,_done };
-
-            Current = TaskViewModelsFactory.Instance.CurrentTask;
+            Collections = new List<ObservableCollection<TaskView>>() { _inProgress, _toDo, _done };
+            if (Current != null)
+            {
+                RemoveItemFromCollections(Current);
+                Current.ViewModel.SwitchToBranch();
+            }
         }
 
         public void Update(TaskView item, IEnumerable itemsSource)
         {
-
             if (Done.Contains(item))
             {
                 return;
+            }
+
+
+            if (itemsSource.Equals(_inProgress))
+            {
+                item.ViewModel.InProgress();
+            }
+            else if (itemsSource.Equals(_toDo))
+            {
+                item.ViewModel.ToDo();
             }
 
             if (itemsSource.Equals(Done))
             {
                 if (item.Equals(Current))
                 {
-                    Current = null;
-                    Done.AddInOrder(item);
-                    item.PopUpLastComment();
-                    item.ViewModel.CommitBranch();
+                    if (item.ViewModel.CommitBranch())
+                    {
+                        Current = null;
+                        Done.AddInOrder(item);
+                        item.PopUpLastComment();
+                        item.ViewModel.Resolve();
+                    }
                 }
                 else
                 {
@@ -104,9 +120,6 @@ namespace SushiPikant.UI.ViewModels
 
                 source.AddInOrder(item);
             }
-
-
-
         }
 
 
@@ -138,6 +151,7 @@ namespace SushiPikant.UI.ViewModels
                 _inProgress.Add(Current);
             }
             Current = item;
+            item.ViewModel.InProgress();
             item.ViewModel.SwitchToBranch();
             RaisePropertyChanged("Current");
         }

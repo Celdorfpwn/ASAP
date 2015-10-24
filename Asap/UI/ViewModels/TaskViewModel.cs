@@ -9,8 +9,9 @@ using JiraService;
 
 namespace SushiPikant.UI.ViewModels
 {
-    public class TaskViewModel
+    public class TaskViewModel : ViewModel
     {
+ 
         public string Title
         {
             get
@@ -51,6 +52,21 @@ namespace SushiPikant.UI.ViewModels
             }
         }
 
+        public string StatusMessage
+        {
+            get
+            {
+                if (Model.IsDone)
+                {
+                    return "Code Review";
+                }
+                else
+                {
+                    return string.Empty;
+                }
+            }
+        }
+
         public ObservableCollection<Comments> Comments { get;private set; }
 
         private SeverityEnum SeverityEnum { get; set; }
@@ -82,6 +98,18 @@ namespace SushiPikant.UI.ViewModels
             Comments = new ObservableCollection<Comments>(Model.Comments);
         }
 
+        public void InProgress()
+        {
+            Model.UpdateJiraStatusInProgress();
+        }
+
+        internal void ToDo()
+        {
+            Model.UpdateJiraStatusOpen();
+        }
+
+
+
         /// <summary>
         /// Switch or creates to the issue branch
         /// </summary>
@@ -98,12 +126,28 @@ namespace SushiPikant.UI.ViewModels
             Model.CommitBranchInProgress();
         }
 
+        internal void Resolve()
+        {
+            Model.UpdateJiraStatusResolved();
+        }
+
+
         /// <summary>
         /// Commits a branch for code review
         /// </summary>
-        public void CommitBranch()
+        public bool CommitBranch()
         {
-            Model.CommitBranchDone();
+            if (Model.CommitBranchDone())
+            {
+                Model.IsDone = true;
+                RaisePropertyChanged("StatusMessage");
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
         }
 
     }

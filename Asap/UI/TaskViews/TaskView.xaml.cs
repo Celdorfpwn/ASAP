@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -61,7 +63,7 @@ namespace SushiPikant.UI.TaskViews
 
                 PopupTextBox.Text = String.Empty;
             }
-            else if(e.Key == Key.Escape)
+            else if (e.Key == Key.Escape)
             {
                 Popup.IsOpen = false;
             }
@@ -88,8 +90,8 @@ namespace SushiPikant.UI.TaskViews
             Dispatcher.BeginInvoke(DispatcherPriority.Input,
              new Action(delegate ()
             {
-                LastCommentTextBox.Focus();        // Set Logical Focus
-                Keyboard.Focus(LastCommentTextBox); // Set Keyboard Focus
+                LastCommentTextBox.Focus();
+                Keyboard.Focus(LastCommentTextBox);
             }));
         }
     }
