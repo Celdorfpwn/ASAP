@@ -21,10 +21,20 @@ namespace SushiPikant.UI.TaskViews
     /// </summary>
     public partial class TaskView : UserControl
     {
+
+        public TaskViewModel ViewModel { get; private set; }
+
         public TaskView(TaskViewModel viewModel)
         {
             InitializeComponent();
             MainGrid.DataContext = viewModel;
+            ViewModel = viewModel;
+            BitmapImage logo = new BitmapImage();
+            logo.BeginInit();
+            var path = "pack://application:,,,/UI;component/Icons/" + viewModel.Severity.ToLower() + ".png";
+            logo.UriSource = new Uri(path);
+            logo.EndInit();
+            SeverityIcon.Source = logo;
         }
     }
 }

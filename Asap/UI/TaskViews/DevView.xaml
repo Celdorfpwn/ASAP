@@ -7,7 +7,8 @@
              d:DesignHeight="500" d:DesignWidth="800" MinHeight="500" MinWidth="900">
     <UserControl.Resources>
         <Style TargetType="Border">
-            <Setter Property="BorderBrush" Value="CadetBlue"></Setter>
+            <Setter Property="BorderBrush" Value="#3366FF"></Setter>
+            <Setter Property="HorizontalAlignment" Value="Stretch"></Setter>
         </Style>
     </UserControl.Resources>
     <Grid Name="MainGrid">
@@ -25,8 +26,11 @@
             <Style TargetType="ListView">
                 <Setter Property="FocusVisualStyle" Value="{x:Null}" />
                 <Setter Property="AllowDrop" Value="True"></Setter>
+                <Setter Property="HorizontalAlignment" Value="Stretch"></Setter>
+                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                 <Setter Property="Background" Value="Transparent"></Setter>
                 <Setter Property="BorderThickness" Value="0"></Setter>
+                <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"></Setter>
                 <EventSetter Event="Drop" Handler="ListViewDrop"></EventSetter>
                 <EventSetter Event="PreviewDragOver" Handler="ListViewPreviewDragOver"></EventSetter>
                 <EventSetter Event="RequestBringIntoView" Handler="ListViewRequestBringIntoView"></EventSetter>

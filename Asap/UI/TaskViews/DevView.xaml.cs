@@ -38,12 +38,13 @@ namespace SushiPikant.UI.TaskViews
         private void ListViewItemDrag(object sender, MouseEventArgs e)
         {
             ListViewItem view = sender as ListViewItem;
-            if (e.LeftButton == MouseButtonState.Pressed && IsMouseMoving(e) && view.Content != null)
+            if (e.LeftButton == MouseButtonState.Pressed && IsMouseMoving(e) && view.Content != null && view.Content is TaskView)
             {
                 DataObject dragData = new DataObject(DragDataFormat, view.Content);
 
                 DragDrop.DoDragDrop(view, dragData, DragDropEffects.Move);
             }
+
             e.Handled = true;
         }
 

@@ -6,17 +6,44 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SushiPikant.UI.Factories;
 using SushiPikant.UI.TaskViews;
 
 namespace SushiPikant.UI.ViewModels
 {
     public class DevViewModel : ViewModel
     {
-        public ObservableCollection<TaskView> ToDo { get; private set; }
 
-        public ObservableCollection<TaskView> InProgress { get; private set; }
 
-        public ObservableCollection<TaskView> Done { get;private set; }
+        private ObservableCollection<TaskView> _toDo { get; set; }
+
+        private ObservableCollection<TaskView> _inProgress { get; set; }
+
+        private ObservableCollection<TaskView> _done { get; set; }
+
+        public ObservableCollection<TaskView> ToDo
+        {
+            get
+            {
+                return _toDo;
+            }
+        }
+
+        public ObservableCollection<TaskView> InProgress
+        {
+            get
+            {
+                return _inProgress;
+            }
+        }
+
+        public ObservableCollection<TaskView> Done
+        {
+            get
+            {
+                return _done;
+            }
+        }
 
         private List<ObservableCollection<TaskView>> Collections { get; set; }
 
@@ -29,13 +56,13 @@ namespace SushiPikant.UI.ViewModels
 
         private void Initialize()
         {
-            InProgress = BuildCollection(2);
-            ToDo = BuildCollection(5);
-            Done = BuildCollection(3);
+            _inProgress = new ObservableCollection<TaskView>(TaskViewModelsFactory.Instance.InProgress);
+            _toDo = new ObservableCollection<TaskView>(TaskViewModelsFactory.Instance.ToDoTaskViews);
+            _done = new ObservableCollection<TaskView>();
 
-            Collections = new List<ObservableCollection<TaskView>>() { InProgress, ToDo,Done };
+            Collections = new List<ObservableCollection<TaskView>>() { _inProgress, _toDo,_done };
 
-            Current = new TaskView(new TaskViewModel());
+            //Current = new TaskView(new TaskViewModel());
         }
 
         public void Update(TaskView item, IEnumerable itemsSource)
@@ -50,7 +77,9 @@ namespace SushiPikant.UI.ViewModels
                 RemoveItemFromCollections(item);
             }
 
-            (itemsSource as ObservableCollection<TaskView>).Add(item);
+            var source = (itemsSource as ObservableCollection<TaskView>);
+
+            source.AddInOrder(item);
         }
 
         private void RemoveItemFromCollections(TaskView item)
@@ -64,24 +93,14 @@ namespace SushiPikant.UI.ViewModels
             RemoveItemFromCollections(item);
             if (Current != null)
             {
-                InProgress.Add(Current);
+                _inProgress.Add(Current);
             }
             Current = item;
             RaisePropertyChanged("Current");
         }
 
-
-
-        private static ObservableCollection<TaskView> BuildCollection(int elements)
-        {
-            var result = new ObservableCollection<TaskView>();
-
-            for (int number = 0; number < elements;number++)
-            {
-                result.Add(new TaskView(new TaskViewModel()));
-            }
-
-            return result;
-        }
     }
+
+
+ 
 }
