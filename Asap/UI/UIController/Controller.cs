@@ -25,13 +25,12 @@ namespace SushiPikant.UI.UIController
 
         private void Initialize()
         {
-            DevView = new DevView(new DevViewModel());
-
             Window.ContentContainer.Content = new LoginView(this);
         }
 
         internal void SwitchToDevView()
         {
+            DevView = new DevView(new DevViewModel());
             Window.ContentContainer.Content = DevView;
         }
     }

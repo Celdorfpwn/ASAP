@@ -16,6 +16,7 @@ namespace BL.Models
     {
         private bool _isDone;
 
+        private string ResolveMessage { get;set; }
 
         /// <summary>
         /// Represents the Jira issue informations
@@ -55,6 +56,13 @@ namespace BL.Models
             }
         }
 
+        public void SetResolveMessage(string message)
+        {
+            ResolveMessage = message;
+            UpdateJiraStatusResolved();
+        }
+
+
         /// <summary>
         /// Checks if the Issue is Open or Reopen
         /// </summary>
@@ -81,7 +89,7 @@ namespace BL.Models
         {
             get
             {
-                return _isDone;
+                return _isDone || Issue.Field.Status.Id == (int)JiraItemStatus.Resolved;
             }
             set
             {
@@ -90,29 +98,38 @@ namespace BL.Models
         }
 
         /// <summary>
-        /// Updates the jira status
+        /// Updates the jira status to In Progress
         /// </summary>
         public void UpdateJiraStatusInProgress()
         {
             if (Issue.Field.Status.Id == (int)JiraItemStatus.Opened || Issue.Field.Status.Id == (int)JiraItemStatus.Reopened)
             {
                 TasksFactory.Instance.Jira.SetStatus(Issue, JiraTransition.StartProgress);
+                Issue.Field.Status.Id = (int)JiraItemStatus.InProgress;
             }
         }
 
+        /// <summary>
+        /// Updates the jira status to Open
+        /// </summary>
         public void UpdateJiraStatusOpen()
         {
             if (Issue.Field.Status.Id == (int)JiraItemStatus.InProgress)
             {
                 TasksFactory.Instance.Jira.SetStatus(Issue, JiraTransition.StopProgress);
+                Issue.Field.Status.Id = (int)JiraItemStatus.Opened;
             }
         }
 
+        /// <summary>
+        /// Updates the jira status to Resolved
+        /// </summary>
         public void UpdateJiraStatusResolved()
         {
             if (Issue.Field.Status.Id == (int)JiraItemStatus.InProgress)
             {
-                TasksFactory.Instance.Jira.SetStatus(Issue, JiraTransition.Resolve);
+                TasksFactory.Instance.Jira.SetStatus(Issue, JiraTransition.Resolve,Issue.Key + " " + Issue.Field.Summary + ". "+ ResolveMessage);
+                Issue.Field.Status.Id = (int)JiraItemStatus.Resolved;
             }
         }
 
@@ -191,9 +208,7 @@ namespace BL.Models
             {
                 return false;
             }
-
-
-            Git.Push(Issue.Key);
+            Git.PushToOrigin(Issue.Key);
             Git.Checkout("master");
             return true;
         }

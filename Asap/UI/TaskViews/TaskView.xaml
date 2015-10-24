@@ -20,7 +20,7 @@
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="30"></RowDefinition>
             </Grid.RowDefinitions>
-            <Border Grid.Row="0" BorderThickness="0,0,0,2" BorderBrush="Green">
+            <Border Grid.Row="0" BorderThickness="0,0,0,2" BorderBrush="Green" Background="WhiteSmoke">
                 <Grid >
                     <Label HorizontalAlignment="Left" VerticalAlignment="Center"  VerticalContentAlignment="Center" Content="{Binding Title}"></Label>
                     <Label HorizontalAlignment="Right" VerticalAlignment="Center" VerticalContentAlignment="Center" Content="{Binding Reporter}"></Label>

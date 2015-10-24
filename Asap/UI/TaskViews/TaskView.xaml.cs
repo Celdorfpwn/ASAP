@@ -73,6 +73,7 @@ namespace SushiPikant.UI.TaskViews
         {
             if (e.Key == Key.Enter)
             {
+                ViewModel.SetResolveMessage(LastCommentTextBox.Text);
                 LastPopup.IsOpen = false;
             }
         }

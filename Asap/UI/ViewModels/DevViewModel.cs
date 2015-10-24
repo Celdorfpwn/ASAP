@@ -95,7 +95,6 @@ namespace SushiPikant.UI.ViewModels
                         Current = null;
                         Done.AddInOrder(item);
                         item.PopUpLastComment();
-                        item.ViewModel.Resolve();
                     }
                 }
                 else

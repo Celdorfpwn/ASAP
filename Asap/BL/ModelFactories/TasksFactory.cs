@@ -21,7 +21,7 @@ namespace BL.ModelFactories
 
         public TasksFactory()
         {
-            Jira = new Jira();
+            Jira = new Jira(Credentials.Credentials64);
 
             LoadModels();
         }

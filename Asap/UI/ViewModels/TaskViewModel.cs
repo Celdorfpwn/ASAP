@@ -67,6 +67,11 @@ namespace SushiPikant.UI.ViewModels
             }
         }
 
+        public void SetResolveMessage(string message)
+        {
+            Model.SetResolveMessage(message);
+        }
+
         public ObservableCollection<Comments> Comments { get;private set; }
 
         private SeverityEnum SeverityEnum { get; set; }
