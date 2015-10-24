@@ -66,7 +66,7 @@ namespace GitService
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                System.Diagnostics.Debug.WriteLine(ex.Message);
                 return CommandStatus.FAIL;
             }
         }
@@ -104,7 +104,7 @@ namespace GitService
             }
             catch(Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                System.Diagnostics.Debug.WriteLine(ex.Message);
                 return CommandStatus.FAIL;
             }
         }
@@ -114,11 +114,11 @@ namespace GitService
             return PushToOrigin(_repositoryPath, branchName);
         }
 
-        public static CommandStatus PushToOrigin(string reposiotryPath, string branchName)
+        public static CommandStatus PushToOrigin(string repositoryPath, string branchName)
         {
             try
             {
-                using (var repo = new Repository(reposiotryPath))
+                using (var repo = new Repository(repositoryPath))
                 {
                     Remote remote = repo.Network.Remotes["origin"];
 
@@ -145,7 +145,7 @@ namespace GitService
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                System.Diagnostics.Debug.WriteLine(ex.Message);
                 return CommandStatus.FAIL;
             }
 
@@ -176,7 +176,7 @@ namespace GitService
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                System.Diagnostics.Debug.WriteLine(ex.Message);
                 return CommandStatus.FAIL;
             }
         }
@@ -206,7 +206,7 @@ namespace GitService
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                System.Diagnostics.Debug.WriteLine(ex.Message);
                 return CommandStatus.FAIL;
             }
         }
@@ -236,7 +236,7 @@ namespace GitService
             }
             catch(Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                System.Diagnostics.Debug.WriteLine(ex.Message);
                 return CommandStatus.FAIL;
             }
         }
@@ -260,7 +260,7 @@ namespace GitService
             }
             catch(Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                System.Diagnostics.Debug.WriteLine(ex.Message);
                 return CommandStatus.FAIL;
             }
         }
@@ -268,7 +268,7 @@ namespace GitService
 
         public static CommandStatus Commit(string message, bool allowEmptyCommit = false)
         {
-            return Commit(_repositoryPath, allowEmptyCommit);
+            return Commit(_repositoryPath, message, allowEmptyCommit);
         }
 
         public static CommandStatus Commit(string repositoryPath, string message, bool allowEmptyCommit = false)
@@ -289,7 +289,7 @@ namespace GitService
             }
             catch(Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                System.Diagnostics.Debug.WriteLine(ex.Message);
                 return CommandStatus.FAIL;
             }
         }
@@ -320,8 +320,29 @@ namespace GitService
             }
             catch(Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                System.Diagnostics.Debug.WriteLine(ex.Message);
                 return CommandStatus.FAIL;
+            }
+        }
+
+        public static string GetCurrentBranch()
+        {
+            return GetCurrentBranch(_repositoryPath);
+        }
+
+        public static string GetCurrentBranch(string repositoryPath)
+        {
+            try
+            {
+                using (var repo = new Repository(repositoryPath))
+                {
+                    return repo.Head.Name.ToString();
+                }
+            }
+            catch(Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                return string.Empty;
             }
         }
 
