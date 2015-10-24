@@ -383,7 +383,7 @@ namespace GitService
                     CommitOptions commitOptions = new CommitOptions();
                     commitOptions.AllowEmptyCommit = allowEmptyCommit;
 
-                    Commit commit = repo.Commit(message, author, commiter, commitOptions);
+                    Commit commit = repo.Commit(message, author, commiter, commitOptions); 
                     return CommandStatus.OK;
                 }
             }
@@ -420,8 +420,7 @@ namespace GitService
                     if (localBranch != null)
                     {
                         Signature merger = new Signature(_userName, _email, DateTime.Now);
-                        repo.Merge(localBranch, merger);
-                        return CommandStatus.OK;
+                        return (CommandStatus)(repo.Merge(localBranch, merger).Status);  
                     }
                     else
                     {
@@ -466,5 +465,34 @@ namespace GitService
             }
         }
 
+        /// <summary>
+        /// Gets last commit message from current branch.
+        /// </summary>
+        /// <returns>Commit message</returns>
+        public static string GetLastCommit()
+        {
+            return GetLastCommit(_repositoryPath);
+        }
+
+        /// <summary>
+        /// Gets last commit message from current branch.
+        /// </summary>
+        /// <param name="repositoryPath"></param>
+        /// <returns>Commit message</returns>
+        public static string GetLastCommit(string repositoryPath)
+        {
+            try
+            {
+                using (var repo = new Repository(repositoryPath))
+                {
+                    return repo.Head.Tip.Message;
+                }
+            }
+            catch(Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                return string.Empty;
+            }
+        }
     }
 }
