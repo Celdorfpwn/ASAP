@@ -30,7 +30,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>Key.snk</AssemblyOriginatorKeyFile>
@@ -50,6 +50,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\GitService\GitService.csproj">
+      <Project>{6c3e2abb-8571-45f8-81fb-ce70b74556b7}</Project>
+      <Name>GitService</Name>
+    </ProjectReference>
     <ProjectReference Include="..\JiraUtil\JiraService.csproj">
       <Project>{4784b69e-ce08-4750-9b26-485345bc97e8}</Project>
       <Name>JiraService</Name>

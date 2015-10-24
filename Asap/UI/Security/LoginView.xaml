@@ -45,7 +45,7 @@
                             BorderThickness="{TemplateBinding BorderThickness}">
                                     <Grid>
                                         <ScrollViewer x:Name="PART_ContentHost" VerticalAlignment="Center" Margin="1" />
-                                        <TextBlock x:Name="Message" FontStyle="Italic"
+                                        <TextBlock x:Name="Message" 
                                        Text="{TemplateBinding local:WaterMarkTextHelper.WatermarkText}" 
                                        Foreground="Gray" IsHitTestVisible="False" FontFamily="Calibri"
                                        Opacity="0.8" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="6,0,0,0"/>
@@ -114,7 +114,7 @@
                             BorderThickness="{TemplateBinding BorderThickness}">
                                     <Grid>
                                         <ScrollViewer x:Name="PART_ContentHost" VerticalAlignment="Center" Margin="1" />
-                                        <TextBlock x:Name="Message" Text="{TemplateBinding local:WaterMarkTextHelper.WatermarkText}" FontStyle="Italic"
+                                        <TextBlock x:Name="Message" Text="{TemplateBinding local:WaterMarkTextHelper.WatermarkText}" 
                                        Foreground="Gray" IsHitTestVisible="False" FontFamily="Calibri" Opacity="0.8" HorizontalAlignment="Left" VerticalAlignment="Center"
                                        Margin="6,0,0,0"/>
                                     </Grid>

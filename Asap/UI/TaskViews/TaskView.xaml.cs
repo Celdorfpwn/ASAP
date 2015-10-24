@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using SushiPikant.UI.ViewModels;
 
 namespace SushiPikant.UI.TaskViews
@@ -46,6 +47,9 @@ namespace SushiPikant.UI.TaskViews
             else
             {
                 Popup.IsOpen = true;
+                ViewModel.PopulateComments();
+                Comments.ItemsSource = ViewModel.Comments;
+                PopupTextBox.Focus();
             }
         }
 
@@ -54,9 +58,20 @@ namespace SushiPikant.UI.TaskViews
             if (e.Key == Key.Enter)
             {
                 ViewModel.AddComment(PopupTextBox.Text);
-                PopupTextBox.Text = String.Empty;
 
                 PopupTextBox.Text = String.Empty;
+            }
+            else if(e.Key == Key.Escape)
+            {
+                Popup.IsOpen = false;
+            }
+        }
+
+        private void LastCommentKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                LastPopup.IsOpen = false;
             }
         }
 
@@ -68,7 +83,14 @@ namespace SushiPikant.UI.TaskViews
 
         public void PopUpLastComment()
         {
+            LastPopup.IsOpen = true;
 
+            Dispatcher.BeginInvoke(DispatcherPriority.Input,
+             new Action(delegate ()
+            {
+                LastCommentTextBox.Focus();        // Set Logical Focus
+                Keyboard.Focus(LastCommentTextBox); // Set Keyboard Focus
+            }));
         }
     }
 }

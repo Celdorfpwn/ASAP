@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BL.Models;
+using GitService;
 using JiraService;
 
 namespace BL.ModelFactories
@@ -11,7 +12,7 @@ namespace BL.ModelFactories
     public class TasksFactory
     {
 
-        private Jira Jira { get;set; }
+        public Jira Jira { get;private set; }
 
 
         private Issue[] Issues { get; set; }
@@ -39,11 +40,19 @@ namespace BL.ModelFactories
             Models = new List<TaskModel>();
             Issues = Jira.GetIssuesForPerson("ionut.apostol").Issues;
 
-            var statuses = Issues.Select(i => i.Field.Status.Name).ToList();
             foreach (var issue in Issues)
             {
                 Models.Add(new TaskModel(issue));
             }
+        }
+
+        public TaskModel Current
+        {
+            get
+            {
+                var branchName = Git.GetCurrentBranch();
+                return Models.FirstOrDefault(model => model.Issue.Key == branchName);
+            }            
         }
 
         private static TasksFactory Singleton { get;set; }
@@ -61,6 +70,6 @@ namespace BL.ModelFactories
             }
         }
 
-        
+
     }
 }
