@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using LibGit2Sharp;
 using LibGit2Sharp.Handlers;
 
 namespace GitService
 {
-
+    /// <summary>
+    /// Git commands utility class.
+    /// </summary>
     public static class Git
     {
         static string _userName = "ahito";
@@ -16,35 +14,60 @@ namespace GitService
         static string _email = "test@test.com";
         static string _repositoryPath = "";
 
+        /// <summary>
+        /// Represents the git UserName.
+        /// </summary>
+        /// <returns>UserName</returns>
         public static string UserName
         {
             get { return _userName; }
             set { _userName = value; }
         }
 
+        /// <summary>
+        /// Represents the password for git.
+        /// </summary>
+        /// <returns>Password</returns>
         public static string Password
         {
             get { return _password; }
             set { _password = value; }
         }
 
+        /// <summary>
+        /// Represents the users email.
+        /// </summary>
+        /// <returns>Email</returns>
         public static string Email
         {
             get { return _email; }
             set { _email = value; }
         }
 
+        /// <summary>
+        /// Represents the path to the Repository.
+        /// </summary>
+        /// <returns>Repository path</returns>
         public static string RepositoryPath
         {
             get { return _repositoryPath; }
             set { _repositoryPath = value; }
         }
 
+        /// <summary>
+        /// Git pull command
+        /// </summary>
+        /// <returns>CommandStatus</returns>
         public static CommandStatus Pull()
         {
             return Pull(_repositoryPath);
         }
 
+        /// <summary>
+        /// Git pull command
+        /// </summary>
+        /// <param name="repositoryPath"></param>
+        /// <returns>CommandStatus</returns>
         public static CommandStatus Pull(string repositoryPath)
         {
             try
@@ -71,11 +94,22 @@ namespace GitService
             }
         }
 
+        /// <summary>
+        /// Git push command.
+        /// </summary>
+        /// <param name="branchName"></param>
+        /// <returns>CommandStatus</returns>
         public static CommandStatus Push(string branchName)
         {
             return Push(_repositoryPath, branchName);
         }
 
+        /// <summary>
+        /// Git push command.
+        /// </summary>
+        /// <param name="repositoryPath"></param>
+        /// <param name="branchName"></param>
+        /// <returns>CommandStatus</returns>
         public static CommandStatus Push(string repositoryPath, string branchName)
         {
             try
@@ -109,11 +143,22 @@ namespace GitService
             }
         }
 
+        /// <summary>
+        /// Pushes the branch to remote origin.
+        /// </summary>
+        /// <param name="branchName"></param>
+        /// <returns>CommandStatus</returns>
         public static CommandStatus PushToOrigin(string branchName)
         {
             return PushToOrigin(_repositoryPath, branchName);
         }
 
+        /// <summary>
+        /// Pushes the branch to remote origin.
+        /// </summary>
+        /// <param name="repositoryPath"></param>
+        /// <param name="branchName"></param>
+        /// <returns>CommandStatus</returns>
         public static CommandStatus PushToOrigin(string repositoryPath, string branchName)
         {
             try
@@ -151,11 +196,22 @@ namespace GitService
 
         }
 
+        /// <summary>
+        /// Creates a new branch with branchName.
+        /// </summary>
+        /// <param name="branchName"></param>
+        /// <returns>CommandStatus</returns>
         public static CommandStatus Branch(string branchName)
         {
             return Branch(_repositoryPath, branchName);
         }
 
+        /// <summary>
+        /// Creates a new branch with branchName.
+        /// </summary>
+        /// <param name="repositoryPath"></param>
+        /// <param name="branchName"></param>
+        /// <returns>CommandStatus</returns>
         public static CommandStatus Branch(string repositoryPath, string branchName)
         {
             try
@@ -181,11 +237,24 @@ namespace GitService
             }
         }
 
+        /// <summary>
+        /// Deletes the branch branchName.
+        /// </summary>
+        /// <param name="branchName"></param>
+        /// <param name="isRemote"></param>
+        /// <returns>CommandStatus</returns>
         public static CommandStatus DeleteBranch(string branchName, bool isRemote = false)
         {
             return DeleteBranch(_repositoryPath, branchName, isRemote);
         }
 
+        /// <summary>
+        /// Deletes the branch branchName.
+        /// </summary>
+        /// <param name="repositoryPath"></param>
+        /// <param name="branchName"></param>
+        /// <param name="isRemote"></param>
+        /// <returns>CommandStatus</returns>
         public static CommandStatus DeleteBranch(string repositoryPath, string branchName, bool isRemote = false)
         {
             try
@@ -211,11 +280,22 @@ namespace GitService
             }
         }
 
+        /// <summary>
+        /// Checks out branch branchName.
+        /// </summary>
+        /// <param name="branchName"></param>
+        /// <returns>CommandStatus</returns>
         public static CommandStatus Checkout(string branchName)
         {
             return Checkout(_repositoryPath, branchName);
         }
 
+        /// <summary>
+        /// Checks out branch branchName.
+        /// </summary>
+        /// <param name="repositoryPath"></param>
+        /// <param name="branchName"></param>
+        /// <returns>CommandStatus</returns>
         public static CommandStatus Checkout(string repositoryPath, string branchName)
         {
             try
@@ -241,12 +321,20 @@ namespace GitService
             }
         }
 
+        /// <summary>
+        /// Stages all files.
+        /// </summary>
+        /// <returns>CommandStatus</returns>
         public static CommandStatus AddAll()
         {
             return AddAll(_repositoryPath);
         }
 
-
+        /// <summary>
+        /// Stages all files.
+        /// </summary>
+        /// <param name="repositoryPath"></param>
+        /// <returns>CommandStatus</returns>
         public static CommandStatus AddAll(string repositoryPath)
         {
             try
@@ -265,12 +353,24 @@ namespace GitService
             }
         }
 
-
+        /// <summary>
+        /// Commits all staged files.
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="allowEmptyCommit"></param>
+        /// <returns>CommandStatus</returns>
         public static CommandStatus Commit(string message, bool allowEmptyCommit = false)
         {
             return Commit(_repositoryPath, message, allowEmptyCommit);
         }
 
+        /// <summary>
+        /// Commits all staged files.
+        /// </summary>
+        /// <param name="repositoryPath"></param>
+        /// <param name="message"></param>
+        /// <param name="allowEmptyCommit"></param>
+        /// <returns>CommandStatus</returns>
         public static CommandStatus Commit(string repositoryPath, string message, bool allowEmptyCommit = false)
         {
             try
@@ -294,11 +394,22 @@ namespace GitService
             }
         }
 
+        /// <summary>
+        /// Merges branchName to current Branch.
+        /// </summary>
+        /// <param name="branchName"></param>
+        /// <returns>CommandStatus</returns>
         public static CommandStatus Merge(string branchName)
         {
             return Merge(_repositoryPath, branchName);
         }
 
+        /// <summary>
+        /// Merges branchName to current Branch.
+        /// </summary>
+        /// <param name="repositoryPath"></param>
+        /// <param name="branchName"></param>
+        /// <returns>CommandStatus</returns>
         public static CommandStatus Merge(string repositoryPath, string branchName)
         {
             try
@@ -325,11 +436,20 @@ namespace GitService
             }
         }
 
+        /// <summary>
+        /// Get the current branch name.
+        /// </summary>
+        /// <returns>Branch name</returns>
         public static string GetCurrentBranch()
         {
             return GetCurrentBranch(_repositoryPath);
         }
 
+        /// <summary>
+        /// Gets the current branch name.
+        /// </summary>
+        /// <param name="repositoryPath"></param>
+        /// <returns>Branch name</returns>
         public static string GetCurrentBranch(string repositoryPath)
         {
             try

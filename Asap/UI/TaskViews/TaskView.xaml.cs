@@ -21,10 +21,48 @@ namespace SushiPikant.UI.TaskViews
     /// </summary>
     public partial class TaskView : UserControl
     {
+
+        public TaskViewModel ViewModel { get; private set; }
+
         public TaskView(TaskViewModel viewModel)
         {
             InitializeComponent();
             MainGrid.DataContext = viewModel;
+            ViewModel = viewModel;
+            BitmapImage logo = new BitmapImage();
+            logo.BeginInit();
+            var path = "pack://application:,,,/UI;component/Icons/" + viewModel.Severity.ToLower() + ".png";
+            logo.UriSource = new Uri(path);
+            logo.EndInit();
+            SeverityIcon.Source = logo;
+        }
+
+        private void MessageClick(object sender, RoutedEventArgs e)
+        {
+            if (Popup.IsOpen)
+            {
+                Popup.IsOpen = false;
+            }
+            else
+            {
+                Popup.IsOpen = true;
+            }
+        }
+
+        private void PopupKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                ViewModel.AddComment(PopupTextBox.Text);
+                PopupTextBox.Text = String.Empty;
+
+                PopupTextBox.Text = String.Empty;
+            }
+        }
+
+        private void UserControl_MouseLeave(object sender, MouseEventArgs e)
+        {
+            Popup.IsOpen = false;
         }
     }
 }
