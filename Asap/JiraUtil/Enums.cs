@@ -36,7 +36,7 @@ namespace JiraService
     public enum JiraTransition
     {
         None,
-        Close = 701, /*2 or 701 ???*/
+        Close = 701,
         Reopen = 3,
         StartProgress = 4,
         Resolve = 5,

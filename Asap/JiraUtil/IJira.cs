@@ -42,6 +42,13 @@
         /// <returns>Comments for the given issue</returns>
         Comment AppendCommentsForIssue(Issue issue);
 
-        void SetStatus(Issue issue, JiraTransition status);
+        /// <summary>
+        /// Set the next status
+        /// </summary>
+        /// <param name="issue">The issue to change the status for</param>
+        /// <param name="status">The new status (transition)</param>
+        /// <param name="message">Message to add</param>
+        /// <param name="fixVersion">Issue fixed version</param>
+        void SetStatus(Issue issue, JiraTransition status, string message = "", Version fixVersion = null);
     }
 }
