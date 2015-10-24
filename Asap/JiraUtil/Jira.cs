@@ -164,6 +164,24 @@ namespace JiraService
             return issue;
         }
 
+        /// <summary>
+        /// Set the next status
+        /// </summary>
+        /// <param name="issue">The issue to change the status for</param>
+        /// <param name="newStatus">The new status (transition)</param>
+        public void SetStatus(Issue issue, JiraTransition newStatus)
+        {
+            string query = String.Format("issue/{0}", issue.Key);
+            string data = "{\"transition\" : {\"id\" : \"" + (int)newStatus + "\"}}";
+
+            string response = RunQuery(query, data, "POST");
+
+            if (!String.IsNullOrEmpty(response))
+            {
+                throw new InvalidDataException("Set status return not expected data");
+            }
+        }
+
 
         /// <summary>
         /// Execute Jira query
@@ -184,11 +202,14 @@ namespace JiraService
                     url = string.Format("{0}{1}/", url, argument);
                 }
             }
+            else if (!String.IsNullOrEmpty(data) && data.Contains("transition"))
+            {
+                url = String.Format("{0}{1}/transitions?expand=transitions.fields", BASE_URL, argument);
+            }
             else
             {
                 // It's a issue search, don't add the project name to the address
                 url = String.Format("{0}{1}", BASE_URL, argument);
-
             }
 
             System.Net.ServicePointManager.Expect100Continue = false;
@@ -198,7 +219,14 @@ namespace JiraService
 
             if (data != null)
             {
-                request.Method = "PUT";
+                if (data.Contains("transition"))
+                {
+                    request.Method = "POST";
+                }
+                else
+                {
+                    request.Method = "PUT";
+                }
                 using (StreamWriter writer = new StreamWriter(request.GetRequestStream()))
                 {
                     writer.Write(data);
@@ -210,16 +238,22 @@ namespace JiraService
 
             HttpWebResponse response = request.GetResponse() as HttpWebResponse;
 
+            #region Handle specific commands reqponse
+            
+            // 204 for transition and reassign
             if (data != null && response.StatusCode == HttpStatusCode.NoContent)
             {
                 // You should just receive a response with a status of "204 No Content"
                 return string.Empty;
             }
 
+            // If none of above, throw exception if not OK
             if (response.StatusCode != HttpStatusCode.OK)
             {
                 throw new Exception(String.Format("Server error (HTTP {0}: {1}).", response.StatusCode, response.StatusDescription));
             }
+
+            #endregion
 
             string result = string.Empty;
             using (StreamReader reader = new StreamReader(response.GetResponseStream()))

@@ -41,5 +41,7 @@
         /// <param name="issue">Issue to add comments to</param>
         /// <returns>Comments for the given issue</returns>
         Comment AppendCommentsForIssue(Issue issue);
+
+        void SetStatus(Issue issue, JiraTransition status);
     }
 }
