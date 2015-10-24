@@ -57,6 +57,11 @@ namespace JiraService
             return vers;
         }
 
+        /// <summary>
+        /// Returns all Issues for the given personId
+        /// </summary>
+        /// <param name="persionID">The person name (firstName.lastName)</param>
+        /// <returns>Search result object</returns>
         public SearchResult GetIssuesForPerson(String persionID)
         {
             string query = String.Format("search?jql=status%20in%20(Open%2C%20'In%20Progress'%2C%20Reopened)%20AND%20assignee%20in%20('{0}')+order+by+priority", persionID);
@@ -71,8 +76,8 @@ namespace JiraService
             {
                 issue.URL = BROWSER_URL + issue.Key;
                 issue.Field.Severity = ParseSeverityFromTheme(issue.Field.Labels);
-                AppendCommentsForIssue(issue);
-                Attachment[] a = AppendAttachmentForIssue(issue);
+                //AppendCommentsForIssue(issue);
+                //Attachment[] a = AppendAttachmentForIssue(issue);
             }
 
             return vers;
@@ -169,10 +174,17 @@ namespace JiraService
         /// </summary>
         /// <param name="issue">The issue to change the status for</param>
         /// <param name="newStatus">The new status (transition)</param>
-        public void SetStatus(Issue issue, JiraTransition newStatus)
+        /// <param name="message">Message to add</param>
+        public void SetStatus(Issue issue, JiraTransition newStatus, string message = "", Version fixVersion = null)
         {
             string query = String.Format("issue/{0}", issue.Key);
             string data = "{\"transition\" : {\"id\" : \"" + (int)newStatus + "\"}}";
+            if (!String.IsNullOrWhiteSpace(message))
+            {
+                data = "{\"update\" : {\"comment\" : [{\"add\" : {\"body\" : \"" + message + "\"}}]}, \"transition\": {\"id\": \"" + (int)newStatus + "\"}}";
+            }
+
+            //TODO: Implement setting-up fix fixVersion
 
             string response = RunQuery(query, data, "POST");
 
