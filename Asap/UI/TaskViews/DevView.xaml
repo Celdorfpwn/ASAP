@@ -50,7 +50,18 @@
                         <RowDefinition Height="*"></RowDefinition>
                     </Grid.RowDefinitions>
                     <Border BorderThickness="0,0,0,2">
-                        <Label Margin="5,0,0,0" Grid.Row="0" Content="To Do"></Label>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                <ColumnDefinition Width="34"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+
+                            <Label Margin="5,0,0,0" Grid.Column="0" Content="To Do"></Label>
+                            <Label Grid.Column="1" HorizontalContentAlignment="Right" Content="{Binding ToDo.Count,UpdateSourceTrigger=PropertyChanged}"></Label>
+                            <Label Margin="0,0,2,0" Grid.Column="2" Content="Left"></Label>
+                        </Grid>
+                        
                     </Border>
                     <ListView Name="ToDoListView" Grid.Row="1" ItemsSource="{Binding ToDo,UpdateSourceTrigger=PropertyChanged}">
                     </ListView>
@@ -80,7 +91,17 @@
                                 <RowDefinition Height="*"></RowDefinition>
                             </Grid.RowDefinitions>
                             <Border BorderThickness="0,2,0,2">
-                                <Label Margin="5,0,0,0" Grid.Row="0" Content="In Progress"></Label>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"></ColumnDefinition>
+                                        <ColumnDefinition Width="*"></ColumnDefinition>
+                                        <ColumnDefinition Width="34"></ColumnDefinition>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Label Margin="5,0,0,0" Grid.Column="0" Content="In Progress"></Label>
+                                    <Label Grid.Column="1" HorizontalContentAlignment="Right" Content="{Binding InProgress.Count,UpdateSourceTrigger=PropertyChanged}"></Label>
+                                    <Label Margin="0,0,2,0" Grid.Column="2" Content="Left"></Label>
+                                </Grid>
                             </Border>
                             <ListView Name="InProgressListView" Grid.Row="1" ItemsSource="{Binding InProgress,UpdateSourceTrigger=PropertyChanged}" >
                             </ListView>
@@ -95,7 +116,17 @@
                         <RowDefinition Height="*"></RowDefinition>
                     </Grid.RowDefinitions>
                     <Border BorderThickness="0,0,0,2">
-                        <Label Margin="5,0,0,0" Grid.Row="0" Content="Done"></Label>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                <ColumnDefinition Width="34"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+
+                            <Label Margin="5,0,0,0" Grid.Column="0" Content="Done"></Label>
+                            <Label Grid.Column="1" HorizontalContentAlignment="Right" Content="{Binding Done.Count,UpdateSourceTrigger=PropertyChanged}"></Label>
+                            <Label Margin="0,0,2,0" Grid.Column="2" Content="Left"></Label>
+                        </Grid>
                     </Border>
                     <ListView Name="DoneListView" Grid.Row="1" ItemsSource="{Binding Done,UpdateSourceTrigger=PropertyChanged}">
                     </ListView>

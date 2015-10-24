@@ -11,7 +11,7 @@ namespace BL.ModelFactories
     public class TasksFactory
     {
 
-        private Jira Jira { get;set; }
+        public Jira Jira { get;private set; }
 
 
         private Issue[] Issues { get; set; }
@@ -39,7 +39,6 @@ namespace BL.ModelFactories
             Models = new List<TaskModel>();
             Issues = Jira.GetIssuesForPerson("ionut.apostol").Issues;
 
-            var statuses = Issues.Select(i => i.Field.Status.Name).ToList();
             foreach (var issue in Issues)
             {
                 Models.Add(new TaskModel(issue));

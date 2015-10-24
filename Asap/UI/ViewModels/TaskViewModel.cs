@@ -63,7 +63,6 @@ namespace SushiPikant.UI.ViewModels
 
             SeverityEnum = (SeverityEnum)Enum.Parse(typeof(SeverityEnum), model.Issue.Field.Priority.Name);
 
-            Comments = new ObservableCollection<Comments>(Model.Issue.Field.Comment.IssueComments);
         }
 
         public void AddComment(string text)
@@ -73,6 +72,11 @@ namespace SushiPikant.UI.ViewModels
             model.Author = new Person { DisplayName = "ionut.apostol" };
 
             Comments.Add(model);
+        }
+
+        public void PopulateComments()
+        {
+            Comments = new ObservableCollection<Comments>(Model.Comments);
         }
     }
 }

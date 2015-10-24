@@ -89,7 +89,7 @@ namespace SushiPikant.UI.ViewModels
         {
             if (itemsSource.Equals(_done))
             {
-
+                item.PopUpLastComment();
             }
         }
 
