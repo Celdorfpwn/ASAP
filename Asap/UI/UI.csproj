@@ -16,7 +16,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SushiPikant.UI</RootNamespace>
     <AssemblyName>UI</AssemblyName>
-    <SignAssembly>True</SignAssembly>
+    <SignAssembly>false</SignAssembly>
     <AssemblyOriginatorKeyFile>Key.snk</AssemblyOriginatorKeyFile>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
@@ -190,6 +190,7 @@
     <Resource Include="Icons\critical.png" />
     <Resource Include="Icons\major.png" />
     <Resource Include="Icons\minor.png" />
+    <Resource Include="Icons\picture.png" />
     <Content Include="Resources\Package.ico" />
   </ItemGroup>
   <ItemGroup>

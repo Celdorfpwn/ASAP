@@ -56,57 +56,103 @@ namespace SushiPikant.UI.ViewModels
 
         private void Initialize()
         {
+            Current = TaskViewModelsFactory.Instance.CurrentTask;
             _inProgress = new ObservableCollection<TaskView>(TaskViewModelsFactory.Instance.InProgress);
             _toDo = new ObservableCollection<TaskView>(TaskViewModelsFactory.Instance.ToDoTaskViews);
-            _done = new ObservableCollection<TaskView>();
+            _done = new ObservableCollection<TaskView>(TaskViewModelsFactory.Instance.Done);
 
-            Collections = new List<ObservableCollection<TaskView>>() { _inProgress, _toDo,_done };
-
-            //Current = new TaskView(new TaskViewModel());
+            Collections = new List<ObservableCollection<TaskView>>() { _inProgress, _toDo, _done };
+            if (Current != null)
+            {
+                RemoveItemFromCollections(Current);
+                Current.ViewModel.SwitchToBranch();
+            }
         }
 
         public void Update(TaskView item, IEnumerable itemsSource)
         {
-            if (item.Equals(Current))
+            if (Done.Contains(item))
             {
-                Current = null;
-                RaisePropertyChanged("Current");
+                return;
+            }
+
+
+            if (itemsSource.Equals(_inProgress))
+            {
+                item.ViewModel.InProgress();
+            }
+            else if (itemsSource.Equals(_toDo))
+            {
+                item.ViewModel.ToDo();
+            }
+
+            if (itemsSource.Equals(Done))
+            {
+                if (item.Equals(Current))
+                {
+                    if (item.ViewModel.CommitBranch())
+                    {
+                        Current = null;
+                        Done.AddInOrder(item);
+                        item.PopUpLastComment();
+                        item.ViewModel.Resolve();
+                    }
+                }
+                else
+                {
+                    return;
+                }
             }
             else
             {
-                RemoveItemFromCollections(item);
-            }
+                if (item.Equals(Current))
+                {
+                    Current.ViewModel.SaveBranch();
+                    Current = null;
+                    RaisePropertyChanged("Current");
+                }
+                else
+                {
+                    RemoveItemFromCollections(item);
+                }
 
-            var source = (itemsSource as ObservableCollection<TaskView>);
+                var source = (itemsSource as ObservableCollection<TaskView>);
 
-            source.AddInOrder(item);
-
-            AfterDrop(item, itemsSource);
-
-        }
-
-        private void AfterDrop(TaskView item, IEnumerable itemsSource)
-        {
-            if (itemsSource.Equals(_done))
-            {
-                item.PopUpLastComment();
+                source.AddInOrder(item);
             }
         }
 
+
+        /// <summary>
+        /// Removes an items from the view model collections
+        /// </summary>
+        /// <param name="item"></param>
         private void RemoveItemFromCollections(TaskView item)
         {
             Collections.ForEach(collection => collection.Remove(item));
         }
 
 
+        /// <summary>
+        /// Updates the Current task view
+        /// </summary>
+        /// <param name="item">The Task View</param>
         public void Update(TaskView item)
         {
+            if (Done.Contains(item))
+            {
+                return;
+            }
+
             RemoveItemFromCollections(item);
             if (Current != null)
             {
+                Current.ViewModel.SaveBranch();
                 _inProgress.Add(Current);
             }
             Current = item;
+            item.ViewModel.InProgress();
+            item.ViewModel.SwitchToBranch();
             RaisePropertyChanged("Current");
         }
 

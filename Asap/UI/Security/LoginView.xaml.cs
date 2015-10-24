@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using BL;
 using SushiPikant.UI.UIController;
 
 namespace SushiPikant.UI.Security
@@ -34,6 +35,8 @@ namespace SushiPikant.UI.Security
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            Credentials.Username = Username.Text;
+            Credentials.Password = Password.Password;
             Controller.SwitchToDevView();
         }
 
