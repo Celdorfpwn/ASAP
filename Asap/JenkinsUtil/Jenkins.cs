@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace JenkinsService
 {
@@ -26,13 +29,40 @@ namespace JenkinsService
         /// /api/json
         /// </summary>
         private const String JENKINS_URL_SUFFIX = "/api/json";
-        
+
+        /// <summary>
+        /// Job config file
+        /// </summary>
+        private const String JENKINS_CONFIG_FILE = "config.xml";
+
         /// <summary>
         /// http://192.168.9.206:8080/job/TheChromeEurope
         /// </summary>
         private readonly String JENKINS_PREFIX = String.Format("{0}/job/{1}/", JENKINS_SERVER, JENKINS_JOB);
 
+        /// <summary>
+        /// Jenkins URL to the last build
+        /// </summary>
         private readonly String LAST_BUILD_URL = String.Format("{0}/job/{1}/lastBuild/api/json", JENKINS_SERVER, JENKINS_JOB); //"http://192.168.9.206:8080/job/TheChromeEurope/lastBuild/api/json";
+
+        /// <summary>
+        /// Jenkins job config file URL
+        /// </summary>
+        private readonly String JENKINS_CONFIG_URL = String.Format("{0}/job/{1}/{2}", JENKINS_SERVER, JENKINS_JOB, JENKINS_CONFIG_FILE);
+        #endregion
+
+        #region Fields
+
+        /// <summary>
+        /// Background worker that checks for build completion
+        /// </summary>
+        private BackgroundWorker bw = new BackgroundWorker();
+
+        /// <summary>
+        /// Current build associated with this instance
+        /// </summary>
+        private Build _currentBuild;
+
         #endregion
 
         #region Constructor
@@ -42,12 +72,26 @@ namespace JenkinsService
         /// </summary>
         public Jenkins()
         {
-
+            _currentBuild = new Build();
+            bw.WorkerSupportsCancellation = true;
+            bw.WorkerReportsProgress = true;
+            bw.DoWork += bw_DoWork;
+            bw.RunWorkerCompleted += bw_RunWorkerCompleted;
+            bw.ProgressChanged += bw_ProgressChanged;
         }
 
         #endregion
 
         #region Public methods
+
+        /// <summary>
+        /// Gets the current build associated with this instance
+        /// </summary>
+        /// <returns>Current Build object</returns>
+        public Build GetCurrentBuild()
+        {
+            return _currentBuild;
+        }
 
         /// <summary>
         /// Get the Jenkins build object for the given build number
@@ -56,8 +100,9 @@ namespace JenkinsService
         /// <returns>Build object</returns>
         public Build GetBuild(int buildNo)
         {
-            string retData = RunQuery("buildNo");
-            return new Build(retData);
+            string retData = RunQuery(buildNo.ToString());
+            _currentBuild = new Build(retData);
+            return _currentBuild;
         }
 
         /// <summary>
@@ -67,14 +112,24 @@ namespace JenkinsService
         /// <returns>Build object with the return</returns>
         public Build NewBuild(string branch)
         {
+            if (!String.IsNullOrWhiteSpace(branch))
+            {
+                SwitchBranch(branch);
+            }
+            Build previous = GetLatest();
+
+            Build current = new Build();
+            current.Number = previous.Number + 1;
+
             string ret = RunQuery("build");
             if (!String.IsNullOrEmpty(ret))
             {
                 throw new FormatException("Jenkins build may be not started correctly.");
             }
-            System.Threading.Thread.Sleep(5000);
 
-            return GetLatest();
+            bw.RunWorkerAsync(current);
+            FireBuildStateChange(current);
+            return current;
         }
 
         /// <summary>
@@ -87,6 +142,22 @@ namespace JenkinsService
             return new Build(retData);
         }
 
+        /// <summary>
+        /// Swith the current Jenkins build branch
+        /// </summary>
+        /// <param name="newBranch">The new branch to build</param>
+        public void SwitchBranch(string newBranch)
+        {
+            string configXML = RunQuery(JENKINS_CONFIG_URL);
+
+            XmlDocument conf = new XmlDocument();
+            conf.LoadXml(configXML);
+
+            XmlNode branchName = conf.DocumentElement.SelectSingleNode("/project/scm/branches/hudson.plugins.git.BranchSpec/name");
+            branchName.InnerText = "*/" + newBranch;
+
+            RunQuery(JENKINS_CONFIG_URL, conf.InnerXml, "POST");
+        }
         #endregion
 
         #region Private methods
@@ -118,6 +189,11 @@ namespace JenkinsService
 
             url = String.Format("{0}{1}{2}", JENKINS_PREFIX, argument, JENKINS_URL_SUFFIX);
 
+            if (argument.EndsWith(JENKINS_CONFIG_URL))
+            {
+                url = argument;
+            }
+
             //System.Net.ServicePointManager.Expect100Continue = false;
             HttpWebRequest request = WebRequest.Create(url) as HttpWebRequest;
             request.ContentType = "application/json";
@@ -125,7 +201,14 @@ namespace JenkinsService
 
             if (data != null)
             {
-                request.Method = "PUT";
+                if (String.IsNullOrWhiteSpace(method))
+                {
+                    request.Method = "PUT";
+                }
+                else
+                {
+                    request.Method = method;
+                }
                 using (StreamWriter writer = new StreamWriter(request.GetRequestStream()))
                 {
                     writer.Write(data);
@@ -155,6 +238,71 @@ namespace JenkinsService
                 result = reader.ReadToEnd();
             }
             return result;
+        }
+
+        #endregion
+
+        #region Events
+
+        /// <summary>
+        /// Build state change event
+        /// </summary>
+        public event Action<Build> BuildStateChange;
+
+        /// <summary>
+        /// Fire the Build state change
+        /// </summary>
+        /// <param name="build">Build object that just changed its state</param>
+        private void FireBuildStateChange(Build build)
+        {
+            if (BuildStateChange != null)
+            {
+                BuildStateChange(build);
+            }
+        }
+
+        /// <summary>
+        /// Do work event handler for the background worker
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void bw_DoWork(object sender, DoWorkEventArgs e)
+        {
+            Thread.Sleep(10000);
+            do
+            {
+                
+                GetBuild((e.Argument as Build).Number);
+                if (_currentBuild.State == BuildState.Failed)
+                {
+                    e.Result = BuildState.Failed;
+                    break;
+                }
+                bw.ReportProgress(10, BuildState.Building);
+                Thread.Sleep(5000);
+            } while (_currentBuild.State == BuildState.None || _currentBuild.State == BuildState.Building);
+
+            e.Result = BuildState.Success;
+        }
+
+        /// <summary>
+        /// Background worker completed event handler
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void bw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            FireBuildStateChange(_currentBuild);
+        }
+
+        /// <summary>
+        /// Background worker progress changed event handler
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void bw_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            FireBuildStateChange(_currentBuild);
         }
 
         #endregion
