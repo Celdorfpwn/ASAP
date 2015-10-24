@@ -211,24 +211,117 @@ namespace GitService
             }
         }
 
-        public static string Checkout(string repositoryPath, string branchName)
+        public static CommandStatus Checkout(string branchName)
         {
-            using (var repo = new Repository(repositoryPath))
+            return Checkout(_repositoryPath, branchName);
+        }
+
+        public static CommandStatus Checkout(string repositoryPath, string branchName)
+        {
+            try
             {
-                Branch branch = repo.Checkout(branchName);
-                return branch.Name;
+                using (var repo = new Repository(repositoryPath))
+                {
+                    var localBranch = repo.Branches[branchName];
+                    if (localBranch != null)
+                    {                                               
+                        Branch branch = repo.Checkout(branchName);
+                        return CommandStatus.OK;
+                    }
+                    else
+                    {
+                        return CommandStatus.BranchNotFound;
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return CommandStatus.FAIL;
             }
         }
 
-        public static string Commit(string repositoryPath, string message)
+        public static CommandStatus AddAll()
         {
-            using (var repo = new Repository(repositoryPath))
-            {
-                Signature author = new Signature(_userName, _email, DateTime.Now);
-                Signature commiter = author;
+            return AddAll(_repositoryPath);
+        }
 
-                Commit commit = repo.Commit(message, author, commiter);
-                return commit.Message;
+
+        public static CommandStatus AddAll(string repositoryPath)
+        {
+            try
+            {
+                using (var repo = new Repository(repositoryPath))
+                {
+
+                    repo.Stage("*");
+                    return CommandStatus.OK;
+                }
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return CommandStatus.FAIL;
+            }
+        }
+
+
+        public static CommandStatus Commit(string message, bool allowEmptyCommit = false)
+        {
+            return Commit(_repositoryPath, allowEmptyCommit);
+        }
+
+        public static CommandStatus Commit(string repositoryPath, string message, bool allowEmptyCommit = false)
+        {
+            try
+            {
+                using (var repo = new Repository(repositoryPath))
+                {
+                    Signature author = new Signature(_userName, _email, DateTime.Now);
+                    Signature commiter = author;
+
+                    CommitOptions commitOptions = new CommitOptions();
+                    commitOptions.AllowEmptyCommit = allowEmptyCommit;
+
+                    Commit commit = repo.Commit(message, author, commiter, commitOptions);
+                    return CommandStatus.OK;
+                }
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return CommandStatus.FAIL;
+            }
+        }
+
+        public static CommandStatus Merge(string branchName)
+        {
+            return Merge(_repositoryPath, branchName);
+        }
+
+        public static CommandStatus Merge(string repositoryPath, string branchName)
+        {
+            try
+            {
+                using ( var repo = new Repository(repositoryPath))
+                {
+                    var localBranch = repo.Branches[branchName];
+                    if (localBranch != null)
+                    {
+                        Signature merger = new Signature(_userName, _email, DateTime.Now);
+                        repo.Merge(localBranch, merger);
+                        return CommandStatus.OK;
+                    }
+                    else
+                    {
+                        return CommandStatus.BranchNotFound;
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return CommandStatus.FAIL;
             }
         }
 
