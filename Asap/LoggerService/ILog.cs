@@ -13,5 +13,11 @@ namespace LoggerService
         /// Add a new log message
         /// </summary>
         void AddLog(LogEntry logEntry);
+
+        /// <summary>
+        /// Add the exception
+        /// </summary>
+        /// <param name="ex">Exception to be logged</param>
+        void AddException(Exception ex);
     }
 }

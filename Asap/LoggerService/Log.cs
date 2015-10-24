@@ -9,7 +9,17 @@ namespace LoggerService
 {
     public class Log : ILog
     {
+        static readonly Log _instance = new Log();
+
         #region Properties
+
+        public static Log Instance
+        {
+            get
+            {
+                return _instance;
+            }
+        }
 
         /// <summary>
         /// Gets and sets all available log messages
@@ -39,6 +49,15 @@ namespace LoggerService
         public void AddLog(LogEntry newLog)
         {
             Logs.Add(newLog);
+        }
+
+        /// <summary>
+        /// Add the exception
+        /// </summary>
+        /// <param name="ex">Exception to be logged</param>
+        public void AddException(Exception ex)
+        {
+            Logs.Add(new LogEntry(LogType.Exception, ex.ToString()));
         }
 
         #endregion

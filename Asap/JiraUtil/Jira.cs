@@ -155,6 +155,9 @@ namespace JiraService
             {
                 throw new InvalidDataException("Reassign flow return not expected data");
             }
+
+            string logMsg = String.Format("{0} assigned to {1}", issue.Key, newName);
+            LoggerService.Log.Instance.AddLog(new LoggerService.LogEntry(LoggerService.LogType.Info, logMsg));
         }
 
         /// <summary>
@@ -203,6 +206,9 @@ namespace JiraService
             {
                 throw new InvalidDataException("Set status return not expected data");
             }
+
+            string logMsg = String.Format("{0} changed into {1}", issue.Key, newStatus);
+            LoggerService.Log.Instance.AddLog(new LoggerService.LogEntry(LoggerService.LogType.Info, logMsg));
         }
 
         /// <summary>
@@ -256,8 +262,15 @@ namespace JiraService
             }
 
             request.Headers.Add("Authorization", "Basic " + _credentials);
-
-            HttpWebResponse response = request.GetResponse() as HttpWebResponse;
+            HttpWebResponse response = null;
+            try
+            {
+                response = request.GetResponse() as HttpWebResponse;
+            }
+            catch(WebException e)
+            {
+                LoggerService.Log.Instance.AddException(e);
+            }
 
             #region Handle specific commands reqponse
             
