@@ -20,6 +20,19 @@ namespace JiraService
 
         private readonly string BROWSER_URL = "https://jira.softvision.ro/browse/";
 
+        private string _credentials = String.Empty;
+
+        #region Constructor
+        /// <summary>
+        /// The constructor
+        /// </summary>
+        /// <param name="credentials">Jira credentials user:pass</param>
+        public Jira(string credentials)
+        {
+            _credentials = credentials;
+        }
+        #endregion
+
         /// <summary>
         /// Get all available Jira versions
         /// </summary>
@@ -194,7 +207,6 @@ namespace JiraService
             }
         }
 
-
         /// <summary>
         /// Execute Jira query
         /// </summary>
@@ -245,8 +257,7 @@ namespace JiraService
                 }
             }
 
-            string base64Credentials = "dmFsZW50aW4ubWl0YXJ1OkNlZmFjaWF6aTAx";
-            request.Headers.Add("Authorization", "Basic " + base64Credentials);
+            request.Headers.Add("Authorization", "Basic " + _credentials);
 
             HttpWebResponse response = request.GetResponse() as HttpWebResponse;
 
