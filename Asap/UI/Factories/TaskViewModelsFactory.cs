@@ -30,7 +30,7 @@ namespace SushiPikant.UI.Factories
         {
             get
             {
-                foreach (var issue in TasksFactory.Instance.TaskModels.Where(model => model.IsToDo))
+                foreach (var issue in TasksFactory.Instance.TaskModels.Where(model => model.IsInProgress))
                 {
                     yield return new TaskView(new TaskViewModel(issue));
                 }

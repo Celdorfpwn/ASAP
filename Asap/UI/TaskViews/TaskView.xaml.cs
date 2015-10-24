@@ -36,5 +36,33 @@ namespace SushiPikant.UI.TaskViews
             logo.EndInit();
             SeverityIcon.Source = logo;
         }
+
+        private void MessageClick(object sender, RoutedEventArgs e)
+        {
+            if (Popup.IsOpen)
+            {
+                Popup.IsOpen = false;
+            }
+            else
+            {
+                Popup.IsOpen = true;
+            }
+        }
+
+        private void PopupKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                ViewModel.AddComment(PopupTextBox.Text);
+                PopupTextBox.Text = String.Empty;
+
+                PopupTextBox.Text = String.Empty;
+            }
+        }
+
+        private void UserControl_MouseLeave(object sender, MouseEventArgs e)
+        {
+            Popup.IsOpen = false;
+        }
     }
 }

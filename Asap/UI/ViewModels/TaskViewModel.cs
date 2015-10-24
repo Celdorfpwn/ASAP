@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -50,6 +51,8 @@ namespace SushiPikant.UI.ViewModels
             }
         }
 
+        public ObservableCollection<Comments> Comments { get;private set; }
+
         private SeverityEnum SeverityEnum { get; set; }
 
         private TaskModel Model { get;set; }
@@ -60,10 +63,16 @@ namespace SushiPikant.UI.ViewModels
 
             SeverityEnum = (SeverityEnum)Enum.Parse(typeof(SeverityEnum), model.Issue.Field.Priority.Name);
 
+            Comments = new ObservableCollection<Comments>(Model.Issue.Field.Comment.IssueComments);
         }
 
+        public void AddComment(string text)
+        {
+            var model = new Comments();
+            model.Body = text;
+            model.Author = new Person { DisplayName = "ionut.apostol" };
 
-
-
+            Comments.Add(model);
+        }
     }
 }
