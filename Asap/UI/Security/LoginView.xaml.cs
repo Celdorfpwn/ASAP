@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using BL;
+using SushiPikant.UI.Properties;
 using SushiPikant.UI.UIController;
 
 namespace SushiPikant.UI.Security
@@ -29,20 +30,43 @@ namespace SushiPikant.UI.Security
         {
             InitializeComponent();
             Controller = controller;
+
+            Username.Text = Settings.Default.UserName;
+            Password.Password = Settings.Default.Password;
         }
 
+        private void Login()
+        {
+            Credentials.Username = Username.Text;
+            Credentials.Password = Password.Password;
+
+            Settings.Default.UserName = Username.Text;
+            Settings.Default.Password = Password.Password;
+
+            Settings.Default.Save();
+
+            try
+            {
+                Controller.SwitchToDevView();
+            } catch(Exception e)
+            {
+                ErrorLabel.Content = "Invalid credentials";
+            }
+        }
 
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            Credentials.Username = Username.Text;
-            Credentials.Password = Password.Password;
-            Controller.SwitchToDevView();
+            Login();
         }
 
-
-
-
+        private void WindowKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                Login();
+            }
+        }
     }
 
     public class WaterMarkTextHelper : DependencyObject
