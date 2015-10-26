@@ -16,6 +16,7 @@
 
             <ContentControl Name="TopTools" Grid.Row="0">
                 <Border Grid.Column="1"  BorderThickness="0,0,0,2" BorderBrush="#3366FF">
+                    <TextBlock Text="{Binding Logs}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"></TextBlock>
                 </Border>
             </ContentControl>
             <ContentControl Name="ContentContainer" Grid.Row="1">

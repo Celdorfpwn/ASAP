@@ -147,7 +147,7 @@ namespace SushiPikant.UI.ViewModels
             if (Current != null)
             {
                 Current.ViewModel.SaveBranch();
-                _inProgress.Add(Current);
+                _inProgress.AddInOrder(Current);
             }
             Current = item;
             item.ViewModel.InProgress();
