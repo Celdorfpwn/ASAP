@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BL.ModelFactories;
-using SushiPikant.UI.TaskViews;
+using SushiPikant.UI.SettigsViews;
 using SushiPikant.UI.ViewModels;
 
 namespace SushiPikant.UI.Factories

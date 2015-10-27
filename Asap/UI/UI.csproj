@@ -126,16 +126,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Factories\TaskViewModelsFactory.cs" />
+    <Compile Include="Helpers\PasswordHelper.cs" />
+    <Compile Include="Helpers\WatermarkTextHelper.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="MyToolWindow.cs" />
     <Compile Include="Guids.cs" />
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <DependentUpon>Settings.settings</DependentUpon>
-    </Compile>
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -145,16 +142,27 @@
     <Compile Include="Security\LoginView.xaml.cs">
       <DependentUpon>LoginView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="TaskViews\DevView.xaml.cs">
+    <Compile Include="Settings\SettingsViewModels\GitViewModel.cs" />
+    <Compile Include="Settings\SettingsViews\GitSettingsView.xaml.cs">
+      <DependentUpon>GitSettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Settings\SettingsViews\JiraSettingsView.xaml.cs">
+      <DependentUpon>JiraSettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DevView.xaml.cs">
       <DependentUpon>DevView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="TaskViews\TaskView.xaml.cs">
+    <Compile Include="Settings\SettingsViews\SettingsView.xaml.cs">
+      <DependentUpon>SettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TaskView.xaml.cs">
       <DependentUpon>TaskView.xaml</DependentUpon>
     </Compile>
     <Compile Include="UIController\Controller.cs" />
     <Compile Include="UIPackage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PkgCmdID.cs" />
+    <Compile Include="ViewModels\ConfigurationViewModel.cs" />
     <Compile Include="ViewModels\DevViewModel.cs" />
     <Compile Include="ViewModels\Extensions.cs" />
     <Compile Include="ViewModels\SeverityEnum.cs" />
@@ -174,10 +182,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
     <None Include="source.extension.vsixmanifest">
       <SubType>Designer</SubType>
     </None>
@@ -208,15 +212,31 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Resources\CommonResources.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Security\LoginView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="TaskViews\DevView.xaml">
+    <Page Include="Settings\SettingsViews\GitSettingsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="TaskViews\TaskView.xaml">
+    <Page Include="Settings\SettingsViews\JiraSettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\DevView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Settings\SettingsViews\SettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\TaskView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

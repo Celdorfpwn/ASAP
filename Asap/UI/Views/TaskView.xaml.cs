@@ -17,7 +17,7 @@ using System.Windows.Shapes;
 using System.Windows.Threading;
 using SushiPikant.UI.ViewModels;
 
-namespace SushiPikant.UI.TaskViews
+namespace SushiPikant.UI.SettigsViews
 {
     /// <summary>
     /// Interaction logic for TaskView.xaml
