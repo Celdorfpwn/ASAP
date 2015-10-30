@@ -1,0 +1,66 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:SushiPikant.UI.Helpers">
+    
+    
+    <!-- Style user for a card border -->
+    <Style TargetType="Border" x:Key="CardBorder">
+        <Setter Property="BorderBrush" Value="Transparent"></Setter>
+        <Setter Property="BorderThickness" Value="1"></Setter>
+        <Setter Property="CornerRadius" Value="5"></Setter>
+        <Setter Property="Effect">
+            <Setter.Value>
+                <DropShadowEffect BlurRadius="10" Color="Black" Direction="235" Opacity=".5"
+           RenderingBias="Quality" ShadowDepth="5" />
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Style user for a container border -->
+    <Style TargetType="Border" x:Key="ContainerBorder" BasedOn="{StaticResource CardBorder}">
+        <Setter Property="Margin" Value="10"></Setter>
+        <Setter Property="Background" Value="#D4D6D6"></Setter>
+    </Style>
+
+    <!-- Style user for a task status border -->
+    <Style TargetType="Border" x:Key="TaskStatusBorder" BasedOn="{StaticResource CardBorder}">
+        <Setter Property="Margin" Value="3,1,3,1"></Setter>
+        <Setter Property="Background" Value="#53BEE8"></Setter>
+    </Style>
+
+    <!-- Style user for the settings labels -->
+    <Style TargetType="Label" x:Key="SettingLabel">
+        <Setter Property="VerticalAlignment" Value="Stretch"></Setter>
+        <Setter Property="HorizontalAlignment" Value="Stretch"></Setter>
+        <Setter Property="HorizontalContentAlignment" Value="Right"></Setter>
+        <Setter Property="VerticalContentAlignment" Value="Center"></Setter>
+        <Setter Property="Margin" Value="5"></Setter>
+    </Style>
+
+    <!-- Style user for the settings headers  labels -->
+    <Style TargetType="Label" x:Key="SettingHeaderLabel" BasedOn="{StaticResource SettingLabel}">
+        <Setter Property="HorizontalContentAlignment" Value="Left"></Setter>
+        <Setter Property="FontWeight" Value="Bold"></Setter>
+        <Setter Property="FontSize" Value="16"></Setter>
+    </Style>
+
+    <!-- Style user for the settings text boxes -->
+    <Style TargetType="TextBox" x:Key="SettingsTextBox">
+        <Setter Property="VerticalAlignment" Value="Center"></Setter>
+        <Setter Property="HorizontalAlignment" Value="Stretch"></Setter>
+        <Setter Property="Grid.Column" Value="1"></Setter>
+        <Setter Property="Margin" Value="0,0,30,0"></Setter>
+    </Style>
+
+    <!-- Style user for the settings password boxes -->
+    <Style TargetType="PasswordBox" x:Key="SettingsPasswords">
+        <Setter Property="local:WaterMarkTextHelper.IsMonitoring" Value="True"/>
+        <Setter Property="local:PasswordHelper.Attach" Value="True"></Setter>
+        <Setter Property="local:PasswordHelper.Password" Value="{Binding Password,Mode=TwoWay}"></Setter>
+        <Setter Property="local:PasswordHelper.Password" Value="{Binding Password,Mode=TwoWay}"></Setter>
+        <Setter Property="Grid.Column" Value="1"></Setter>
+        <Setter Property="VerticalAlignment" Value="Center"></Setter>
+        <Setter Property="HorizontalAlignment" Value="Stretch"></Setter>
+        <Setter Property="Margin" Value="0,0,30,0"></Setter>
+    </Style>
+</ResourceDictionary>

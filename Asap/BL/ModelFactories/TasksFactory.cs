@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BL.Configuration;
 using BL.Models;
 using GitService;
 using JiraService;
@@ -21,7 +22,7 @@ namespace BL.ModelFactories
 
         public TasksFactory()
         {
-            Jira = new Jira(Credentials.Credentials64);
+            Jira = new Jira(ConfigurationModel.Instance.Credentials.Credentials64);
 
             LoadModels();
         }

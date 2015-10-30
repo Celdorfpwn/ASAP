@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="SushiPikant.UI.TaskViews.DevView"
+﻿<UserControl x:Class="SushiPikant.UI.SettigsViews.DevView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -6,9 +6,27 @@
              mc:Ignorable="d" 
              d:DesignHeight="500" d:DesignWidth="800" MinHeight="500" MinWidth="900">
     <UserControl.Resources>
-        <Style TargetType="Border">
-            <Setter Property="BorderBrush" Value="#3366FF"></Setter>
-            <Setter Property="HorizontalAlignment" Value="Stretch"></Setter>
+
+        <Style TargetType="Border" x:Key="CardBorder">
+            <Setter Property="BorderBrush" Value="Transparent"></Setter>
+            <Setter Property="BorderThickness" Value="1"></Setter>
+            <Setter Property="CornerRadius" Value="5"></Setter>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="10" Color="Black" Direction="235" Opacity=".5"
+           RenderingBias="Quality" ShadowDepth="5" />
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <Style TargetType="Border" x:Key="ListViewBorder" BasedOn="{StaticResource CardBorder}">
+            <Setter Property="Margin" Value="5"></Setter>
+            <Setter Property="Background" Value="#D4D6D6"></Setter>
+        </Style>
+
+        <Style TargetType="Border" x:Key="TaskStatusBorder" BasedOn="{StaticResource CardBorder}">
+            <Setter Property="Margin" Value="3,1,3,1"></Setter>
+            <Setter Property="Background" Value="#53BEE8"></Setter>
         </Style>
     </UserControl.Resources>
     <Grid Name="MainGrid">
@@ -31,6 +49,7 @@
                 <Setter Property="Background" Value="Transparent"></Setter>
                 <Setter Property="BorderThickness" Value="0"></Setter>
                 <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"></Setter>
+                <Setter Property="Padding" Value="5"></Setter>
                 <EventSetter Event="Drop" Handler="ListViewDrop"></EventSetter>
                 <EventSetter Event="PreviewDragOver" Handler="ListViewPreviewDragOver"></EventSetter>
                 <EventSetter Event="RequestBringIntoView" Handler="ListViewRequestBringIntoView"></EventSetter>
@@ -43,13 +62,13 @@
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
-            <Border Grid.Column="0" BorderThickness="0,0,2,0">
+            <Border Grid.Column="0" Style="{StaticResource ListViewBorder}">
                 <Grid Grid.Column="0">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="30"></RowDefinition>
                         <RowDefinition Height="*"></RowDefinition>
                     </Grid.RowDefinitions>
-                    <Border BorderThickness="0,0,0,2">
+                    <Border Style="{StaticResource TaskStatusBorder}" >
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"></ColumnDefinition>
@@ -68,13 +87,13 @@
                 </Grid>
             </Border>
 
-            <Border Grid.Column="1"  BorderThickness="0,0,2,0">
+            <Border Grid.Column="1"  Style="{StaticResource ListViewBorder}">
                 <Grid Grid.Column="0">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="30"></RowDefinition>
                         <RowDefinition Height="*"></RowDefinition>
                     </Grid.RowDefinitions>
-                    <Border BorderThickness="0,0,0,2">
+                    <Border Style="{StaticResource TaskStatusBorder}" >
                         <Label Margin="5,0,0,0" Grid.Row="0" Content="Current"></Label>
                     </Border>
                     <Grid Grid.Row="1">
@@ -82,7 +101,7 @@
                             <RowDefinition Height="130"></RowDefinition>
                             <RowDefinition Height="*"></RowDefinition>
                         </Grid.RowDefinitions>
-                        <ListViewItem Name="CurrentItemsControl" Grid.Row="0" AllowDrop="True" Drop="CurrentDrop" PreviewDragOver="ListViewPreviewDragOver" Content="{Binding Current,UpdateSourceTrigger=PropertyChanged}" >
+                        <ListViewItem Margin="5" Name="CurrentItemsControl" Grid.Row="0" AllowDrop="True" Drop="CurrentDrop" PreviewDragOver="ListViewPreviewDragOver" Content="{Binding Current,UpdateSourceTrigger=PropertyChanged}" >
                         </ListViewItem>
 
                         <Grid Grid.Row="1">
@@ -90,7 +109,7 @@
                                 <RowDefinition Height="30"></RowDefinition>
                                 <RowDefinition Height="*"></RowDefinition>
                             </Grid.RowDefinitions>
-                            <Border BorderThickness="0,2,0,2">
+                            <Border Style="{StaticResource TaskStatusBorder}">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*"></ColumnDefinition>
@@ -109,13 +128,13 @@
                     </Grid>
                 </Grid>
             </Border>
-            <Border Grid.Column="2"  BorderThickness="0,0,0,0">
+            <Border Grid.Column="2"  Style="{StaticResource ListViewBorder}">
                 <Grid Grid.Column="0">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="30"></RowDefinition>
                         <RowDefinition Height="*"></RowDefinition>
                     </Grid.RowDefinitions>
-                    <Border BorderThickness="0,0,0,2">
+                    <Border Style="{StaticResource TaskStatusBorder}">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"></ColumnDefinition>

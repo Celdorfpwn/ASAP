@@ -11,7 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using SushiPikant.UI.TaskViews;
+using SushiPikant.UI.SettigsViews;
 using SushiPikant.UI.UIController;
 
 namespace SushiPikant.UI

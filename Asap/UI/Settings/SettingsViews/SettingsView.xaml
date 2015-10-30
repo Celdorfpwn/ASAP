@@ -1,0 +1,52 @@
+﻿<UserControl x:Class="SushiPikant.UI.Settings.SettingsViews.SettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:controls="clr-namespace:SushiPikant.UI.Settings.SettingsViews"
+
+             mc:Ignorable="d" 
+             d:DesignHeight="800" d:DesignWidth="500">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/UI;component/Resources/CommonResources.xaml"></ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+            <Style TargetType="Label" BasedOn="{StaticResource SettingLabel}"></Style>
+            <Style TargetType="TextBox" BasedOn="{StaticResource SettingsTextBox}"></Style>
+            <Style TargetType="PasswordBox" BasedOn="{StaticResource SettingsPasswords}"></Style>
+            
+        </ResourceDictionary>
+  
+        
+    </UserControl.Resources>
+    <Grid Name="MainGrid">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+
+        <Border Grid.Row="0" Grid.Column="0" Style="{StaticResource ContainerBorder}">
+            <controls:GitSettingsView></controls:GitSettingsView>
+        </Border>
+
+        <Border Grid.Row="1" Grid.Column="0" Style="{StaticResource ContainerBorder}">
+            <controls:JiraSettingsView></controls:JiraSettingsView>
+        </Border>
+
+        <Border Grid.Row="2" Grid.Column="0" Style="{StaticResource ContainerBorder}"></Border>
+
+        <Border Grid.Row="0" Grid.Column="1" Style="{StaticResource ContainerBorder}"></Border>
+
+        <Border Grid.Row="1" Grid.Column="1" Style="{StaticResource ContainerBorder}"></Border>
+
+        <Border Grid.Row="2" Grid.Column="1" Style="{StaticResource ContainerBorder}"></Border>
+    </Grid>
+</UserControl>

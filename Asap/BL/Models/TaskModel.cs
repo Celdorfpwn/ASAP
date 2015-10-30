@@ -82,6 +82,15 @@ namespace BL.Models
         }
 
         /// <summary>
+        /// Adds a comment to Jira bug
+        /// </summary>
+        /// <param name="text"></param>
+        public void AddComment(string text)
+        {
+        }
+
+
+        /// <summary>
         /// Checks if a task is done
         /// </summary>
         /// <returns>True or false</returns>

@@ -14,7 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using SushiPikant.UI.ViewModels;
 
-namespace SushiPikant.UI.TaskViews
+namespace SushiPikant.UI.SettigsViews
 {
     /// <summary>
     /// Interaction logic for DevView.xaml

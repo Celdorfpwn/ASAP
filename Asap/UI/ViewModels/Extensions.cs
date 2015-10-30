@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using SushiPikant.UI.TaskViews;
+using SushiPikant.UI.SettigsViews;
 
 namespace SushiPikant.UI.ViewModels
 {
