@@ -53,6 +53,7 @@
   <ItemGroup>
     <Compile Include="Enums.cs" />
     <Compile Include="Git.cs" />
+    <Compile Include="IGit.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

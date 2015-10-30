@@ -3,7 +3,7 @@
     /// <summary>
     /// Enum to represent different statuses for git commands
     /// </summary>
-    public enum CommandStatus
+    public enum ECommandStatus
     {
         UpToDate = 0,       //merge status
         FastForward = 1,    //merge status

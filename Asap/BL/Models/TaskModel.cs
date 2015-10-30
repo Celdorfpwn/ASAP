@@ -33,7 +33,7 @@ namespace BL.Models
         {
             Issue = issue;
 
-            if (Git.Checkout(Issue.Key) == CommandStatus.OK)
+            if (Git.Checkout(Issue.Key) == ECommandStatus.OK)
             {
                 var last = Git.GetLastCommit();
                 _isDone = last.Contains(DoneCommitMessage);
@@ -176,7 +176,7 @@ namespace BL.Models
         private void CreateBranchIfDoesntExists()
         {
             var checkoutResult = Git.Checkout(Issue.Key);
-            if (checkoutResult == CommandStatus.BranchNotFound)
+            if (checkoutResult == ECommandStatus.BranchNotFound)
             {
                 Git.Branch(Issue.Key);
             }
@@ -204,7 +204,7 @@ namespace BL.Models
             Git.AddAll();
             var result = Git.Commit(DoneCommitMessage);
 
-            if (result != CommandStatus.OK)
+            if (result != ECommandStatus.OK)
             {
                 return false;
             }
