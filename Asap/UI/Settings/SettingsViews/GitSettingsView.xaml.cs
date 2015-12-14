@@ -12,7 +12,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using SushiPikant.UI.Settings.SettingsViewModels;
 
 namespace SushiPikant.UI.Settings.SettingsViews
 {
@@ -22,19 +21,9 @@ namespace SushiPikant.UI.Settings.SettingsViews
     public partial class GitSettingsView : UserControl
     {
 
-        public GitViewModel ViewModel
-        {
-            get
-            {
-                return GitViewModel.Instance;
-            }
-
-        }
-
         public GitSettingsView()
         {
             InitializeComponent();
-            GitMainGrid.DataContext = ViewModel;
         }
     }
 }

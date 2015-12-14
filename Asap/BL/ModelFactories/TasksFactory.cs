@@ -15,6 +15,13 @@ namespace BL.ModelFactories
 
         public Jira Jira { get;private set; }
 
+        public Git Git
+        {
+            get
+            {
+                return Git.Instance;
+            }
+        }
 
         private Issue[] Issues { get; set; }
 

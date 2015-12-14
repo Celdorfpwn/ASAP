@@ -24,6 +24,13 @@ namespace BL.Models
         /// <returns>The jira issue</returns>
         public Issue Issue { get;private set; }
 
+        public Git Git
+        {
+            get
+            {
+                return Git.Instance;
+            }
+        }
 
         /// <summary>
         /// The class constructor
@@ -197,7 +204,7 @@ namespace BL.Models
         public void CommitBranchInProgress()
         {
             CreateBranchIfDoesntExists();
-            Git.AddAll();
+            //Git.AddAll();
             Git.Commit(Issue.Key + "  work in progress " +DateTime.Today.ToShortDateString());
             Git.Push(Issue.Key);
             Git.Checkout("master");
@@ -210,14 +217,14 @@ namespace BL.Models
         public bool CommitBranchDone()
         {
             CreateBranchIfDoesntExists();
-            Git.AddAll();
+            //Git.AddAll();
             var result = Git.Commit(DoneCommitMessage);
 
             if (result != ECommandStatus.OK)
             {
                 return false;
             }
-            Git.PushToOrigin(Issue.Key);
+            //Git.PushToOrigin(Issue.Key);
             Git.Checkout("master");
             return true;
         }
