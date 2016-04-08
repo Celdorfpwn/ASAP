@@ -51,14 +51,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Enums.cs" />
     <Compile Include="Git.cs" />
-    <Compile Include="IGit.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Key.snk" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SourceControl\SourceControl.csproj">
+      <Project>{65c01e51-42c5-49d3-96df-f6a454e2e2c1}</Project>
+      <Name>SourceControl</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ToolsConfiguration\ToolsConfiguration.csproj">
+      <Project>{8364b339-6499-493f-acc3-dc8534bf3e94}</Project>
+      <Name>ToolsConfiguration</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

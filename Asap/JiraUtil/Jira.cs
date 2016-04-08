@@ -4,30 +4,23 @@ using System.IO;
 using System.Net;
 using System.Runtime.Serialization.Json;
 using System.Text;
+using IssuesTracking;
+using ToolsConfiguration;
 
 namespace JiraService
 {
-    public class Jira : IJira
+    public class Jira : IIssuesTracking
     {
-        /// <summary>
-        /// The Chrome Europe Jira project key
-        /// </summary>
-        public readonly string JIRA_PROJECT = "CHREU";
-
-        private readonly string BASE_URL = "https://jira.softvision.ro/rest/api/latest/";
-
-        private readonly string BROWSER_URL = "https://jira.softvision.ro/browse/";
-
-        private string _credentials = String.Empty;
+        private IIssuesTrackingConfig Config { get; set; }
 
         #region Constructor
         /// <summary>
         /// The constructor
         /// </summary>
         /// <param name="credentials">Jira credentials user:pass</param>
-        public Jira(string credentials)
+        public Jira(IIssuesTrackingConfig config)
         {
-            _credentials = credentials;
+            Config = config;
         }
         #endregion
 
@@ -35,13 +28,13 @@ namespace JiraService
         /// Get all available Jira versions
         /// </summary>
         /// <returns>List with all versions</returns>
-        public List<Version> GetVersions()
+        public IEnumerable<ItVersion> GetVersions()
         {
             string response = RunQuery("versions");
 
-            DataContractJsonSerializer jsonSerializer = new DataContractJsonSerializer(typeof(List<Version>));
+            DataContractJsonSerializer jsonSerializer = new DataContractJsonSerializer(typeof(List<ItVersion>));
             MemoryStream stream = new MemoryStream(Encoding.UTF8.GetBytes(response));
-            var vers = (List<Version>)jsonSerializer.ReadObject(stream);
+            var vers = (List<ItVersion>)jsonSerializer.ReadObject(stream);
 
             return vers;
         }
@@ -50,7 +43,7 @@ namespace JiraService
         /// Search the Jira for issues that were fixed in the given version
         /// </summary>
         /// <param name="version">The version used to search for FixVersion</param>
-        public SearchResult SearchIssues(Version version)
+        public SearchResult SearchIssues(ItVersion version)
         {
             string query = String.Format("search?jql=FixVersion='{0}'+order+by+priority", version.Name);
             string response = RunQuery(query);
@@ -62,7 +55,7 @@ namespace JiraService
             // Fill-up URL property
             foreach (Issue issue in vers.Issues)
             {
-                issue.URL = BROWSER_URL + issue.Key;
+                issue.URL = Config.BrowserUrl + issue.Key;
                 issue.Field.Severity = ParseSeverityFromTheme(issue.Field.Labels);
             }
             return vers;
@@ -73,9 +66,9 @@ namespace JiraService
         /// </summary>
         /// <param name="persionID">The person name (firstName.lastName)</param>
         /// <returns>Search result object</returns>
-        public SearchResult GetIssuesForPerson(String persionID)
+        public SearchResult GetIssues()
         {
-            string query = String.Format("search?jql=status%20in%20(Open%2C%20'In%20Progress'%2C%20Reopened)%20AND%20assignee%20in%20('{0}')+order+by+priority", persionID);
+            string query = String.Format("search?jql=status%20in%20(Open%2C%20'In%20Progress'%2C%20Reopened)%20AND%20assignee%20in%20('{0}')+order+by+priority", Config.Username);
             string response = RunQuery(query);
 
             DataContractJsonSerializer jsonSerializer = new DataContractJsonSerializer(typeof(SearchResult));
@@ -85,7 +78,7 @@ namespace JiraService
             // Fill-up extra stuff
             foreach (Issue issue in vers.Issues)
             {
-                issue.URL = BROWSER_URL + issue.Key;
+                issue.URL = Config.BrowserUrl + issue.Key;
                 issue.Field.Severity = ParseSeverityFromTheme(issue.Field.Labels);
                 //AppendCommentsForIssue(issue);
                 //Attachment[] a = AppendAttachmentForIssue(issue);
@@ -175,7 +168,7 @@ namespace JiraService
             Issue issue = (Issue)jsonSerializer.ReadObject(stream);
 
             // Fill-up URL property
-            issue.URL = BROWSER_URL + issue.Key;
+            issue.URL = Config.BrowserUrl + issue.Key;
 
             // Add the severity field
             issue.Field.Severity = ParseSeverityFromTheme(issue.Field.Labels);
@@ -189,7 +182,7 @@ namespace JiraService
         /// <param name="issue">The issue to change the status for</param>
         /// <param name="newStatus">The new status (transition)</param>
         /// <param name="message">Message to add</param>
-        public void SetStatus(Issue issue, JiraTransition newStatus, string message = "", Version fixVersion = null)
+        public void SetStatus(Issue issue, JiraTransition newStatus, string message, ItVersion fixVersion)
         {
             string query = String.Format("issue/{0}", issue.Key);
             string data = "{\"transition\" : {\"id\" : \"" + (int)newStatus + "\"}}";
@@ -223,7 +216,7 @@ namespace JiraService
             string url = String.Empty;
             if (!argument.StartsWith("search") && !argument.StartsWith("issue"))
             {
-                url = string.Format("{0}project/{1}/", BASE_URL, JIRA_PROJECT);
+                url = string.Format("{0}project/{1}/", Config.BaseUrl, Config.Project);
 
                 if (argument != null)
                 {
@@ -232,12 +225,12 @@ namespace JiraService
             }
             else if (!String.IsNullOrEmpty(data) && data.Contains("transition"))
             {
-                url = String.Format("{0}{1}/transitions?expand=transitions.fields", BASE_URL, argument);
+                url = String.Format("{0}{1}/transitions?expand=transitions.fields", Config.BaseUrl, argument);
             }
             else
             {
                 // It's a issue search, don't add the project name to the address
-                url = String.Format("{0}{1}", BASE_URL, argument);
+                url = String.Format("{0}{1}", Config.BaseUrl, argument);
             }
 
             System.Net.ServicePointManager.Expect100Continue = false;
@@ -261,19 +254,19 @@ namespace JiraService
                 }
             }
 
-            request.Headers.Add("Authorization", "Basic " + _credentials);
+            request.Headers.Add("Authorization", "Basic " + CredentialsAsBase64());
             HttpWebResponse response = null;
             try
             {
                 response = request.GetResponse() as HttpWebResponse;
             }
-            catch(WebException e)
+            catch (WebException e)
             {
                 LoggerService.Log.Instance.AddException(e);
             }
 
             #region Handle specific commands reqponse
-            
+
             // 204 for transition and reassign
             if (data != null && response.StatusCode == HttpStatusCode.NoContent)
             {
@@ -295,6 +288,12 @@ namespace JiraService
                 result = reader.ReadToEnd();
             }
             return result;
+        }
+
+        private string CredentialsAsBase64()
+        {
+            var bytes = Encoding.UTF8.GetBytes(Config.Username + ":" + Config.Password);
+            return Convert.ToBase64String(bytes);
         }
     }
 }

@@ -63,4 +63,24 @@
         <Setter Property="HorizontalAlignment" Value="Stretch"></Setter>
         <Setter Property="Margin" Value="0,0,30,0"></Setter>
     </Style>
+
+    <Style TargetType="Button" x:Key="BlueButton">
+        <Setter Property="Background" Value="#3366FF"></Setter>
+        <Setter Property="Foreground" Value="White"></Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border Background="{TemplateBinding Background}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Foreground" Value="Gray"></Setter>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
 </ResourceDictionary>

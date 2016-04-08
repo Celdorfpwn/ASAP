@@ -12,7 +12,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using BL;
 using SushiPikant.UI.UIController;
 using SushiPikant.UI.ViewModels;
 
@@ -30,7 +29,7 @@ namespace SushiPikant.UI.Security
         {
             InitializeComponent();
             Controller = controller;
-            MainGrid.DataContext = ConfigurationViewModel.Instance;
+            MainGrid.DataContext = new ConfigurationViewModel();
         }
 
         private void Login()

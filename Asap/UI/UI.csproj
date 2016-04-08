@@ -42,7 +42,31 @@
     <RunCodeAnalysis>true</RunCodeAnalysis>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=6d32ff45e0ccc69f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.4.0.1\lib\net45\Microsoft.Practices.Unity.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity.Configuration, Version=4.0.0.0, Culture=neutral, PublicKeyToken=6d32ff45e0ccc69f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.4.0.1\lib\net45\Microsoft.Practices.Unity.Configuration.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity.RegistrationByConvention, Version=4.0.0.0, Culture=neutral, PublicKeyToken=6d32ff45e0ccc69f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.4.0.1\lib\net45\Microsoft.Practices.Unity.RegistrationByConvention.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.VisualStudio.OLE.Interop" />
     <Reference Include="Microsoft.VisualStudio.Shell.Interop" />
     <Reference Include="Microsoft.VisualStudio.Shell.Interop.8.0" />
@@ -60,6 +84,7 @@
     <Reference Include="Microsoft.VisualStudio.Shell.Immutable.11.0" />
     <Reference Include="Microsoft.VisualStudio.Shell.Immutable.12.0" />
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.Design" />
@@ -128,6 +153,18 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration\ConfigurationView.xaml.cs">
+      <DependentUpon>ConfigurationView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Configuration\CredentialsView.xaml.cs">
+      <DependentUpon>CredentialsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Configuration\IssuesTrackingView.xaml.cs">
+      <DependentUpon>IssuesTrackingView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Configuration\SourceControlView.xaml.cs">
+      <DependentUpon>SourceControlView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Factories\TaskViewModelsFactory.cs" />
     <Compile Include="Helpers\PasswordHelper.cs" />
     <Compile Include="Helpers\WatermarkTextHelper.cs" />
@@ -184,6 +221,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="packages.config" />
     <None Include="source.extension.vsixmanifest">
       <SubType>Designer</SubType>
     </None>
@@ -210,6 +248,22 @@
     <Content Include="Resources\Package.ico" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Configuration\ConfigurationView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Configuration\CredentialsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Configuration\IssuesTrackingView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Configuration\SourceControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -248,9 +302,21 @@
       <Project>{ebbb6b94-38ac-473c-a474-018a1eb17a9e}</Project>
       <Name>BL</Name>
     </ProjectReference>
-    <ProjectReference Include="..\JiraUtil\JiraService.csproj">
-      <Project>{4784b69e-ce08-4750-9b26-485345bc97e8}</Project>
-      <Name>JiraService</Name>
+    <ProjectReference Include="..\ConfigurationDI\ConfigurationDI.csproj">
+      <Project>{e684d351-994a-4f5a-928b-e81acf057cf3}</Project>
+      <Name>ConfigurationDI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DependencyFactory\ModelsDI.csproj">
+      <Project>{f58a6f7e-c073-4429-9da3-8e520148ca44}</Project>
+      <Name>ModelsDI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IssuesTracking\IssuesTracking.csproj">
+      <Project>{07410fd9-44c8-4635-bad9-5526024f8da4}</Project>
+      <Name>IssuesTracking</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ToolsConfiguration\ToolsConfiguration.csproj">
+      <Project>{8364b339-6499-493f-acc3-dc8534bf3e94}</Project>
+      <Name>ToolsConfiguration</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

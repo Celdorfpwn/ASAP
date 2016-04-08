@@ -1,6 +1,8 @@
 ﻿using System;
 using LibGit2Sharp;
 using LibGit2Sharp.Handlers;
+using SourceControl;
+using ToolsConfiguration;
 
 namespace GitService
 {
@@ -12,83 +14,37 @@ namespace GitService
 
         #region Private Variables
 
-        string _userName;
-        string _password;
-        string _email;
-        string _repositoryPath;
-        static readonly Git instance = new Git();
+        private ISourceControlConfig Config { get; set; }
 
         #endregion
-    
+
         #region Public Properties
-        /// <summary>
-        /// Represents the git UserName.
-        /// </summary>
-        /// <returns>UserName</returns>
-        public string UserName
-        {
-            get { return _userName; }
-            set { _userName = value; }
-        }
-
-        /// <summary>
-        /// Represents the password for git.
-        /// </summary>
-        /// <returns>Password</returns>
-        public string Password
-        {
-            get { return _password; }
-            set { _password = value; }
-        }
-
-        /// <summary>
-        /// Represents the users email.
-        /// </summary>
-        /// <returns>Email</returns>
-        public string Email
-        {
-            get { return _email; }
-            set { _email = value; }
-        }
-
-        /// <summary>
-        /// Represents the path to the Repository.
-        /// </summary>
-        /// <returns>Repository path</returns>
-        public string RepositoryPath
-        {
-            get { return _repositoryPath; }
-            set { _repositoryPath = value; }
-        }
-
-        /// <summary>
-        /// Represents the Git Instance
-        /// </summary>
-        /// <returns>Git Instance</returns>
-        public static Git Instance
-        {
-            get { return instance; }
-        }
 
         #endregion
 
         #region Private Methods
 
-        /// <summary>
-        /// Default constructor
-        /// </summary>
-        private Git(){}
-
         #endregion
 
         #region Public Methods
+
+
+        /// <summary>
+        /// Sets the user details 
+        /// </summary>
+        /// <param name="user">The user details</param>
+        public Git(ISourceControlConfig config)
+        {
+            Config = config;
+        }
+
         /// <summary>
         /// Git pull command
         /// </summary>
         /// <returns>CommandStatus</returns>
         public ECommandStatus Pull()
         {
-            return Pull(_repositoryPath);
+            return Pull(Config.Path);
         }
 
         /// <summary>
@@ -98,7 +54,7 @@ namespace GitService
         /// <returns>CommandStatus</returns>
         public ECommandStatus Push(string remote = "",  string branchName = "")
         {
-            return Push(_repositoryPath, remote, branchName);
+            return Push(Config.Path, remote, branchName);
         }
 
         /// <summary>
@@ -108,7 +64,7 @@ namespace GitService
         /// <returns>CommandStatus</returns>
         public ECommandStatus Branch(string branchName, bool delete = false, bool isRemote = false)
         {
-            return Branch(_repositoryPath, branchName, delete, isRemote);
+            return Branch(Config.Path, branchName, delete, isRemote);
         }
 
         /// <summary>
@@ -118,7 +74,7 @@ namespace GitService
         /// <returns>CommandStatus</returns>
         public ECommandStatus Checkout(string branchName)
         {
-            return Checkout(_repositoryPath, branchName);
+            return Checkout(Config.Path, branchName);
         }
 
         /// <summary>
@@ -127,7 +83,7 @@ namespace GitService
         /// <returns>CommandStatus</returns>
         public ECommandStatus Add(string fileName, bool all = false)
         {
-            return Add(_repositoryPath, fileName, all);
+            return Add(Config.Path, fileName, all);
         }
 
         /// <summary>
@@ -138,7 +94,8 @@ namespace GitService
         /// <returns>CommandStatus</returns>
         public ECommandStatus Commit(string message, bool allowEmptyCommit = false)
         {
-            return Commit(_repositoryPath, message, allowEmptyCommit);
+            
+            return Commit(Config.Path, message, allowEmptyCommit);
         }
 
         /// <summary>
@@ -148,7 +105,7 @@ namespace GitService
         /// <returns>CommandStatus</returns>
         public ECommandStatus Merge(string branchName)
         {
-            return Merge(_repositoryPath, branchName);
+            return Merge(Config.Path, branchName);
         }
 
         /// <summary>
@@ -157,7 +114,7 @@ namespace GitService
         /// <returns>Branch name</returns>
         public string GetCurrentBranch()
         {
-            return GetCurrentBranch(_repositoryPath);
+            return GetCurrentBranch(Config.Path);
         }
 
         /// <summary>
@@ -166,7 +123,7 @@ namespace GitService
         /// <returns>Commit message</returns>
         public string GetLastCommit()
         {
-            return GetLastCommit(_repositoryPath);
+            return GetLastCommit(Config.Path);
         }
 
         #endregion
@@ -189,11 +146,11 @@ namespace GitService
                     options.FetchOptions.CredentialsProvider = new CredentialsHandler(
                         (url, usernameFromUrl, types) => new UsernamePasswordCredentials()
                     {
-                        Username = _userName,
-                        Password = _password
+                        Username = Config.Username,
+                        Password = Config.Password
                     });
 
-                    MergeResult result = repo.Network.Pull(new Signature(_userName, _email, new DateTimeOffset(DateTime.Now)), options);
+                    MergeResult result = repo.Network.Pull(new Signature(Config.Username, Config.Email, new DateTimeOffset(DateTime.Now)), options);
                     return (ECommandStatus)result.Status;
                 }
             }
@@ -235,8 +192,8 @@ namespace GitService
                     options.CredentialsProvider = new CredentialsHandler(
                         (url, usernameFromUrl, types) => new UsernamePasswordCredentials()
                     {
-                        Username = _userName,
-                        Password = _password
+                        Username = Config.Username,
+                        Password = Config.Password
                     });
 
                     if (localBranch != null)
@@ -377,12 +334,12 @@ namespace GitService
             {
                 using (var repo = new Repository(repositoryPath))
                 {
-                    Signature author = new Signature(_userName, _email, DateTime.Now);
+                    Signature author = new Signature(Config.Username, Config.Email, DateTime.Now);
                     Signature commiter = author;
 
                     CommitOptions commitOptions = new CommitOptions();
                     commitOptions.AllowEmptyCommit = allowEmptyCommit;
-
+                    repo.Stage("*");
                     Commit commit = repo.Commit(message, author, commiter, commitOptions); 
                     return ECommandStatus.OK;
                 }
@@ -409,7 +366,7 @@ namespace GitService
                     var localBranch = repo.Branches[branchName];
                     if (localBranch != null)
                     {
-                        Signature merger = new Signature(_userName, _email, DateTime.Now);
+                        Signature merger = new Signature(Config.Username, Config.Email, DateTime.Now);
                         return (ECommandStatus)(repo.Merge(localBranch, merger).Status);  
                     }
                     else

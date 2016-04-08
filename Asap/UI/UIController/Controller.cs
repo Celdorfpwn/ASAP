@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SushiPikant.UI.Configuration;
 using SushiPikant.UI.Security;
 using SushiPikant.UI.SettigsViews;
 using SushiPikant.UI.Settings.SettingsViews;
@@ -25,8 +26,7 @@ namespace SushiPikant.UI.UIController
 
         private void Initialize()
         {
-            Window.ContentContainer.Content = new LoginView(this);
-            //SwitchToSettings();
+            SwitchToSettings();
         }
 
         internal void SwitchToDevView()
@@ -37,8 +37,7 @@ namespace SushiPikant.UI.UIController
 
         internal void SwitchToSettings()
         {
-            var settings = new SettingsView();
-            Window.ContentContainer.Content = settings;
+            Window.ContentContainer.Content = new ConfigurationView(this);
         }
     }
 }

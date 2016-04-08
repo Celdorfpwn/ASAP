@@ -1,0 +1,32 @@
+﻿<UserControl x:Class="SushiPikant.UI.Configuration.ConfigurationView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SushiPikant.UI.Configuration"
+             mc:Ignorable="d" 
+             d:DesignHeight="500" d:DesignWidth="1000">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/UI;component/Resources/CommonResources.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid Margin="30" >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="250"></RowDefinition>
+            <RowDefinition Height="30"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        
+        <local:CredentialsView Grid.Row="0" Grid.Column="0"  x:Name="_credentialsView" Width="340" VerticalAlignment="Center" HorizontalAlignment="Left"></local:CredentialsView>
+        <local:SourceControlView Grid.Row="0" Grid.Column="1" x:Name="_sourceControlView" Width="340"  VerticalAlignment="Center" HorizontalAlignment="Left"></local:SourceControlView>
+        <local:IssuesTrackingView Grid.Row="0" Grid.Column="2" x:Name="_issuesTrackingView" Width="340" VerticalAlignment="Center" HorizontalAlignment="Left"></local:IssuesTrackingView>
+        <Button Width="100" Grid.Row="1" Grid.Column="1" Content="Continue" Click="Button_Click" Style="{StaticResource BlueButton}"></Button>
+    </Grid>
+</UserControl>

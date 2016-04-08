@@ -45,8 +45,6 @@ namespace SushiPikant.UI.ViewModels
             }
         }
 
-        private List<ObservableCollection<TaskView>> Collections { get; set; }
-
         public TaskView Current { get;set; }
 
         public DevViewModel()
@@ -61,7 +59,7 @@ namespace SushiPikant.UI.ViewModels
             _toDo = new ObservableCollection<TaskView>(TaskViewModelsFactory.Instance.ToDoTaskViews);
             _done = new ObservableCollection<TaskView>(TaskViewModelsFactory.Instance.Done);
 
-            Collections = new List<ObservableCollection<TaskView>>() { _inProgress, _toDo, _done };
+
             if (Current != null)
             {
                 RemoveItemFromCollections(Current);
@@ -128,7 +126,28 @@ namespace SushiPikant.UI.ViewModels
         /// <param name="item"></param>
         private void RemoveItemFromCollections(TaskView item)
         {
-            Collections.ForEach(collection => collection.Remove(item));
+            var current = _inProgress.FirstOrDefault(task => task.ViewModel.Title.Equals(item.ViewModel.Title));
+            if (current == null)
+            {
+                current = _toDo.FirstOrDefault(task => task.ViewModel.Title.Equals(item.ViewModel.Title));
+                if (current == null)
+                {
+                    current =_done.FirstOrDefault(task => task.ViewModel.Title.Equals(item.ViewModel.Title));
+                    if (current != null)
+                    {
+                        _done.Remove(current);
+                    }
+                }
+                else
+                {
+                    _toDo.Remove(current);
+                }
+            }
+            else
+            {
+                _inProgress.Remove(current);
+            }
+            
         }
 
 

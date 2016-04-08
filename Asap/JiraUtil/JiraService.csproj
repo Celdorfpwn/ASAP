@@ -47,19 +47,24 @@
     <Reference Include="System.Xml.Serialization" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Enums.cs" />
-    <Compile Include="IJira.cs" />
     <Compile Include="Jira.cs" />
-    <Compile Include="JSONDataMembers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Key.snk" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\IssuesTracking\IssuesTracking.csproj">
+      <Project>{07410fd9-44c8-4635-bad9-5526024f8da4}</Project>
+      <Name>IssuesTracking</Name>
+    </ProjectReference>
     <ProjectReference Include="..\LoggerService\LoggerService.csproj">
       <Project>{e41e01cb-c3b9-4391-b993-db076abe3f7c}</Project>
       <Name>LoggerService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ToolsConfiguration\ToolsConfiguration.csproj">
+      <Project>{8364b339-6499-493f-acc3-dc8534bf3e94}</Project>
+      <Name>ToolsConfiguration</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

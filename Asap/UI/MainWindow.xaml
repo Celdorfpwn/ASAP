@@ -6,7 +6,7 @@
              mc:Ignorable="d"
              d:DesignHeight="500" d:DesignWidth="800" MinHeight="500" MinWidth="900"
              Name="Main" Background="White">
-    <ScrollViewer PreviewMouseWheel="ScrollViewer_PreviewMouseWheel">
+ 
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="0"></RowDefinition>
@@ -22,5 +22,5 @@
             <ContentControl Name="ContentContainer" Grid.Row="1">
             </ContentControl>
         </Grid>
-    </ScrollViewer>
+    
 </UserControl>

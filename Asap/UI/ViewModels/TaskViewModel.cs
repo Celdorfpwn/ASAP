@@ -4,8 +4,9 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using BL.Models;
-using JiraService;
+using BL;
+using IssuesTracking;
+
 
 namespace SushiPikant.UI.ViewModels
 {
@@ -16,7 +17,7 @@ namespace SushiPikant.UI.ViewModels
         {
             get
             {
-                return Model.Issue.Key;
+                return Model.Key;
             }
         }
 
@@ -24,7 +25,7 @@ namespace SushiPikant.UI.ViewModels
         {
             get
             {
-                return Model.Issue.Field.Reporter.DisplayName;
+                return Model.Reporter;
             }
         }
 
@@ -32,7 +33,7 @@ namespace SushiPikant.UI.ViewModels
         {
             get
             {
-                return Model.Issue.Field.Summary;
+                return Model.Description;
             }
         }
 
@@ -82,7 +83,7 @@ namespace SushiPikant.UI.ViewModels
         {
             Model = model;
 
-            SeverityEnum = (SeverityEnum)Enum.Parse(typeof(SeverityEnum), model.Issue.Field.Priority.Name);
+            SeverityEnum = (SeverityEnum)Enum.Parse(typeof(SeverityEnum), model.Priority);
 
         }
 
@@ -146,7 +147,6 @@ namespace SushiPikant.UI.ViewModels
         {
             if (Model.CommitBranchDone())
             {
-                Model.IsDone = true;
                 RaisePropertyChanged("StatusMessage");
                 return true;
             }
