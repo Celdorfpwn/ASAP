@@ -15,4 +15,14 @@ namespace IssuesTracking
         Resolved = 5,
         Closed = 6
     }
+
+    /// <summary>
+    /// Jira Issue types Enum
+    /// </summary>
+    public enum JiraIssueType
+    {
+        None,
+        Bug = 44,
+        UserStory = 43
+    }
 }

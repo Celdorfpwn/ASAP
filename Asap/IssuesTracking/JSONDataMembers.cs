@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using IssuesTracking;
 
@@ -16,6 +17,19 @@ namespace IssuesTracking
 
         [DataMember(Name = "issues")]
         public Issue[] Issues { get; set; }
+    }
+
+    [DataContract]
+    public class CreateResult
+    {
+        [DataMember(Name = "id")]
+        public int Id { get; set; }
+
+        [DataMember(Name = "key")]
+        public string Key { get; set; }
+
+        [DataMember(Name = "self")]
+        public string self { get; set; }
     }
 
     [DataContract]
@@ -37,7 +51,23 @@ namespace IssuesTracking
     public class Field
     {
         [DataMember(Name = "summary")]
-        public string Summary { get; set; }
+        public string Summary
+        {
+            get
+            {
+                return _summary;
+            }
+            set
+            {
+                _summary = value;
+                ExtractUSName();
+            }
+        }
+
+        public string USNumber
+        {
+            get; private set;
+        }
 
         [DataMember(Name = "description")]
         public string Description { get; set; }
@@ -100,6 +130,30 @@ namespace IssuesTracking
 
         private string _createdDate;
         private string _updatedDate;
+        private string _summary;
+
+        private void ExtractUSName()
+        {
+            try
+            {
+                Match m = _usRegex.Match(_summary);
+                if (m.Success)
+                {
+                    USNumber = m.Value.Substring(1, m.Value.Length - 2);
+                }
+                else
+                {
+                    USNumber = string.Empty;
+                    return;
+                }
+            }
+            catch (Exception)
+            {
+                USNumber = string.Empty;
+            }
+        }
+
+        private static Regex _usRegex = new Regex(@"\[US\w{5}\]+", RegexOptions.Compiled);
     }
 
     [DataContract]
@@ -247,13 +301,28 @@ namespace IssuesTracking
     public class IssueType
     {
         [DataMember(Name = "id")]
-        public int Id { get; set; }
+        public int Id
+        {
+            get
+            {
+                return _id;
+            }
+            set
+            {
+                _id = value;
+                Type = (JiraIssueType)_id;
+            }
+        }
 
         [DataMember(Name = "name")]
         public string Name { get; set; }
 
         [DataMember(Name = "iconUrl")]
         public string IconURL { get; set; }
+
+        public JiraIssueType Type { get; private set; }
+
+        private int _id;
     }
 
     [DataContract]

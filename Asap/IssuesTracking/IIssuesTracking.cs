@@ -7,11 +7,12 @@ using System.Threading.Tasks;
 namespace IssuesTracking
 {
     public interface IIssuesTracking
-    {        /// <summary>
-             /// Assign the given issue to the specified name
-             /// </summary>
-             /// <param name="issue">Issue to be assigned to newName</param>
-             /// <param name="newName">The person that gets the Issue</param>
+    {        
+        /// <summary>
+        /// Assign the given issue to the specified name
+        /// </summary>
+        /// <param name="issue">Issue to be assigned to newName</param>
+        /// <param name="newName">The person that gets the Issue</param>
         void AssignIssue(Issue issue, string newName);
 
         /// <summary>
@@ -24,9 +25,18 @@ namespace IssuesTracking
         /// <summary>
         /// Returns all Issues for the given personId
         /// </summary>
-        /// <param name="persionID">The person name (firstName.lastName)</param>
+        /// <param name="username">The person name (firstName.lastName)</param>
         /// <returns>Search result object</returns>
-        SearchResult GetIssues();
+        SearchResult GetIssues(String username = "");
+
+        /// <summary>
+        /// Get all the Jira items for the specified project with the specified status
+        /// </summary>
+        /// <param name="project">The project to query</param>
+        /// <param name="status">The status to search for</param>
+        /// <param name="type">The type of the issue</param>
+        /// <returns>SearchResult with the requested issues</returns>
+        SearchResult GetIssues(string project, List<JiraItemStatus> status, JiraIssueType type);
 
         /// <summary>
         /// Get all available Jira versions

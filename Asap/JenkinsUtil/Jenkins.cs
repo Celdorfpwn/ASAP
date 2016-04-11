@@ -158,6 +158,21 @@ namespace JenkinsService
 
             RunQuery(JENKINS_CONFIG_URL, conf.InnerXml, "POST");
         }
+
+        /// <summary>
+        /// Get the current Jenkins build branch
+        /// </summary>
+        /// <returns>The name of the branch</returns>
+        public string GetBranch()
+        {
+            string configXML = RunQuery(JENKINS_CONFIG_URL);
+
+            XmlDocument conf = new XmlDocument();
+            conf.LoadXml(configXML);
+
+            XmlNode branchName = conf.DocumentElement.SelectSingleNode("/project/scm/branches/hudson.plugins.git.BranchSpec/name");
+            return branchName.InnerText.Substring(2);
+        }
         #endregion
 
         #region Private methods

@@ -36,6 +36,12 @@ namespace JenkinsService
         void SwitchBranch(string newBranch);
 
         /// <summary>
+        /// Get the current Jenkins build branch
+        /// </summary>
+        /// <returns>The name of the branch</returns>
+        string GetBranch();
+
+        /// <summary>
         /// Build state change event
         /// </summary>
         event Action<Build> BuildStateChange;
