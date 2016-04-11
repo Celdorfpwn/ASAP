@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<TestRun id="0524acc7-f479-4377-8a03-95859cfd9ffb" name="ionut.apostol@P5446 2016-04-06 09:49:19" runUser="P5446\ionut.apostol" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2016-04-06T09:49:19.6956154+03:00" queuing="2016-04-06T09:49:19.6966154+03:00" start="2016-04-06T09:49:19.7036154+03:00" finish="2016-04-06T09:49:19.8036154+03:00" />
+  <TestSettings name="default" id="17fe2995-b43c-40e4-98ac-25b47a433bcc">
+    <Execution>
+      <TestTypeSpecific />
+    </Execution>
+    <Deployment runDeploymentRoot="ionut.apostol_P5446 2016-04-06 09_49_19" />
+    <Properties />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="2a201bee-c3ca-4dd0-96ba-4b68b7b12f36" testId="f2087339-2266-fe04-793e-6f1f426ef893" testName="Initialize_Configuration_Model_When_Settings_Is_Empty" computerName="P5446" duration="00:00:00.3929214" startTime="2016-04-06T09:49:18.9376154+03:00" endTime="2016-04-06T09:49:19.5676154+03:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2a201bee-c3ca-4dd0-96ba-4b68b7b12f36" />
+    <UnitTestResult executionId="aca6fa95-6858-452c-8ae7-2035a1ebb9b0" testId="60ef5aab-3031-39c3-126a-9ffa62b871c7" testName="Configuration_Model_Credentials_Not_Null" computerName="P5446" duration="00:00:00.0136791" startTime="2016-04-06T09:49:19.5786154+03:00" endTime="2016-04-06T09:49:19.5926154+03:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="aca6fa95-6858-452c-8ae7-2035a1ebb9b0" />
+    <UnitTestResult executionId="aa0c6ff3-3124-491d-bc7a-6eedd2d7fb5e" testId="43aa2226-caa3-684c-df1e-2534c6945391" testName="Configuration_Model_JiraConfig_Not_Null" computerName="P5446" duration="00:00:00.0067886" startTime="2016-04-06T09:49:19.5926154+03:00" endTime="2016-04-06T09:49:19.5996154+03:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="aa0c6ff3-3124-491d-bc7a-6eedd2d7fb5e" />
+    <UnitTestResult executionId="d4a217a4-c7f7-49ac-91b6-da834b3bb89a" testId="b0a9e5e4-8860-2338-8e7a-7163155ef01b" testName="Configuration_Model_GitConfig_Not_Null" computerName="P5446" duration="00:00:00.0055952" startTime="2016-04-06T09:49:19.5996154+03:00" endTime="2016-04-06T09:49:19.6056154+03:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d4a217a4-c7f7-49ac-91b6-da834b3bb89a" />
+    <UnitTestResult executionId="0dd5c7aa-7dc8-4afb-b0f6-49ac172f679a" testId="bc1f15ea-3ab8-46d8-3ceb-cfdf28cfc8ee" testName="Configuraiton_Model_Set_Credentials_Properties" computerName="P5446" duration="00:00:00.0057077" startTime="2016-04-06T09:49:19.6056154+03:00" endTime="2016-04-06T09:49:19.6116154+03:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0dd5c7aa-7dc8-4afb-b0f6-49ac172f679a" />
+    <UnitTestResult executionId="1e59de6b-eba8-42ee-a48b-bbd98519ada7" testId="42c05800-e6e0-f44a-f5b6-62811dc11f8d" testName="Configuraiton_Model_Set_GitConfig_Properties" computerName="P5446" duration="00:00:00.0049521" startTime="2016-04-06T09:49:19.6116154+03:00" endTime="2016-04-06T09:49:19.6166154+03:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1e59de6b-eba8-42ee-a48b-bbd98519ada7" />
+    <UnitTestResult executionId="57866ae9-ef92-4801-8792-11f06c786cc5" testId="157f3719-ee92-2d15-7949-f920cf6d3401" testName="Configuration_Model_Set_JiraConfig_Properties" computerName="P5446" duration="00:00:00.0049160" startTime="2016-04-06T09:49:19.6166154+03:00" endTime="2016-04-06T09:49:19.6226154+03:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="57866ae9-ef92-4801-8792-11f06c786cc5" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="Initialize_Configuration_Model_When_Settings_Is_Empty" storage="e:\sideprojects\asap\asap\gitjiraconfigurationunittests\bin\debug\gitjiraconfigurationunittests.dll" id="f2087339-2266-fe04-793e-6f1f426ef893">
+      <Execution id="2a201bee-c3ca-4dd0-96ba-4b68b7b12f36" />
+      <TestMethod codeBase="E:\SideProjects\ASAP\Asap\GitJiraConfigurationUnitTests\bin\Debug\GitJiraConfigurationUnitTests.dll" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter" className="GitJiraConfigurationUnitTests.ConfigurationModelUT" name="Initialize_Configuration_Model_When_Settings_Is_Empty" />
+    </UnitTest>
+    <UnitTest name="Configuration_Model_Credentials_Not_Null" storage="e:\sideprojects\asap\asap\gitjiraconfigurationunittests\bin\debug\gitjiraconfigurationunittests.dll" id="60ef5aab-3031-39c3-126a-9ffa62b871c7">
+      <Execution id="aca6fa95-6858-452c-8ae7-2035a1ebb9b0" />
+      <TestMethod codeBase="E:\SideProjects\ASAP\Asap\GitJiraConfigurationUnitTests\bin\Debug\GitJiraConfigurationUnitTests.dll" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter" className="GitJiraConfigurationUnitTests.ConfigurationModelUT" name="Configuration_Model_Credentials_Not_Null" />
+    </UnitTest>
+    <UnitTest name="Configuration_Model_JiraConfig_Not_Null" storage="e:\sideprojects\asap\asap\gitjiraconfigurationunittests\bin\debug\gitjiraconfigurationunittests.dll" id="43aa2226-caa3-684c-df1e-2534c6945391">
+      <Execution id="aa0c6ff3-3124-491d-bc7a-6eedd2d7fb5e" />
+      <TestMethod codeBase="E:\SideProjects\ASAP\Asap\GitJiraConfigurationUnitTests\bin\Debug\GitJiraConfigurationUnitTests.dll" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter" className="GitJiraConfigurationUnitTests.ConfigurationModelUT" name="Configuration_Model_JiraConfig_Not_Null" />
+    </UnitTest>
+    <UnitTest name="Configuration_Model_GitConfig_Not_Null" storage="e:\sideprojects\asap\asap\gitjiraconfigurationunittests\bin\debug\gitjiraconfigurationunittests.dll" id="b0a9e5e4-8860-2338-8e7a-7163155ef01b">
+      <Execution id="d4a217a4-c7f7-49ac-91b6-da834b3bb89a" />
+      <TestMethod codeBase="E:\SideProjects\ASAP\Asap\GitJiraConfigurationUnitTests\bin\Debug\GitJiraConfigurationUnitTests.dll" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter" className="GitJiraConfigurationUnitTests.ConfigurationModelUT" name="Configuration_Model_GitConfig_Not_Null" />
+    </UnitTest>
+    <UnitTest name="Configuraiton_Model_Set_Credentials_Properties" storage="e:\sideprojects\asap\asap\gitjiraconfigurationunittests\bin\debug\gitjiraconfigurationunittests.dll" id="bc1f15ea-3ab8-46d8-3ceb-cfdf28cfc8ee">
+      <Execution id="0dd5c7aa-7dc8-4afb-b0f6-49ac172f679a" />
+      <TestMethod codeBase="E:\SideProjects\ASAP\Asap\GitJiraConfigurationUnitTests\bin\Debug\GitJiraConfigurationUnitTests.dll" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter" className="GitJiraConfigurationUnitTests.ConfigurationModelUT" name="Configuraiton_Model_Set_Credentials_Properties" />
+    </UnitTest>
+    <UnitTest name="Configuraiton_Model_Set_GitConfig_Properties" storage="e:\sideprojects\asap\asap\gitjiraconfigurationunittests\bin\debug\gitjiraconfigurationunittests.dll" id="42c05800-e6e0-f44a-f5b6-62811dc11f8d">
+      <Execution id="1e59de6b-eba8-42ee-a48b-bbd98519ada7" />
+      <TestMethod codeBase="E:\SideProjects\ASAP\Asap\GitJiraConfigurationUnitTests\bin\Debug\GitJiraConfigurationUnitTests.dll" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter" className="GitJiraConfigurationUnitTests.ConfigurationModelUT" name="Configuraiton_Model_Set_GitConfig_Properties" />
+    </UnitTest>
+    <UnitTest name="Configuration_Model_Set_JiraConfig_Properties" storage="e:\sideprojects\asap\asap\gitjiraconfigurationunittests\bin\debug\gitjiraconfigurationunittests.dll" id="157f3719-ee92-2d15-7949-f920cf6d3401">
+      <Execution id="57866ae9-ef92-4801-8792-11f06c786cc5" />
+      <TestMethod codeBase="E:\SideProjects\ASAP\Asap\GitJiraConfigurationUnitTests\bin\Debug\GitJiraConfigurationUnitTests.dll" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter" className="GitJiraConfigurationUnitTests.ConfigurationModelUT" name="Configuration_Model_Set_JiraConfig_Properties" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="f2087339-2266-fe04-793e-6f1f426ef893" executionId="2a201bee-c3ca-4dd0-96ba-4b68b7b12f36" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="60ef5aab-3031-39c3-126a-9ffa62b871c7" executionId="aca6fa95-6858-452c-8ae7-2035a1ebb9b0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="43aa2226-caa3-684c-df1e-2534c6945391" executionId="aa0c6ff3-3124-491d-bc7a-6eedd2d7fb5e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b0a9e5e4-8860-2338-8e7a-7163155ef01b" executionId="d4a217a4-c7f7-49ac-91b6-da834b3bb89a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="bc1f15ea-3ab8-46d8-3ceb-cfdf28cfc8ee" executionId="0dd5c7aa-7dc8-4afb-b0f6-49ac172f679a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="42c05800-e6e0-f44a-f5b6-62811dc11f8d" executionId="1e59de6b-eba8-42ee-a48b-bbd98519ada7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="157f3719-ee92-2d15-7949-f920cf6d3401" executionId="57866ae9-ef92-4801-8792-11f06c786cc5" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="7" executed="7" passed="7" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+  </ResultSummary>
+</TestRun>
