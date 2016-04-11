@@ -27,7 +27,7 @@ namespace IssuesTracking
         /// </summary>
         /// <param name="username">The person name (firstName.lastName)</param>
         /// <returns>Search result object</returns>
-        SearchResult GetIssues(String username = "");
+        SearchResult GetIssues(string username = "", string project = "");
 
         /// <summary>
         /// Get all the Jira items for the specified project with the specified status
