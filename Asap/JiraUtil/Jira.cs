@@ -11,12 +11,6 @@ namespace JiraService
 {
     public class Jira : IIssuesTracking
     {
-        public enum JiraProjects
-        {
-            CHREU,
-            CHRSOEC
-        }
-
         private IIssuesTrackingConfig Config { get; set; }
 
         #region Constructor
@@ -140,12 +134,12 @@ namespace JiraService
         /// <param name="project">The project.</param>
         /// <returns>CreateResult object</returns>
         /// <exception cref="InvalidDataException">Create item return not expected data</exception>
-        public CreateResult CreateIssue(Issue issue, Jira.JiraProjects project)
+        public CreateResult CreateIssue(Issue issue)
         {
             issue.Field.Assignee = new Person();
             issue.Field.Assignee.Name = "valentin.mitaru";
             string query = String.Format("issue/");
-            string data = "{\"fields\" : {\"project\" : {\"key\" : \"" + project + "\"}, \"summary\":\"" + issue.Field.Summary + "\", \"description\":\"" + issue.Field.Description + "\", \"issuetype\": {\"name\":\"" + issue.Field.IssueType.Name + "\"}, \"assignee\": {\"name\":\"" + issue.Field.Assignee.Name + "\"}}}";
+            string data = "{\"fields\" : {\"project\" : {\"key\" : \"" + Config.Project + "\"}, \"summary\":\"" + issue.Field.Summary + "\", \"description\":\"" + issue.Field.Description + "\", \"issuetype\": {\"name\":\"" + issue.Field.IssueType.Name + "\"}, \"assignee\": {\"name\":\"" + issue.Field.Assignee.Name + "\"}}}";
             string response = RunQuery(query, data, create:true);
             if (String.IsNullOrEmpty(response))
             {
@@ -177,6 +171,20 @@ namespace JiraService
         public SearchResult GetIssues(String username = "")
         {
             username = String.IsNullOrWhiteSpace(username) ? Config.Username : username;
+            
+            List<JiraItemStatus> status = new List<JiraItemStatus>();
+            string statusMsg = "status%20in%20(";
+            for (int i = 0; i < status.Count; i++)
+            {
+                if (i < (status.Count - 1))
+                {
+                    statusMsg += JiraJQLConverter(status[i]) + "%2C%20";
+                }
+                else
+                {
+                    statusMsg += JiraJQLConverter(status[i]) + ")";
+                }
+            }
             string query = String.Format("search?jql=status%20in%20(Open%2C%20'In%20Progress'%2C%20Reopened)%20AND%20assignee%20in%20('{0}')+order+by+priority", username);
             string response = RunQuery(query);
 
