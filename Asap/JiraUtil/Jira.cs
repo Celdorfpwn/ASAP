@@ -172,8 +172,8 @@ namespace JiraService
         {
             username = String.IsNullOrWhiteSpace(username) ? Config.Username : username;
             project = String.IsNullOrWhiteSpace(project) ? Config.Project : project;
-            
-            List<JiraItemStatus> status = new List<JiraItemStatus>();
+
+            List<JiraItemStatus> status = new List<JiraItemStatus>() { JiraItemStatus.Opened, JiraItemStatus.Reopened, JiraItemStatus.InProgress, JiraItemStatus.Resolved  };
             string statusMsg = "status%20in%20(";
             for (int i = 0; i < status.Count; i++)
             {
@@ -186,7 +186,7 @@ namespace JiraService
                     statusMsg += JiraJQLConverter(status[i]) + ")";
                 }
             }
-            string query = String.Format("search?jql=status%20in%20(Open%2C%20'In%20Progress'%2C%20Reopened)%20AND%20assignee%20in%20('{0}')%20AND%20project%20%3D{2}+order+by+priority", username, project);
+            string query = String.Format("search?jql={0}%20AND%20assignee%20in%20('{1}')%20AND%20project%20%3D{2}+order+by+priority", statusMsg, username, project);
             string response = RunQuery(query);
 
             DataContractJsonSerializer jsonSerializer = new DataContractJsonSerializer(typeof(SearchResult));
