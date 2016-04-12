@@ -122,7 +122,7 @@ namespace BL
         /// </summary>
         public void UpdateStatusInProgress()
         {
-            if (Issue.Field.Status.Id == (int)JiraItemStatus.Opened || Issue.Field.Status.Id == (int)JiraItemStatus.Reopened)
+            if (Issue.Field.Status.Id == (int)JiraItemStatus.Open || Issue.Field.Status.Id == (int)JiraItemStatus.Reopened)
             {
                 _issuesTracking.SetStatus(Issue, JiraTransition.StartProgress,null,null);
                 Issue.Field.Status.Id = (int)JiraItemStatus.InProgress;
@@ -137,7 +137,7 @@ namespace BL
             if (Issue.Field.Status.Id == (int)JiraItemStatus.InProgress)
             {
                 _issuesTracking.SetStatus(Issue, JiraTransition.StopProgress,null,null);
-                Issue.Field.Status.Id = (int)JiraItemStatus.Opened;
+                Issue.Field.Status.Id = (int)JiraItemStatus.Open;
             }
         }
 

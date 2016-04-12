@@ -9,7 +9,7 @@ namespace IssuesTracking
     public enum JiraItemStatus
     {
         None,
-        Opened = 1,
+        Open = 1,
         InProgress = 3,
         Reopened = 4,
         Resolved = 5,
