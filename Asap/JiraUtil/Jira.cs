@@ -172,7 +172,7 @@ namespace JiraService
         {
             username = String.IsNullOrWhiteSpace(username) ? Config.Username : username;
             project = String.IsNullOrWhiteSpace(project) ? Config.Project : project;
-
+            
             List<JiraItemStatus> status = new List<JiraItemStatus>() { JiraItemStatus.Opened, JiraItemStatus.Reopened, JiraItemStatus.InProgress, JiraItemStatus.Resolved  };
             string statusMsg = "status%20in%20(";
             for (int i = 0; i < status.Count; i++)

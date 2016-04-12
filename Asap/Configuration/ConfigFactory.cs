@@ -7,31 +7,41 @@ using System.Threading.Tasks;
 using Entities;
 using Repository;
 using Security;
+using ToolsConfiguration;
 
 namespace GitJiraConfiguration
 {
     public static class ConfigFactory
     {
-        public static Config Create<Config>(IRepository repository) where Config : class
+
+        internal static void InitializeConfigProperties(ConfigurationModel model)
         {
-            var config = Activator.CreateInstance<Config>();
+            foreach (var property in model.GetType().GetConfigProperties())
+            {
+                property.SetValue(model, Create(property.GetCustomAttribute<ConcreteType>().Value, model.Repository));
+            }
+        }
+
+        private static object Create(Type type, IRepository repository)
+        {
+            var config = Activator.CreateInstance(type);
 
             SetConfigProperties(config, repository);
 
             return config;
         }
 
-        private static void SetConfigProperties<Config>(Config config, IRepository repository) where Config : class
+        private static void SetConfigProperties(object config, IRepository repository)
         {
-            foreach (var setting in typeof(Config).GetSettingProperties())
+            foreach (var setting in config.GetType().GetSettingProperties())
             {
                 setting.SetValue(config, GetSetting(setting.Name, repository));
             }
         }
 
+
         private static Setting GetSetting(string settingName, IRepository repository)
         {
-
             var setting = repository.Get<Setting>(settingName.Encrypt());
 
             if (setting == null)
@@ -40,7 +50,6 @@ namespace GitJiraConfiguration
             }
 
             return setting;
-
         }
 
         private static Setting InitializeSetting(string settingName, IRepository repository)
