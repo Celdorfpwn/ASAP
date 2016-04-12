@@ -78,7 +78,7 @@ namespace BL
         public void SetResolveMessage(string message)
         {
             _resolveMessage = message;
-            UpdateJiraStatusResolved();
+            UpdateStatusResolved();
         }
 
 
@@ -120,20 +120,19 @@ namespace BL
         /// <summary>
         /// Updates the jira status to In Progress
         /// </summary>
-        public void UpdateJiraStatusInProgress()
+        public void UpdateStatusInProgress()
         {
             if (Issue.Field.Status.Id == (int)JiraItemStatus.Opened || Issue.Field.Status.Id == (int)JiraItemStatus.Reopened)
             {
                 _issuesTracking.SetStatus(Issue, JiraTransition.StartProgress,null,null);
                 Issue.Field.Status.Id = (int)JiraItemStatus.InProgress;
-
             }
         }
 
         /// <summary>
         /// Updates the jira status to Open
         /// </summary>
-        public void UpdateJiraStatusOpen()
+        public void UpdateStatusOpen()
         {
             if (Issue.Field.Status.Id == (int)JiraItemStatus.InProgress)
             {
@@ -145,7 +144,7 @@ namespace BL
         /// <summary>
         /// Updates the jira status to Resolved
         /// </summary>
-        public void UpdateJiraStatusResolved()
+        public void UpdateStatusResolved()
         {
             if (Issue.Field.Status.Id == (int)JiraItemStatus.InProgress)
             {
@@ -187,6 +186,7 @@ namespace BL
         {
             CreateBranchIfDoesntExists();
             _sourceControl.Checkout(Issue.Key);
+            _sourceControl.Merge("master");
         }
 
 

@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using SushiPikant.UI.Configuration;
 using SushiPikant.UI.Security;
 using SushiPikant.UI.SettigsViews;
-using SushiPikant.UI.Settings.SettingsViews;
 using SushiPikant.UI.ViewModels;
 
 namespace SushiPikant.UI.UIController

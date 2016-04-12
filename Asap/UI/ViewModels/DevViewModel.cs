@@ -93,6 +93,10 @@ namespace SushiPikant.UI.ViewModels
                         Done.AddInOrder(item);
                         item.PopUpLastComment();
                     }
+                    else
+                    {
+                        item.SetTemporarWarningMessage("Nothing to commit");
+                    }
                 }
                 else
                 {

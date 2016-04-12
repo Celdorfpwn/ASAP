@@ -15,6 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using SushiPikant.UI.Helpers;
 using SushiPikant.UI.ViewModels;
 
 namespace SushiPikant.UI.SettigsViews
@@ -32,12 +33,6 @@ namespace SushiPikant.UI.SettigsViews
             InitializeComponent();
             MainGrid.DataContext = viewModel;
             ViewModel = viewModel;
-            BitmapImage logo = new BitmapImage();
-            logo.BeginInit();
-            var path = "pack://application:,,,/UI;component/Icons/" + viewModel.Severity.ToLower() + ".png";
-            logo.UriSource = new Uri(path);
-            logo.EndInit();
-            SeverityIcon.Source = logo;
         }
 
         private void MessageClick(object sender, RoutedEventArgs e)
@@ -83,6 +78,18 @@ namespace SushiPikant.UI.SettigsViews
             Popup.IsOpen = false;
         }
 
+        public void SetTemporarWarningMessage(string message)
+        {
+            MessageLabel.Foreground = Brushes.Red;
+            ViewModel.StatusMessage = message;
+            new Action(delegate ()
+            {
+                MessageLabel.Foreground = Brushes.Orange;
+                ViewModel.StatusMessage = String.Empty;
+            })
+                .RunAfter(TimeSpan.FromSeconds(5));
+            
+        }
 
         public void PopUpLastComment()
         {

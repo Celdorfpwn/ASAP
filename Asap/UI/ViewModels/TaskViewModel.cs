@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media;
 using BL;
 using IssuesTracking;
 
@@ -45,6 +46,26 @@ namespace SushiPikant.UI.ViewModels
             }
         }
 
+        public Brush Brush
+        {
+            get
+            {
+                switch (SeverityEnum)
+                {
+                    case SeverityEnum.Blocker:
+                        return Brushes.Red;
+                    case SeverityEnum.Critical:
+                        return Brushes.Orange;
+                    case SeverityEnum.Major:
+                        return Brushes.Yellow;
+                    case SeverityEnum.Minor:
+                        return Brushes.Green;
+                    default:
+                        return Brushes.Green;
+                }
+            }
+        }
+
         public int SeverityValue
         {
             get
@@ -57,16 +78,16 @@ namespace SushiPikant.UI.ViewModels
         {
             get
             {
-                if (Model.IsDone)
-                {
-                    return "Code Review";
-                }
-                else
-                {
-                    return string.Empty;
-                }
+                return _statusMessage;
+            }
+            set
+            {
+                _statusMessage = value;
+                RaisePropertyChanged("StatusMessage");
             }
         }
+
+        private string _statusMessage { get; set; }
 
         public void SetResolveMessage(string message)
         {
@@ -108,12 +129,12 @@ namespace SushiPikant.UI.ViewModels
 
         public void InProgress()
         {
-            Model.UpdateJiraStatusInProgress();
+            Model.UpdateStatusInProgress();
         }
 
         internal void ToDo()
         {
-            Model.UpdateJiraStatusOpen();
+            Model.UpdateStatusOpen();
         }
 
 
@@ -136,7 +157,7 @@ namespace SushiPikant.UI.ViewModels
 
         internal void Resolve()
         {
-            Model.UpdateJiraStatusResolved();
+            Model.UpdateStatusResolved();
         }
 
 
@@ -147,7 +168,7 @@ namespace SushiPikant.UI.ViewModels
         {
             if (Model.CommitBranchDone())
             {
-                RaisePropertyChanged("StatusMessage");
+                StatusMessage = "Code Review";
                 return true;
             }
             else

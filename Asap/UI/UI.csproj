@@ -166,6 +166,7 @@
       <DependentUpon>SourceControlView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Factories\TaskViewModelsFactory.cs" />
+    <Compile Include="Helpers\Extensions.cs" />
     <Compile Include="Helpers\PasswordHelper.cs" />
     <Compile Include="Helpers\WatermarkTextHelper.cs" />
     <Compile Include="MainWindow.xaml.cs">
@@ -182,17 +183,8 @@
     <Compile Include="Security\LoginView.xaml.cs">
       <DependentUpon>LoginView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Settings\SettingsViews\GitSettingsView.xaml.cs">
-      <DependentUpon>GitSettingsView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Settings\SettingsViews\JiraSettingsView.xaml.cs">
-      <DependentUpon>JiraSettingsView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\DevView.xaml.cs">
       <DependentUpon>DevView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Settings\SettingsViews\SettingsView.xaml.cs">
-      <DependentUpon>SettingsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\TaskView.xaml.cs">
       <DependentUpon>TaskView.xaml</DependentUpon>
@@ -276,19 +268,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Settings\SettingsViews\GitSettingsView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Settings\SettingsViews\JiraSettingsView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\DevView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Settings\SettingsViews\SettingsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -319,9 +299,7 @@
       <Name>ToolsConfiguration</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Settings\SettingsViewModels\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <UseCodebase>true</UseCodebase>
   </PropertyGroup>

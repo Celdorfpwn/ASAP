@@ -30,7 +30,6 @@ namespace GitJiraConfiguration
         public ConfigurationModel(IRepository repository)
         {
             Repository = repository;
-
             ConfigFactory.InitializeConfigProperties(this);
         }
 
@@ -39,19 +38,14 @@ namespace GitJiraConfiguration
             foreach (var config in this.GetType().GetConfigProperties())
             {
                 var configValue = config.GetValue(this);
-
                 foreach (var setting in configValue.GetType().GetSettingProperties())
                 {
                     var settingValue = setting.GetValue(configValue) as Setting;
                     Repository.Edit<Setting>(settingValue);
                 }
             }
-
             Repository.Save();
         }
-
-
-
 
         public void Dispose()
         {
