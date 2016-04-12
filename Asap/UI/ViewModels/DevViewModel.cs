@@ -74,7 +74,6 @@ namespace SushiPikant.UI.ViewModels
                 return;
             }
 
-
             if (itemsSource.Equals(_inProgress))
             {
                 item.ViewModel.InProgress();
@@ -83,7 +82,7 @@ namespace SushiPikant.UI.ViewModels
             {
                 item.ViewModel.ToDo();
             }
-
+ 
             if (itemsSource.Equals(Done))
             {
                 if (item.Equals(Current))

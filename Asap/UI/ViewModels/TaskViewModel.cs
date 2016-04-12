@@ -91,7 +91,7 @@ namespace SushiPikant.UI.ViewModels
         {
             var model = new Comments();
             model.Body = text;
-            model.Author = new Person { DisplayName = "ionut.apostol" };
+
 
             Comments.Add(model);
 

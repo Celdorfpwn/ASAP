@@ -15,5 +15,11 @@ namespace GitJiraConfiguration
             return type.GetProperties(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)
                 .Where(property => property.PropertyType.Equals(typeof(Setting)));
         }
+
+        internal static IEnumerable<PropertyInfo> GetConfigProperties(this Type type)
+        {
+            return type.GetProperties(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)
+                .Where(property => property.GetCustomAttribute<ConcreteType>() != null);
+        }
     }
 }

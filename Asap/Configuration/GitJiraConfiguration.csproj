@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConcreteType.cs" />
     <Compile Include="ConfigFactory.cs" />
     <Compile Include="ConfigurationModel.cs" />
     <Compile Include="AsapCredentials.cs" />

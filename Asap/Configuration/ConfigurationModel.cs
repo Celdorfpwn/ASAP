@@ -16,38 +16,38 @@ namespace GitJiraConfiguration
     public class ConfigurationModel : IConfiguration
     {
 
-        private IRepository _repository { get; set; }
+        internal IRepository Repository { get; set; }
 
+        [ConcreteType(typeof(AsapCredentials))]
         public ICredentials Credentials { get; private set; }
 
+        [ConcreteType(typeof(GitConfig))]
         public ISourceControlConfig SourceControlConfig { get; private set; }
 
+        [ConcreteType(typeof(JiraConfig))]
         public IIssuesTrackingConfig IssuesTrackingConfig { get; private set; }
 
         public ConfigurationModel(IRepository repository)
         {
-            _repository = repository;
-            Credentials = ConfigFactory.Create<AsapCredentials>(_repository);
-            SourceControlConfig = ConfigFactory.Create<GitConfig>(_repository);
-            IssuesTrackingConfig = ConfigFactory.Create<JiraConfig>(_repository);
+            Repository = repository;
+
+            ConfigFactory.InitializeConfigProperties(this);
         }
-
-
 
         public void Save()
         {
-            foreach (var config in typeof(ConfigurationModel).GetProperties(BindingFlags.Public | BindingFlags.Instance))
+            foreach (var config in this.GetType().GetConfigProperties())
             {
                 var configValue = config.GetValue(this);
 
                 foreach (var setting in configValue.GetType().GetSettingProperties())
                 {
                     var settingValue = setting.GetValue(configValue) as Setting;
-                    _repository.Edit<Setting>(settingValue);
+                    Repository.Edit<Setting>(settingValue);
                 }
             }
 
-            _repository.Save();
+            Repository.Save();
         }
 
 
@@ -55,7 +55,7 @@ namespace GitJiraConfiguration
 
         public void Dispose()
         {
-            _repository.Dispose();
+            Repository.Dispose();
         }
     }
 }
