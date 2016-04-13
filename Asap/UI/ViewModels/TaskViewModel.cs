@@ -87,6 +87,28 @@ namespace SushiPikant.UI.ViewModels
             }
         }
 
+
+        public IEnumerable<ItVersion> AvailableVersions
+        {
+            get
+            {
+                return Model.AvailableVersions;
+            }
+        }
+
+        public ItVersion FixedVersion
+        {
+            get
+            {
+                return Model.FixedVersion;
+            }
+            set
+            {
+                Model.FixedVersion = value;
+            }
+        }
+
+
         private string _statusMessage { get; set; }
 
         public void SetResolveMessage(string message)

@@ -53,6 +53,10 @@ namespace BL
             }
         }
 
+        public ItVersion FixedVersion { get; set; }
+
+        public IEnumerable<ItVersion> AvailableVersions { get; internal set; }
+
 
 
         public TaskModel(ISourceControl sourceControl, IIssuesTracking issuesTracking,Issue issue)
@@ -60,6 +64,7 @@ namespace BL
             _sourceControl = sourceControl;
             _issuesTracking = issuesTracking;
             Issue = issue;
+
         }
 
 
@@ -102,6 +107,7 @@ namespace BL
         /// <param name="text"></param>
         public void AddComment(string text)
         {
+            _issuesTracking.AddMessage(Issue, text);
         }
 
 
@@ -124,7 +130,7 @@ namespace BL
         {
             if (Issue.Field.Status.Id == (int)JiraItemStatus.Open || Issue.Field.Status.Id == (int)JiraItemStatus.Reopened)
             {
-                _issuesTracking.SetStatus(Issue, JiraTransition.StartProgress,null,null);
+                _issuesTracking.SetStatus(Issue, JiraTransition.StartProgress,null, FixedVersion);
                 Issue.Field.Status.Id = (int)JiraItemStatus.InProgress;
             }
         }
@@ -136,7 +142,7 @@ namespace BL
         {
             if (Issue.Field.Status.Id == (int)JiraItemStatus.InProgress)
             {
-                _issuesTracking.SetStatus(Issue, JiraTransition.StopProgress,null,null);
+                _issuesTracking.SetStatus(Issue, JiraTransition.StopProgress,null, FixedVersion);
                 Issue.Field.Status.Id = (int)JiraItemStatus.Open;
             }
         }
@@ -148,8 +154,10 @@ namespace BL
         {
             if (Issue.Field.Status.Id == (int)JiraItemStatus.InProgress)
             {
-                _issuesTracking.SetStatus(Issue, JiraTransition.Resolve, Issue.Key + " " + Issue.Field.Summary + ". " + _resolveMessage, null);
+                _issuesTracking.SetStatus(Issue, JiraTransition.Resolve, Issue.Key + " " + Issue.Field.Summary + ". " + _resolveMessage, FixedVersion);
                 Issue.Field.Status.Id = (int)JiraItemStatus.Resolved;
+                _sourceControl.Checkout("master");
+                _sourceControl.Merge(Key);
             }
         }
 

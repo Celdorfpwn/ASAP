@@ -297,6 +297,13 @@ namespace JiraService
             LoggerService.Log.Instance.AddLog(new LoggerService.LogEntry(LoggerService.LogType.Info, logMsg));
         }
 
+        public void AddMessage(Issue issue, string message)
+        {
+            string query = String.Format("issue/{0}", issue.Key);
+            string data = "{\"update\" : {\"comment\" : [{\"add\" : {\"body\" : \"" + message + "\"}}]}}";
+            string response = RunQuery(query, data, "POST");
+        }
+
         /// <summary>
         /// Add the provided files as attachement for the proviced Issue
         /// </summary>
@@ -544,5 +551,7 @@ namespace JiraService
             var bytes = Encoding.UTF8.GetBytes(Config.Username + ":" + Config.Password);
             return Convert.ToBase64String(bytes);
         }
+
+
     }
 }

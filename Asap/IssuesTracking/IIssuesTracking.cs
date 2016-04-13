@@ -65,5 +65,8 @@ namespace IssuesTracking
         /// <param name="message">Message to add</param>
         /// <param name="fixVersion">Issue fixed version</param>
         void SetStatus(Issue issue, JiraTransition status, string message, ItVersion fixVersion);
+
+
+        void AddMessage(Issue issue,string message);
     }
 }

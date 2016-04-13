@@ -19,6 +19,8 @@ namespace BL
 
         private List<TaskModel> Models { get;set; }
 
+        private IEnumerable<ItVersion> Versions { get; set; }
+
         public TasksModel(ISourceControl sourceControl,IIssuesTracking issuesTracking)
         {
             _sourceControl = sourceControl;
@@ -40,10 +42,12 @@ namespace BL
             var currentBranch = _sourceControl.GetCurrentBranch();
             Models = new List<TaskModel>();
             Issues = _issuesTracking.GetIssues().Issues;
-
+            Versions = _issuesTracking.GetVersions();
+            
             foreach (var issue in Issues)
             {
                 var model = new TaskModel(_sourceControl, _issuesTracking, issue);
+                model.AvailableVersions = Versions;
                 Models.Add(model);
             }
             _sourceControl.Checkout(currentBranch);

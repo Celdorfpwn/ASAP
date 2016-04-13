@@ -22,8 +22,14 @@
             </Grid.RowDefinitions>
             <Border Grid.Row="0" BorderThickness="0,0,0,2" BorderBrush="Green" Background="WhiteSmoke">
                 <Grid >
-                    <Label HorizontalAlignment="Left" VerticalAlignment="Center"  VerticalContentAlignment="Center" Content="{Binding Title}"></Label>
-                    <Label HorizontalAlignment="Right" VerticalAlignment="Center" VerticalContentAlignment="Center" Content="{Binding Reporter}"></Label>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Label Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center"  VerticalContentAlignment="Center" Content="{Binding Title}"></Label>
+                    <ComboBox Margin="4" Grid.Column="1" ItemsSource="{Binding AvailableVersions}" DisplayMemberPath="Name" SelectedValue="{Binding FixedVersion}"></ComboBox>
+                    <Label Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center" VerticalContentAlignment="Center" Content="{Binding Reporter}"></Label>
 
                 </Grid>
             </Border>
