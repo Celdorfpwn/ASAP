@@ -69,6 +69,9 @@ namespace IssuesTracking
             get; private set;
         }
 
+        [DataMember(Name = "fixVersions")]
+        public ItVersion[] FixVersions { get; set; }
+
         [DataMember(Name = "description")]
         public string Description { get; set; }
 
