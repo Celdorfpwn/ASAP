@@ -275,7 +275,7 @@ namespace JiraService
         /// <param name="issue">The issue to change the status for</param>
         /// <param name="newStatus">The new status (transition)</param>
         /// <param name="message">Message to add</param>
-        public void SetStatus(Issue issue, JiraTransition newStatus, string message, ItVersion fixVersion)
+        public void SetStatus(Issue issue, JiraTransition newStatus, string message, ItVersion fixVersion = null)
         {
             string query = String.Format("issue/{0}", issue.Key);
             string data = "{\"transition\" : {\"id\" : \"" + (int)newStatus + "\"}}";
@@ -284,13 +284,22 @@ namespace JiraService
                 data = "{\"update\" : {\"comment\" : [{\"add\" : {\"body\" : \"" + message + "\"}}]}, \"transition\": {\"id\": \"" + (int)newStatus + "\"}}";
             }
 
-            //TODO: Implement setting-up fix fixVersion
-
+            // Set the new status and comment
             string response = RunQuery(query, data, "POST");
 
             if (!String.IsNullOrEmpty(response))
             {
                 throw new InvalidDataException("Set status return not expected data");
+            }
+
+            // Set the fix Version
+            data = "{\"update\" : {\"fixVersions\" : [{\"set\" : [{\"name\" : \"" + fixVersion.Name + "\"}]}]} }";
+
+            response = RunQuery(query, data, "POST");
+
+            if (!String.IsNullOrEmpty(response))
+            {
+                throw new InvalidDataException("Set fix version return not expected data");
             }
 
             string logMsg = String.Format("{0} changed into {1}", issue.Key, newStatus);
