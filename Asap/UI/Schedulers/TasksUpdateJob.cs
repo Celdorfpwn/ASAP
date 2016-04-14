@@ -29,14 +29,33 @@ namespace SushiPikant.UI.Schedulers
             var keys = View.ViewModel.ToDo.Concat(View.ViewModel.Done).Concat(View.ViewModel.InProgress)
                 .Select(view => view.ViewModel.Key);
 
-            var fresh = IssuesTrackingModel.Models
+            var models = IssuesTrackingModel.Models;
+
+            var newKeys = models.Select(model => model.Key);
+
+            var newModels = models
                 .Where(model => !keys.Contains(model.Key)).ToList();
 
-            foreach (var model in fresh)
+            var removeModelKeys = keys.Where(key => !newKeys.Contains(key));
+
+            foreach (var model in newModels)
             {
                 var action = new Action(() => UpdateUI(model));
                 View.Dispatcher.Invoke(action);
             }
+
+            foreach (var key in removeModelKeys)
+            {
+                var action = new Action(() => RemoveByKey(key));
+                View.Dispatcher.Invoke(action);
+            }
+        }
+
+        private void RemoveByKey(string key)
+        {
+            View.ViewModel.ToDo.RemoveByKey(key);
+            View.ViewModel.InProgress.RemoveByKey(key);
+            View.ViewModel.Done.RemoveByKey(key);
         }
 
         private void UpdateUI(TaskModel model)
