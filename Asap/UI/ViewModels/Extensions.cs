@@ -23,9 +23,13 @@ namespace SushiPikant.UI.ViewModels
             order.ForEach(orderItem => list.Add(orderItem));
         }
 
-        public static void AddAsync(this ObservableCollection<TaskView> list, TaskView item)
+        public static void RemoveByKey(this ObservableCollection<TaskView> list, string key)
         {
-            Application.Current.Dispatcher.BeginInvoke((new Action(() => list.Add(item))));
+            var removeView = list.FirstOrDefault(view => view.ViewModel.Key == key);
+            if (removeView != null)
+            {
+                list.Remove(removeView);
+            }
         }
     }
 }
