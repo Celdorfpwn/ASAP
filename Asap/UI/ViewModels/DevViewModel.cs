@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SushiPikant.UI.Factories;
+using SushiPikant.UI.Schedulers;
 using SushiPikant.UI.SettigsViews;
 
 namespace SushiPikant.UI.ViewModels
@@ -50,6 +51,7 @@ namespace SushiPikant.UI.ViewModels
         public DevViewModel()
         {
             Initialize();
+            SchedulerStarter.StartTaskUpdateScheduler();
         }
 
         private void Initialize()
@@ -176,6 +178,9 @@ namespace SushiPikant.UI.ViewModels
             item.ViewModel.SwitchToBranch();
             RaisePropertyChanged("Current");
         }
+
+
+
 
     }
 

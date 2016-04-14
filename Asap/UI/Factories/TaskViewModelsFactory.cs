@@ -22,7 +22,6 @@ namespace SushiPikant.UI.Factories
         }
 
 
-
         public IEnumerable<TaskView> ToDoTaskViews
         {
             get

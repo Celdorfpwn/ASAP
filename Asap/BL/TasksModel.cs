@@ -36,23 +36,6 @@ namespace BL
             }
         }
 
-
-        private void LoadModels()
-        {
-            var currentBranch = _sourceControl.GetCurrentBranch();
-            Models = new List<TaskModel>();
-            Issues = _issuesTracking.GetIssues().Issues;
-            Versions = _issuesTracking.GetVersions();
-            
-            foreach (var issue in Issues)
-            {
-                var model = new TaskModel(_sourceControl, _issuesTracking, issue);
-                model.AvailableVersions = Versions;
-                Models.Add(model);
-            }
-            _sourceControl.Checkout(currentBranch);
-        }
-
         public TaskModel Current
         {
             get
@@ -61,14 +44,38 @@ namespace BL
                 var result = Models.FirstOrDefault(model => model.Key == branchName);
                 if (result == null)
                 {
-                    _sourceControl.Checkout("master"); 
+                    _sourceControl.Checkout("master");
                     return null;
                 }
                 else
                 {
                     return result;
                 }
-            }            
+            }
         }
+
+
+        private List<TaskModel> GetTaskModels()
+        {
+            var models = new List<TaskModel>();
+            Issues = _issuesTracking.GetIssues().Issues;
+            Versions = _issuesTracking.GetVersions().OrderByDescending(version => version.Name);
+            foreach (var issue in Issues)
+            {
+                var model = new TaskModel(_sourceControl, _issuesTracking, issue);
+                model.AvailableVersions = Versions;
+                models.Add(model);
+            }
+
+            return models;
+        }
+
+        private void LoadModels()
+        {
+            var currentBranch = _sourceControl.GetCurrentBranch();
+            Models = GetTaskModels();
+            _sourceControl.Checkout(currentBranch);
+        }
+
     }
 }

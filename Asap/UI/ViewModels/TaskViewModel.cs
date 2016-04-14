@@ -13,7 +13,17 @@ namespace SushiPikant.UI.ViewModels
 {
     public class TaskViewModel : ViewModel
     {
- 
+
+        public string Key
+        {
+            get
+            {
+                return Model.Key;
+            }
+        }
+
+            
+
         public string Title
         {
             get

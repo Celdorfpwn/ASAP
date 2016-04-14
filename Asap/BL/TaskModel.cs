@@ -64,7 +64,6 @@ namespace BL
             _sourceControl = sourceControl;
             _issuesTracking = issuesTracking;
             Issue = issue;
-
         }
 
 

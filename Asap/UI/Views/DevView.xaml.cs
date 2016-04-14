@@ -24,7 +24,7 @@ namespace SushiPikant.UI.SettigsViews
 
         public DevViewModel ViewModel { get; private set; }
 
-        private Point ClickPosition { get;set; }
+        private Point ClickPosition { get; set; }
 
         private const string DragDataFormat = "DragData";
 
@@ -32,7 +32,7 @@ namespace SushiPikant.UI.SettigsViews
         {
             ViewModel = viewModel;
             InitializeComponent();
-            MainGrid.DataContext = viewModel;
+            MainGrid.DataContext = ViewModel;
         }
 
         private void ListViewItemDrag(object sender, MouseEventArgs e)
@@ -89,6 +89,22 @@ namespace SushiPikant.UI.SettigsViews
         private void ListViewRequestBringIntoView(object sender, RequestBringIntoViewEventArgs e)
         {
             e.Handled = true;
+        }
+
+
+
+        private static DevView _instance { get; set; }
+
+        public static DevView Instance
+        {
+            get
+            {
+                if (_instance == null)
+                {
+                    _instance = new DevView(new DevViewModel());
+                }
+                return _instance;
+            }
         }
     }
 }

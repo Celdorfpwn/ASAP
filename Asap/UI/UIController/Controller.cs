@@ -30,7 +30,7 @@ namespace SushiPikant.UI.UIController
 
         internal void SwitchToDevView()
         {
-            DevView = new DevView(new DevViewModel());
+            DevView = DevView.Instance;
             Window.ContentContainer.Content = DevView;
         }
 

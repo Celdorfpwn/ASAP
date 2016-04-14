@@ -27,6 +27,7 @@ namespace ModelsDI
         {
 
             _container.RegisterType<TasksModel>(new InjectionConstructor(ExternalDependencyInjection.Resolve<ISourceControl>(), ExternalDependencyInjection.Resolve<IIssuesTracking>()));
+            _container.RegisterType<IssuesTrackingModel>(new InjectionConstructor(ExternalDependencyInjection.Resolve<ISourceControl>(), ExternalDependencyInjection.Resolve<IIssuesTracking>()));
         }
 
         public static Dependency Resolve<Dependency>()
