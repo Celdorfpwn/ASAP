@@ -165,6 +165,9 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration\CodeReviewView.xaml.cs">
+      <DependentUpon>CodeReviewView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Configuration\ConfigurationView.xaml.cs">
       <DependentUpon>ConfigurationView.xaml</DependentUpon>
     </Compile>
@@ -257,6 +260,10 @@
     <Content Include="Resources\Package.ico" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Configuration\CodeReviewView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Configuration\ConfigurationView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

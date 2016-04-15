@@ -9,7 +9,7 @@ using ToolsConfiguration;
 
 namespace GitJiraConfiguration
 {
-    public class GitConfig : ISourceControlConfig
+    class GitConfig : ISourceControlConfig
     {
         public string Username
         {

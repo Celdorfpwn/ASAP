@@ -64,6 +64,7 @@ namespace BL
             _sourceControl = sourceControl;
             _issuesTracking = issuesTracking;
             Issue = issue;
+            FixedVersion = issue.Field.FixVersions.LastOrDefault();
         }
 
 

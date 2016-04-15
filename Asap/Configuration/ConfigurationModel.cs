@@ -27,6 +27,9 @@ namespace GitJiraConfiguration
         [ConcreteType(typeof(JiraConfig))]
         public IIssuesTrackingConfig IssuesTrackingConfig { get; private set; }
 
+        [ConcreteType(typeof(FishEyeConfig))]
+        public ICodeReviewConfig CodeReviewConfig { get; private set; }
+
         public ConfigurationModel(IRepository repository)
         {
             Repository = repository;

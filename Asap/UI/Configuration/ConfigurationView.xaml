@@ -16,6 +16,7 @@
     <Grid Margin="30" >
         <Grid.RowDefinitions>
             <RowDefinition Height="250"></RowDefinition>
+            <RowDefinition Height="250"></RowDefinition>
             <RowDefinition Height="30"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -27,6 +28,7 @@
         <local:CredentialsView Grid.Row="0" Grid.Column="0"  x:Name="_credentialsView" Width="340" VerticalAlignment="Center" HorizontalAlignment="Left"></local:CredentialsView>
         <local:SourceControlView Grid.Row="0" Grid.Column="1" x:Name="_sourceControlView" Width="340"  VerticalAlignment="Center" HorizontalAlignment="Left"></local:SourceControlView>
         <local:IssuesTrackingView Grid.Row="0" Grid.Column="2" x:Name="_issuesTrackingView" Width="500" VerticalAlignment="Center" HorizontalAlignment="Left"></local:IssuesTrackingView>
-        <Button Width="100" Grid.Row="1" Grid.Column="1" Content="Continue" Click="Button_Click" Style="{StaticResource BlueButton}"></Button>
+        <local:CodeReviewView Grid.Row="1" Grid.Column="0" x:Name="_codeReviewView" Width="340"  VerticalAlignment="Center" HorizontalAlignment="Left"></local:CodeReviewView>
+        <Button Width="100" Grid.Row="2" Grid.Column="1" Content="Continue" Click="Button_Click" Style="{StaticResource BlueButton}"></Button>
     </Grid>
 </UserControl>
