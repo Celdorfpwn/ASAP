@@ -157,6 +157,11 @@ namespace SushiPikant.UI.ViewModels
 
         }
 
+        public void UpdateModel(TaskModel model)
+        {
+            Model = model;
+        }
+
         public void AddComment(string text)
         {
             var model = new Comments();

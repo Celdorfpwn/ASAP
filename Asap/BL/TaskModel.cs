@@ -113,21 +113,6 @@ namespace BL
             UpdateStatusResolved();
         }
 
-
-        /// <summary>
-        /// Checks if the Issue is Open or Reopen
-        /// </summary>
-        /// <returns>True or false</returns>
-        public bool IsToDo
-        {
-            get
-            {
-                var status = Issue.Field.Status.Name;
-
-                return status == "Open" || status == "Reopened";
-            }
-        }
-
         /// <summary>
         /// Adds a comment to Jira bug
         /// </summary>
@@ -137,6 +122,31 @@ namespace BL
             _issuesTracking.AddMessage(Issue, text);
         }
 
+
+        /// <summary>
+        /// Checks if the Issue is Open or Reopen
+        /// </summary>
+        /// <returns>True or false</returns>
+        public bool IsToDo
+        {
+            get
+            {
+
+                return Issue.Field.Status.Id == (int)JiraItemStatus.Open || Issue.Field.Status.Id == (int)JiraItemStatus.Reopened;
+            }
+        }
+
+        /// <summary>
+        /// Checks if the Issue is in progress
+        /// </summary>
+        /// <returns>True or false</returns>
+        public bool IsInProgress
+        {
+            get
+            {
+                return Issue.Field.Status.Id == (int)JiraItemStatus.InProgress;
+            }
+        }
 
         /// <summary>
         /// Checks if a task is done
@@ -191,19 +201,7 @@ namespace BL
 
 
 
-        /// <summary>
-        /// Checks if the Issue is in progress
-        /// </summary>
-        /// <returns>True or false</returns>
-        public bool IsInProgress
-        {
-            get
-            {
-                var status = Issue.Field.Status.Name;
 
-                return status == "In Progress";
-            }
-        }
 
         private string DoneCommitMessage
         {
@@ -212,6 +210,8 @@ namespace BL
                 return Issue.Key + " " + Issue.Field.Summary;
             }
         }
+
+
 
 
         /// <summary>
