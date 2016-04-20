@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -160,6 +161,20 @@ namespace SushiPikant.UI.ViewModels
         public void UpdateModel(TaskModel model)
         {
             Model = model;
+
+            FixedVersions.Clear();
+
+            foreach (var fixedVersion in Model.FixedVersions)
+            {
+                FixedVersions.Add(fixedVersion.Name);
+            }
+
+            SeverityEnum = (SeverityEnum)Enum.Parse(typeof(SeverityEnum), model.Priority);
+
+            foreach (var property in this.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public))
+            {
+                RaisePropertyChanged(property.Name);
+            }
         }
 
         public void AddComment(string text)

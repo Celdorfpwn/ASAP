@@ -11,6 +11,9 @@ namespace SushiPikant.UI.Schedulers
 {
     public static class SchedulerStarter
     {
+
+        const int INTERVAL = 30;
+
         public static void StartTaskUpdateScheduler()
         {
             var scheduler = StdSchedulerFactory.GetDefaultScheduler();
@@ -20,7 +23,7 @@ namespace SushiPikant.UI.Schedulers
             var job = JobBuilder.Create<TasksUpdateJob>().Build();
 
             var trigger = TriggerBuilder.Create()
-                .WithDailyTimeIntervalSchedule(s => s.WithIntervalInSeconds(30))
+                .WithDailyTimeIntervalSchedule(s => s.WithIntervalInSeconds(INTERVAL))
                 .Build();
 
             scheduler.ScheduleJob(job, trigger);

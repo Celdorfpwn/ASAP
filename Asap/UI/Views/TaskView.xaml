@@ -146,9 +146,9 @@
                         <ColumnDefinition Width="25"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
 
-                    <Ellipse Width="15" Height="15" Fill="{Binding Brush}" Name="SeverityIcon" Grid.Column="0" />
+                    <Ellipse Width="15" Height="15" Fill="{Binding Brush,UpdateSourceTrigger=PropertyChanged}" Name="SeverityIcon" Grid.Column="0" />
 
-                    <Label Grid.Column="1" Content="{Binding Severity}" VerticalContentAlignment="Center"></Label>
+                    <Label Grid.Column="1" Content="{Binding Severity,UpdateSourceTrigger=PropertyChanged}" VerticalContentAlignment="Center"></Label>
 
 
                     <Label Name="MessageLabel" Grid.Column="2" Content="{Binding StatusMessage,UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" Foreground="Orange"></Label>

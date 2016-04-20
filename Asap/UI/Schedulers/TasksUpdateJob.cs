@@ -55,6 +55,8 @@ namespace SushiPikant.UI.Schedulers
                 if (jiraModel != null)
                 {
 
+                    taskView.ViewModel.UpdateModel(jiraModel);
+
                     ObservableCollection<TaskView> addTo = null;
                     bool change = true;
 
