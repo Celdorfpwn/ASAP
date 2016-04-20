@@ -293,15 +293,17 @@ namespace JiraService
             }
 
             // Set the fix Version
-            data = "{\"update\" : {\"fixVersions\" : [{\"set\" : [{\"name\" : \"" + fixVersion.Name + "\"}]}]} }";
-
-            response = RunQuery(query, data, "POST");
-
-            if (!String.IsNullOrEmpty(response))
+            if (fixVersion != null)
             {
-                throw new InvalidDataException("Set fix version return not expected data");
-            }
+                data = "{\"update\" : {\"fixVersions\" : [{\"set\" : [{\"name\" : \"" + fixVersion.Name + "\"}]}]} }";
 
+                response = RunQuery(query, data, "POST");
+
+                if (!String.IsNullOrEmpty(response))
+                {
+                    throw new InvalidDataException("Set fix version return not expected data");
+                }
+            }
             string logMsg = String.Format("{0} changed into {1}", issue.Key, newStatus);
             LoggerService.Log.Instance.AddLog(new LoggerService.LogEntry(LoggerService.LogType.Info, logMsg));
         }

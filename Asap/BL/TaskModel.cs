@@ -20,6 +20,8 @@ namespace BL
 
         private string _resolveMessage { get; set; }
 
+        private IEnumerable<ItVersion> _availableVersions { get;set; }
+
 
         public string Key
         {
@@ -53,9 +55,35 @@ namespace BL
             }
         }
 
+        public bool Current
+        {
+            get
+            {
+                return Issue.Key == _sourceControl.GetCurrentBranch();
+            }
+        }
+
         public ItVersion FixedVersion { get; set; }
 
-        public IEnumerable<ItVersion> AvailableVersions { get; internal set; }
+        public IEnumerable<ItVersion> FixedVersions
+        {
+            get
+            {
+                return Issue.Field.FixVersions;
+            }
+        }
+
+        public IEnumerable<ItVersion> AvailableVersions
+        {
+            get
+            {
+                return _availableVersions.Where(version => Issue.Field.FixVersions.FirstOrDefault(fixedVersion => fixedVersion.Id == version.Id) == null);
+            }
+            set
+            {
+                _availableVersions = value;
+            }
+        }
 
 
 
@@ -64,7 +92,6 @@ namespace BL
             _sourceControl = sourceControl;
             _issuesTracking = issuesTracking;
             Issue = issue;
-            FixedVersion = issue.Field.FixVersions.LastOrDefault();
         }
 
 
@@ -231,7 +258,6 @@ namespace BL
             {
                 return false;
             }
-            _sourceControl.Checkout("master");
             return true;
         }
     }

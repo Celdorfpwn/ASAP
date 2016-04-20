@@ -28,7 +28,7 @@
                         <ColumnDefinition Width="2*"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
                     <Label Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center"  VerticalContentAlignment="Center" Content="{Binding Title}"></Label>
-                    <ComboBox Margin="4" Grid.Column="1" ItemsSource="{Binding AvailableVersions}" DisplayMemberPath="Name" SelectedValue="{Binding FixedVersion}" SelectedIndex="2" ></ComboBox>
+                    <ComboBox Margin="4" Grid.Column="1" ItemsSource="{Binding AvailableVersions}" DisplayMemberPath="Name" SelectedValue="{Binding FixedVersion}" SelectedIndex="2" Visibility="{Binding CurrentTask,UpdateSourceTrigger=PropertyChanged}" ></ComboBox>
                     <Label Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center" VerticalContentAlignment="Center" Content="{Binding Reporter}"></Label>
 
                 </Grid>
@@ -36,9 +36,16 @@
 
             <Grid Grid.Row="1">
 
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="4*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
                 
-                <TextBlock Grid.Row="0" Margin="5" Foreground="Black" TextAlignment="Left" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" TextWrapping="Wrap"   Text="{Binding Description}">
+                <TextBlock Grid.Row="0" Grid.Column="0" Margin="5" Foreground="Black" TextAlignment="Left" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" TextWrapping="Wrap"   Text="{Binding Description}">
                 </TextBlock>
+
+                <ListView Grid.Column="1" ItemsSource="{Binding FixedVersions}"></ListView>
+                
             </Grid>
             <Border Grid.Row="2" BorderThickness="0,2,0,0" BorderBrush="Purple">
 

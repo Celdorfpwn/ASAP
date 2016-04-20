@@ -60,19 +60,23 @@ namespace SushiPikant.UI.Schedulers
 
         private void UpdateUI(TaskModel model)
         {
-            var taskView = new TaskView(new TaskViewModel(model));
 
-            if (model.IsToDo)
+            if (!View.ViewModel.IsCurrent(model.Key))
             {
-                View.ViewModel.ToDo.AddInOrder(taskView);
-            }
-            else if (model.IsInProgress)
-            {
-                View.ViewModel.InProgress.AddInOrder(taskView);
-            }
-            else if (model.IsDone)
-            {
-                View.ViewModel.Done.AddInOrder(taskView);
+                var taskView = new TaskView(new TaskViewModel(model));
+
+                if (model.IsToDo)
+                {
+                    View.ViewModel.ToDo.AddInOrder(taskView);
+                }
+                else if (model.IsInProgress)
+                {
+                    View.ViewModel.InProgress.AddInOrder(taskView);
+                }
+                else if (model.IsDone)
+                {
+                    View.ViewModel.Done.AddInOrder(taskView);
+                }
             }
         }
     }

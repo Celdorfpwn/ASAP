@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Media;
 using BL;
 using IssuesTracking;
@@ -21,9 +22,7 @@ namespace SushiPikant.UI.ViewModels
                 return Model.Key;
             }
         }
-
-            
-
+           
         public string Title
         {
             get
@@ -97,6 +96,20 @@ namespace SushiPikant.UI.ViewModels
             }
         }
 
+        public Visibility CurrentTask
+        {
+            get
+            {
+                if (Model.Current)
+                {
+                    return Visibility.Visible;
+                }
+                else
+                {
+                    return Visibility.Hidden;
+                }
+            }
+        }
 
         public IEnumerable<ItVersion> AvailableVersions
         {
@@ -118,6 +131,8 @@ namespace SushiPikant.UI.ViewModels
             }
         }
 
+        public ObservableCollection<string> FixedVersions { get; private set; }
+
 
         private string _statusMessage { get; set; }
 
@@ -135,6 +150,8 @@ namespace SushiPikant.UI.ViewModels
         public TaskViewModel(TaskModel model)
         {
             Model = model;
+
+            FixedVersions = new ObservableCollection<string>(model.FixedVersions.Select(version => version.Name));
 
             SeverityEnum = (SeverityEnum)Enum.Parse(typeof(SeverityEnum), model.Priority);
 
@@ -162,14 +179,14 @@ namespace SushiPikant.UI.ViewModels
         public void InProgress()
         {
             Model.UpdateStatusInProgress();
+            RaisePropertyChanged("CurrentTask");
         }
 
-        internal void ToDo()
+        public void ToDo()
         {
             Model.UpdateStatusOpen();
+            RaisePropertyChanged("CurrentTask");
         }
-
-
 
         /// <summary>
         /// Switch or creates to the issue branch
@@ -177,6 +194,7 @@ namespace SushiPikant.UI.ViewModels
         public void SwitchToBranch()
         {
             Model.CheckoutBranch();
+            RaisePropertyChanged("CurrentTask");
         }
 
         /// <summary>
@@ -185,11 +203,16 @@ namespace SushiPikant.UI.ViewModels
         public void SaveBranch()
         {
             Model.CommitBranchInProgress();
+            RaisePropertyChanged("CurrentTask");
         }
 
-        internal void Resolve()
+        public void Resolve()
         {
             Model.UpdateStatusResolved();
+            if (FixedVersion != null)
+            {
+                FixedVersions.Add(FixedVersion.Name);
+            }
         }
 
 
@@ -200,7 +223,10 @@ namespace SushiPikant.UI.ViewModels
         {
             if (Model.CommitBranchDone())
             {
+                Resolve();
+                RaisePropertyChanged("CurrentTask");
                 StatusMessage = "Code Review";
+
                 return true;
             }
             else
