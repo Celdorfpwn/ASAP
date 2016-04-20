@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -54,22 +55,30 @@ namespace SushiPikant.UI.Schedulers
                 if (jiraModel != null)
                 {
 
+                    ObservableCollection<TaskView> addTo = null;
+                    bool change = true;
+
                     if (jiraModel.IsToDo && !View.ViewModel.ToDo.Contains(taskView))
                     {
-                        RemoveByKey(taskView.ViewModel.Key);
-                        View.ViewModel.ToDo.AddInOrder(taskView);
-                        taskView.ViewModel.UpdateModel(jiraModel);
+                        addTo = View.ViewModel.ToDo;
                     }
                     else if (jiraModel.IsInProgress && !View.ViewModel.InProgress.Contains(taskView))
                     {
-                        RemoveByKey(taskView.ViewModel.Key);
-                        View.ViewModel.InProgress.AddInOrder(taskView);
-                        taskView.ViewModel.UpdateModel(jiraModel);
+                        addTo = View.ViewModel.InProgress;
+
                     }
                     else if (jiraModel.IsDone && !View.ViewModel.Done.Contains(taskView))
                     {
+                        addTo = View.ViewModel.Done;
+                    }
+                    else
+                    {
+                        change = false;
+                    }
+
+                    if (change)
+                    {
                         RemoveByKey(taskView.ViewModel.Key);
-                        View.ViewModel.Done.AddInOrder(taskView);
                         taskView.ViewModel.UpdateModel(jiraModel);
                     }
 
