@@ -79,6 +79,7 @@ namespace SushiPikant.UI.Schedulers
                     if (change)
                     {
                         RemoveByKey(taskView.ViewModel.Key);
+                        addTo.AddInOrder(taskView);
                         taskView.ViewModel.UpdateModel(jiraModel);
                     }
 
