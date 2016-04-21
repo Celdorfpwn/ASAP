@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using BL;
@@ -40,6 +37,14 @@ namespace SushiPikant.UI.ViewModels
             }
         }
 
+        public string Summary
+        {
+            get
+            {
+                return Model.Summary;
+            }
+        }
+
         public string Description
         {
             get
@@ -52,7 +57,7 @@ namespace SushiPikant.UI.ViewModels
         {
             get
             {
-                return SeverityEnum.ToString();
+                return TaskSeverity.ToString();
             }
         }
 
@@ -60,7 +65,7 @@ namespace SushiPikant.UI.ViewModels
         {
             get
             {
-                switch (SeverityEnum)
+                switch (TaskSeverity)
                 {
                     case SeverityEnum.Blocker:
                         return Brushes.Red;
@@ -80,7 +85,7 @@ namespace SushiPikant.UI.ViewModels
         {
             get
             {
-                return (int)SeverityEnum;
+                return (int)TaskSeverity;
             }
         }
 
@@ -132,19 +137,22 @@ namespace SushiPikant.UI.ViewModels
             }
         }
 
+
         public ObservableCollection<string> FixedVersions { get; private set; }
 
+        public ObservableCollection<Comments> Comments { get; private set; }
 
         private string _statusMessage { get; set; }
 
-        public void SetResolveMessage(string message)
+
+        private SeverityEnum TaskSeverity
         {
-            Model.SetResolveMessage(message);
+            get
+            {
+                return (SeverityEnum)Enum.Parse(typeof(SeverityEnum), Model.Priority);
+            }
         }
-
-        public ObservableCollection<Comments> Comments { get;private set; }
-
-        private SeverityEnum SeverityEnum { get; set; }
+        
 
         private TaskModel Model { get;set; }
 
@@ -153,8 +161,6 @@ namespace SushiPikant.UI.ViewModels
             Model = model;
 
             FixedVersions = new ObservableCollection<string>(model.FixedVersions.Select(version => version.Name));
-
-            SeverityEnum = (SeverityEnum)Enum.Parse(typeof(SeverityEnum), model.Priority);
 
         }
 
@@ -169,23 +175,18 @@ namespace SushiPikant.UI.ViewModels
                 FixedVersions.Add(fixedVersion.Name);
             }
 
-            SeverityEnum = (SeverityEnum)Enum.Parse(typeof(SeverityEnum), model.Priority);
+            RaisePropertyChangedForAll();
 
-            foreach (var property in this.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public))
-            {
-                RaisePropertyChanged(property.Name);
-            }
+        }
+
+        public void SetResolveMessage(string message)
+        {
+            Model.SetResolveMessage(message);
         }
 
         public void AddComment(string text)
         {
-            var model = new Comments();
-            model.Body = text;
-
-
-            Comments.Add(model);
-
-            Model.AddComment(text);
+            Comments.Add(Model.AddComment(text));      
         }
 
         /// <summary>

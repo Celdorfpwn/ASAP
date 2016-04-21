@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using SushiPikant.UI.ViewModels;
+using SushiPikant.UI.Views;
 
 namespace SushiPikant.UI.SettigsViews
 {
@@ -33,6 +34,17 @@ namespace SushiPikant.UI.SettigsViews
             ViewModel = viewModel;
             InitializeComponent();
             MainGrid.DataContext = ViewModel;
+        }
+
+        public void PopupDetails(TaskViewModel taskViewModel)
+        {
+            DetailsContent.Content = new TaskDetailsView(taskViewModel);
+            DetailsPopup.IsOpen = true;
+        }
+
+        private void ClosePopup(object sender, RoutedEventArgs e)
+        {
+            DetailsPopup.IsOpen = false;
         }
 
         private void ListViewItemDrag(object sender, MouseEventArgs e)
@@ -106,5 +118,6 @@ namespace SushiPikant.UI.SettigsViews
                 return _instance;
             }
         }
+
     }
 }

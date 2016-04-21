@@ -39,13 +39,22 @@ namespace BL
             }
         }
 
-        public string Description
+        public string Summary
         {
             get
             {
                 return Issue.Field.Summary;
             }
         }
+
+        public string Description
+        {
+            get
+            {
+                return Issue.Field.Description;
+            }
+        }
+        
 
         public string Priority
         {
@@ -117,9 +126,13 @@ namespace BL
         /// Adds a comment to Jira bug
         /// </summary>
         /// <param name="text"></param>
-        public void AddComment(string text)
+        public Comments AddComment(string text)
         {
+            var comment = new Comments();
+            comment.Author = Issue.Field.Assignee;
+            comment.Body = text;
             _issuesTracking.AddMessage(Issue, text);
+            return comment;
         }
 
 

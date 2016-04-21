@@ -40,12 +40,12 @@
                     <ColumnDefinition Width="4*"></ColumnDefinition>
                     <ColumnDefinition Width="*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                
-                <TextBlock Grid.Row="0" Grid.Column="0" Margin="5" Foreground="Black" TextAlignment="Left" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" TextWrapping="Wrap"   Text="{Binding Description}">
+
+                <TextBlock Grid.Row="0" Grid.Column="0" Margin="5" Foreground="Black" TextAlignment="Left" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" TextWrapping="Wrap"   Text="{Binding Summary}">
                 </TextBlock>
 
                 <ListView Grid.Column="1" ItemsSource="{Binding FixedVersions}"></ListView>
-                
+
             </Grid>
             <Border Grid.Row="2" BorderThickness="0,2,0,0" BorderBrush="Purple">
 
@@ -153,20 +153,20 @@
 
                     <Label Name="MessageLabel" Grid.Column="2" Content="{Binding StatusMessage,UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" Foreground="Orange"></Label>
 
-                    <Button Grid.Column="3" Name="CommentButton" Click="MessageClick" >
+                    <Button Grid.Column="5" Name="CommentButton" Click="MessageClick" >
                         <Button.Content>
                             <Image Margin="4,5,4,5" Source="../Icons/comments.png" Stretch="Fill" />
                         </Button.Content>
                     </Button>
 
-                    <Button Grid.Column="5" Name="PictureButton" Click="MessageClick" >
+                 <!--   <Button Grid.Column="5" Name="PictureButton" Click="MessageClick" >
                         <Button.Content>
                             <Image Margin="4,5,4,5" Source="../Icons/picture.png" Stretch="Fill" />
                         </Button.Content>
                     </Button>
 
-
-                    <Button Grid.Column="7" >
+-->
+                    <Button Grid.Column="7" Name="DetailsButton" Click="DetailsClick" >
                         <Button.Content>
                             <Image Margin="4,5,4,5" Source="../Icons/expand.png" Stretch="Fill" />
                         </Button.Content>
@@ -214,7 +214,6 @@
                             </Grid>
                         </Border>
                     </Popup>
-
 
                     <Popup x:Name="LastPopup"  PlacementTarget="{Binding ElementName=CommentButton}" Placement="Bottom" MaxHeight="400"  Width="300" MinHeight="30" Margin="0,20,0,0">
                         <Border BorderBrush="White" BorderThickness="2">
