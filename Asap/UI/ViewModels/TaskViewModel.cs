@@ -81,6 +81,7 @@ namespace SushiPikant.UI.ViewModels
             }
         }
 
+
         public int SeverityValue
         {
             get
@@ -137,6 +138,13 @@ namespace SushiPikant.UI.ViewModels
             }
         }
 
+        public IEnumerable<Attachment> Attachments
+        {
+            get
+            {
+                return Model.Attachments;
+            }
+        }
 
         public ObservableCollection<string> FixedVersions { get; private set; }
 
@@ -187,6 +195,11 @@ namespace SushiPikant.UI.ViewModels
         public void AddComment(string text)
         {
             Comments.Add(Model.AddComment(text));      
+        }
+
+        public void SaveFile(string filepath, object fileId)
+        {
+            Model.SaveAttachemnt(filepath, fileId);
         }
 
         /// <summary>

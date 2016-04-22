@@ -67,6 +67,8 @@ namespace IssuesTracking
         void SetStatus(Issue issue, JiraTransition status, string message, ItVersion fixVersion);
 
 
+        Attachment[] AppendAttachmentForIssue(Issue issue);
+
         void AddMessage(Issue issue,string message);
     }
 }

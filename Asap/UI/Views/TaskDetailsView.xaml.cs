@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Microsoft.Win32;
+using SushiPikant.UI.SettigsViews;
 using SushiPikant.UI.ViewModels;
 
 namespace SushiPikant.UI.Views
@@ -29,6 +31,24 @@ namespace SushiPikant.UI.Views
             InitializeComponent();
             ViewModel = viewModel;
             this.DataContext = ViewModel;
+        }
+
+        private void AttachmentClick(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            if (button != null)
+            {
+                var saveDialog = new SaveFileDialog();
+                saveDialog.FileName = button.Content.ToString();
+
+                if (saveDialog.ShowDialog() == true)
+                {
+                    ViewModel.SaveFile(saveDialog.FileName, button.Tag);
+                }
+            }
+
+            DevView.Instance.ReopenCurrentPopup();
+
         }
     }
 }

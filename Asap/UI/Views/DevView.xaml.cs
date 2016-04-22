@@ -47,6 +47,11 @@ namespace SushiPikant.UI.SettigsViews
             DetailsPopup.IsOpen = false;
         }
 
+        public void ReopenCurrentPopup()
+        {
+            DetailsPopup.IsOpen = true;
+        }
+
         private void ListViewItemDrag(object sender, MouseEventArgs e)
         {
             ListViewItem view = sender as ListViewItem;
