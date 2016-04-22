@@ -148,7 +148,19 @@ namespace SushiPikant.UI.ViewModels
 
         public ObservableCollection<string> FixedVersions { get; private set; }
 
-        public ObservableCollection<Comments> Comments { get; private set; }
+        public ObservableCollection<Comments> Comments
+        {
+            get
+            {
+                if (_comments == null)
+                {
+                    _comments = new ObservableCollection<Comments>(Model.Comments); 
+                }
+
+                return _comments;
+            }
+        }
+
 
         private string _statusMessage { get; set; }
 
@@ -160,7 +172,9 @@ namespace SushiPikant.UI.ViewModels
                 return (SeverityEnum)Enum.Parse(typeof(SeverityEnum), Model.Priority);
             }
         }
-        
+
+
+        private ObservableCollection<Comments> _comments { get; set; }
 
         private TaskModel Model { get;set; }
 
@@ -177,6 +191,8 @@ namespace SushiPikant.UI.ViewModels
             Model = model;
 
             FixedVersions.Clear();
+
+            _comments = null;
 
             foreach (var fixedVersion in Model.FixedVersions)
             {
@@ -202,13 +218,7 @@ namespace SushiPikant.UI.ViewModels
             Model.SaveAttachemnt(filepath, fileId);
         }
 
-        /// <summary>
-        /// Populates the issue comments
-        /// </summary>
-        public void PopulateComments()
-        {
-            Comments = new ObservableCollection<Comments>(Model.Comments);
-        }
+
 
         public void InProgress()
         {

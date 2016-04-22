@@ -35,6 +35,7 @@ namespace SushiPikant.UI.Views
 
         private void AttachmentClick(object sender, RoutedEventArgs e)
         {
+            DevView.Instance.CloseCurrentPopup();
             var button = sender as Button;
             if (button != null)
             {
@@ -48,7 +49,16 @@ namespace SushiPikant.UI.Views
             }
 
             DevView.Instance.ReopenCurrentPopup();
+        }
 
+        private void CommentKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                ViewModel.AddComment(CommentTextBox.Text);
+
+                CommentTextBox.Text = String.Empty;
+            }
         }
     }
 }

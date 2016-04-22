@@ -47,6 +47,12 @@ namespace SushiPikant.UI.SettigsViews
             DetailsPopup.IsOpen = false;
         }
 
+
+        public void CloseCurrentPopup()
+        {
+            DetailsPopup.IsOpen = false;
+        }
+
         public void ReopenCurrentPopup()
         {
             DetailsPopup.IsOpen = true;

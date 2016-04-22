@@ -45,7 +45,6 @@ namespace SushiPikant.UI.SettigsViews
             else
             {
                 Popup.IsOpen = true;
-                ViewModel.PopulateComments();
                 Comments.ItemsSource = ViewModel.Comments;
                 PopupTextBox.Focus();
             }
