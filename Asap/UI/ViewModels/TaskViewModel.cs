@@ -6,7 +6,7 @@ using System.Windows;
 using System.Windows.Media;
 using BL;
 using IssuesTracking;
-
+using SushiPikant.UI.SettigsViews;
 
 namespace SushiPikant.UI.ViewModels
 {
@@ -33,7 +33,7 @@ namespace SushiPikant.UI.ViewModels
         {
             get
             {
-                return Model.Reporter;
+                return Model.Issue.Field.Reporter.DisplayName;
             }
         }
 
@@ -41,7 +41,7 @@ namespace SushiPikant.UI.ViewModels
         {
             get
             {
-                return Model.Summary;
+                return Model.Issue.Field.Summary;
             }
         }
 
@@ -49,7 +49,7 @@ namespace SushiPikant.UI.ViewModels
         {
             get
             {
-                return Model.Description;
+                return Model.Issue.Field.Description;
             }
         }
 
@@ -58,6 +58,46 @@ namespace SushiPikant.UI.ViewModels
             get
             {
                 return TaskSeverity.ToString();
+            }
+        }
+
+        public string CreateDate
+        {
+            get
+            {
+                return Model.Issue.Field.CreatedDate;
+            }
+        }
+
+        public string Iteration
+        {
+            get
+            {
+                return Model.Issue.Field.Iteration;
+            }
+        }
+
+        public string Status
+        {
+            get
+            {
+                return Model.Issue.Field.Status.Name;
+            }
+        }
+
+        public string Resolution
+        {
+            get
+            {
+                return Model.Issue.Field.Resolution.Name;
+            }
+        }
+
+        public string IssueType
+        {
+            get
+            {
+                return Model.Issue.Field.IssueType.Name;
             }
         }
 
@@ -77,6 +117,36 @@ namespace SushiPikant.UI.ViewModels
                         return Brushes.Green;
                     default:
                         return Brushes.Green;
+                }
+            }
+        }
+
+        public string SwitchTo
+        {
+            get
+            {
+                if (Model.Current)
+                {
+                    return "Done";
+                }
+                else
+                {
+                    return "Current"; ;
+                }  
+            }
+        }
+
+        public Visibility SwitchToVisibility
+        {
+            get
+            {
+                if (Model.IsDone)
+                {
+                    return Visibility.Hidden;
+                }
+                else
+                {
+                    return Visibility.Visible;
                 }
             }
         }
@@ -169,7 +239,7 @@ namespace SushiPikant.UI.ViewModels
         {
             get
             {
-                return (SeverityEnum)Enum.Parse(typeof(SeverityEnum), Model.Priority);
+                return (SeverityEnum)Enum.Parse(typeof(SeverityEnum), Model.Issue.Field.Priority.Name);
             }
         }
 
@@ -184,6 +254,19 @@ namespace SushiPikant.UI.ViewModels
 
             FixedVersions = new ObservableCollection<string>(model.FixedVersions.Select(version => version.Name));
 
+        }
+
+        public void SwitchToTask()
+        {
+            if (Model.Current)
+            {
+                DevView.Instance.ViewModel.ResolveCurrent();
+            }
+            else
+            {
+                DevView.Instance.ViewModel.SetCurrent(this);
+            }
+            RaisePropertyChangedForAll();
         }
 
         public void UpdateModel(TaskModel model)
@@ -216,6 +299,12 @@ namespace SushiPikant.UI.ViewModels
         public void SaveFile(string filepath, object fileId)
         {
             Model.SaveAttachemnt(filepath, fileId);
+        }
+
+
+        public void OpenFile(object fileId)
+        {
+            Model.OpenFile(fileId);
         }
 
 

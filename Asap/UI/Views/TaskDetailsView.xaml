@@ -5,20 +5,127 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
              d:DesignHeight="800" d:DesignWidth="1200">
-    <Grid Margin="15">
+    <ScrollViewer>
+    <Grid Margin="15" Height="Auto" ScrollViewer.IsDeferredScrollingEnabled="True" VirtualizingPanel.IsVirtualizingWhenGrouping="True" VirtualizingPanel.VirtualizationMode="Recycling">
         <Grid.RowDefinitions>
             <RowDefinition Height="40"></RowDefinition>
-            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="135"></RowDefinition>
             <RowDefinition Height="3*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="2*"></RowDefinition>
         </Grid.RowDefinitions>
 
         <Label Grid.Row="0" Content="{Binding Summary}" FontSize="22" FontWeight="Bold"></Label>
+            <Button Grid.Row="0" HorizontalAlignment="Right" VerticalAlignment="Top" Click="CloseClick" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}">
+                <Button.Content>
+                    <Label FontWeight="Bold" Content="X"></Label>
+                </Button.Content>
+            </Button>
         <GroupBox Grid.Row="1">
             <GroupBox.Header>
                 <Label Content="Details" FontWeight="Bold" FontSize="14"></Label>
             </GroupBox.Header>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Grid Grid.Column="0">
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="25"></RowDefinition>
+                            <RowDefinition Height="25"></RowDefinition>
+                            <RowDefinition Height="25"></RowDefinition>
+                            <RowDefinition Height="25"></RowDefinition>
+                        </Grid.RowDefinitions>
+
+                        <Label Grid.Column="0" Grid.Row="0" Content="Type: " HorizontalContentAlignment="Right"></Label>
+                        <Label Grid.Column="0" Grid.Row="1" Content="Severity: " HorizontalContentAlignment="Right"></Label>
+                        <Label Grid.Column="0" Grid.Row="2" Content="Sprint: " HorizontalContentAlignment="Right"></Label>
+                        
+                        
+                        <Label Grid.Column="1" Grid.Row="0" Content="{Binding IssueType}"></Label>
+                        <Label Grid.Column="1" Grid.Row="1" Content="{Binding Severity}"></Label>
+                        <Label Grid.Column="1" Grid.Row="2" Content="{Binding Iteration}"></Label>
+
+                    </Grid>
+
+                    <Grid Grid.Column="1">
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="25"></RowDefinition>
+                            <RowDefinition Height="25"></RowDefinition>
+                            <RowDefinition Height="50"></RowDefinition>
+                        </Grid.RowDefinitions>
+
+                        <Label Grid.Column="0" Grid.Row="0" Content="Status: " HorizontalContentAlignment="Right"></Label>
+                        <Label Grid.Column="0" Grid.Row="1" Content="Resolution: " HorizontalContentAlignment="Right"></Label>
+                        <Label Grid.Column="0" Grid.Row="2" Content="Fxied Versions: " HorizontalContentAlignment="Right" VerticalAlignment="Top"></Label>
+
+                        <Label Grid.Column="1" Grid.Row="0" Content="{Binding Status}"></Label>
+                        <Label Grid.Column="1" Grid.Row="1" Content="{Binding Resolution}"></Label>
+                        <ItemsControl Grid.Column="1" Grid.Row="2" x:Name="FixedVersions" ItemsSource="{Binding FixedVersions}" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel></WrapPanel>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Label Content="{Binding}" />
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </Grid>
+
+
+
+                    <Grid Grid.Column="2">
+                        
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="25"></RowDefinition>
+                            <RowDefinition Height="25"></RowDefinition>
+                            <RowDefinition Height="25"></RowDefinition>
+                            <RowDefinition Height="25"></RowDefinition>
+                        </Grid.RowDefinitions>
+
+                        <Label Grid.Column="0" Grid.Row="0" Content="Reporter: " HorizontalContentAlignment="Right"></Label>
+                        <Label Grid.Column="0" Grid.Row="1" Content="Created: " HorizontalContentAlignment="Right"></Label>
+                        <Label Grid.Column="0" Grid.Row="2" Content="Switch to: " HorizontalContentAlignment="Right" Visibility="{Binding SwitchToVisibility}"></Label>
+                        
+                        <Label Grid.Column="1" Grid.Row="0" Content="{Binding Reporter}"></Label>
+                        <Label Grid.Column="1" Grid.Row="1" Content="{Binding CreateDate}"></Label>
+                        <Button Grid.Column="1" Grid.Row="2" Content="{Binding SwitchTo}" HorizontalAlignment="Left" Width="100" Visibility="{Binding SwitchToVisibility}" Name="SwitchTo" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Click="SwitchToClick"></Button>
+                        <Label Grid.Column="1" Grid.Row="2" Name="StatusMessage" Visibility="Hidden" Foreground="Red" Content="{Binding StatusMessage}"></Label>
+                    </Grid>
+                    
+                   
+                    
+                    
+                    
+                    
+
+                    
+                    
+                </Grid>
+            
         </GroupBox>
 
 
@@ -26,35 +133,33 @@
             <GroupBox.Header>
                 <Label Content="Description" FontWeight="Bold" FontSize="14"></Label>
             </GroupBox.Header>
-            <ScrollViewer>
+
                 <TextBlock Grid.Row="2" Text="{Binding Description}" FontSize="14" TextWrapping="Wrap"></TextBlock>
-            </ScrollViewer>
+
         </GroupBox>
         <GroupBox Grid.Row="3">
             <GroupBox.Header>
                 <Label Content="Attachments" FontWeight="Bold" FontSize="14"></Label>
             </GroupBox.Header>
-            <ScrollViewer>
-                <ItemsControl x:Name="Attachments" ItemsSource="{Binding Attachments}" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <WrapPanel></WrapPanel>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Button Content="{Binding Filename}" Tag="{Binding Id}" Height="20" Click="AttachmentClick"/>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </ScrollViewer>
+            <ItemsControl x:Name="Attachments" ItemsSource="{Binding Attachments}" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel></WrapPanel>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                            <Button Content="{Binding Filename}" Tag="{Binding Id}" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Height="20" Click="AttachmentClick"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
         </GroupBox>
 
         <GroupBox Grid.Row="4">
             <GroupBox.Header>
                 <Label Content="Comments" FontWeight="Bold" FontSize="14"></Label>
             </GroupBox.Header>
-            <ScrollViewer >
+ 
 
                 <Border BorderBrush="White" BorderThickness="2">
                     <Border.Background>
@@ -75,10 +180,7 @@
                                         <Border.Background>
                                             <SolidColorBrush Color="White"></SolidColorBrush>
                                         </Border.Background>
-                                        <Border.Effect>
-                                            <DropShadowEffect BlurRadius="10" Color="Black" Direction="235" Opacity=".2" RenderingBias="Quality" ShadowDepth="5" />
-                                        </Border.Effect>
-                                        <Grid Margin="2">
+                                        <Grid Margin="2" HorizontalAlignment="Stretch">
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="25"></RowDefinition>
                                                 <RowDefinition Height="*"></RowDefinition>
@@ -96,8 +198,9 @@
                     </Grid>
                 </Border>
 
-            </ScrollViewer>
+  
         </GroupBox>
 
-    </Grid>
+        </Grid>
+    </ScrollViewer>
 </UserControl>

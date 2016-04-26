@@ -46,7 +46,7 @@ namespace SushiPikant.UI.ViewModels
             }
         }
 
-        public TaskView Current { get;set; }
+        public TaskView Current { get; set; }
 
         public DevViewModel()
         {
@@ -84,7 +84,7 @@ namespace SushiPikant.UI.ViewModels
             {
                 item.ViewModel.ToDo();
             }
- 
+
             if (itemsSource.Equals(Done))
             {
                 if (item.Equals(Current))
@@ -166,11 +166,25 @@ namespace SushiPikant.UI.ViewModels
             RaisePropertyChanged("Current");
         }
 
+        public void ResolveCurrent()
+        {
+            Update(Current,_done);
+        }
 
-
-
+        public void SetCurrent(TaskViewModel taskViewModel)
+        {
+            var taskView = _inProgress.FirstOrDefault(view => view.ViewModel.Equals(taskViewModel));
+            if (taskView == null)
+            {
+                taskView = _toDo.FirstOrDefault(view => view.ViewModel.Equals(taskViewModel));
+                if (taskView != null)
+                {
+                    Update(taskView);
+                }
+            }
+        }
     }
 
 
- 
+
 }

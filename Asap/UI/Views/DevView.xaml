@@ -49,6 +49,8 @@
                 <Setter Property="Background" Value="Transparent"></Setter>
                 <Setter Property="BorderThickness" Value="0"></Setter>
                 <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"></Setter>
+                <Setter Property="ScrollViewer.IsDeferredScrollingEnabled" Value="True"></Setter>
+                <Setter Property="ScrollViewer.CanContentScroll" Value="False"></Setter>
                 <Setter Property="Padding" Value="5"></Setter>
                 <EventSetter Event="Drop" Handler="ListViewDrop"></EventSetter>
                 <EventSetter Event="PreviewDragOver" Handler="ListViewPreviewDragOver"></EventSetter>
@@ -152,25 +154,5 @@
                 </Grid>
             </Border>
         </Grid>
-
-        <Popup x:Name="DetailsPopup" PlacementTarget="{Binding ElementName=MainGrid}" Placement="Center" Width="1200" Height="1000">
-
-            <Border BorderBrush="White" BorderThickness="2">
-                <Border.Background>
-                    <SolidColorBrush Color="White"></SolidColorBrush>
-                </Border.Background>
-                <Border.Effect>
-                    <DropShadowEffect BlurRadius="10" Color="Black" Direction="235" Opacity=".5" RenderingBias="Quality" ShadowDepth="5" />
-                </Border.Effect>
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="20"></RowDefinition>
-                        <RowDefinition Height="*"></RowDefinition>
-                    </Grid.RowDefinitions>
-                    <Button Grid.Row="0" HorizontalAlignment="Right" Width="20" Content="X" Click="ClosePopup"></Button>
-                    <ContentControl Name="DetailsContent" Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></ContentControl>
-                </Grid>
-            </Border>
-        </Popup>
     </Grid>
 </UserControl>

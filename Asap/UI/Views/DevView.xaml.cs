@@ -36,27 +36,6 @@ namespace SushiPikant.UI.SettigsViews
             MainGrid.DataContext = ViewModel;
         }
 
-        public void PopupDetails(TaskViewModel taskViewModel)
-        {
-            DetailsContent.Content = new TaskDetailsView(taskViewModel);
-            DetailsPopup.IsOpen = true;
-        }
-
-        private void ClosePopup(object sender, RoutedEventArgs e)
-        {
-            DetailsPopup.IsOpen = false;
-        }
-
-
-        public void CloseCurrentPopup()
-        {
-            DetailsPopup.IsOpen = false;
-        }
-
-        public void ReopenCurrentPopup()
-        {
-            DetailsPopup.IsOpen = true;
-        }
 
         private void ListViewItemDrag(object sender, MouseEventArgs e)
         {

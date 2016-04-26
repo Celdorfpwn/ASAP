@@ -43,6 +43,15 @@ namespace SushiPikant.UI.Schedulers
                             .Concat(View.ViewModel.Done)
                             .Concat(View.ViewModel.InProgress);
 
+            if (View.ViewModel.Current != null)
+            {
+                var jiraModel = models.FirstOrDefault(model => model.Key == View.ViewModel.Current.ViewModel.Key);
+                if (jiraModel != null)
+                {
+                    View.ViewModel.Current.ViewModel.UpdateModel(jiraModel);
+                }
+            }
+
             View.Dispatcher.Invoke(new Action(() => UpdateModelsStatus(models, views)));
 
         }

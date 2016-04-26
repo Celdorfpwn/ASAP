@@ -13,7 +13,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Win32;
+using SushiPikant.UI.Helpers;
 using SushiPikant.UI.SettigsViews;
+using SushiPikant.UI.UIController;
 using SushiPikant.UI.ViewModels;
 
 namespace SushiPikant.UI.Views
@@ -35,20 +37,19 @@ namespace SushiPikant.UI.Views
 
         private void AttachmentClick(object sender, RoutedEventArgs e)
         {
-            DevView.Instance.CloseCurrentPopup();
             var button = sender as Button;
             if (button != null)
             {
-                var saveDialog = new SaveFileDialog();
-                saveDialog.FileName = button.Content.ToString();
+                //var saveDialog = new SaveFileDialog();
+                //saveDialog.FileName = button.Content.ToString();
 
-                if (saveDialog.ShowDialog() == true)
-                {
-                    ViewModel.SaveFile(saveDialog.FileName, button.Tag);
-                }
+                //if (saveDialog.ShowDialog() == true)
+                //{
+                //    ViewModel.SaveFile(saveDialog.FileName, button.Tag);
+                //}
+
+                ViewModel.OpenFile(button.Tag);
             }
-
-            DevView.Instance.ReopenCurrentPopup();
         }
 
         private void CommentKeyDown(object sender, KeyEventArgs e)
@@ -58,6 +59,29 @@ namespace SushiPikant.UI.Views
                 ViewModel.AddComment(CommentTextBox.Text);
 
                 CommentTextBox.Text = String.Empty;
+            }
+        }
+
+        private void CloseClick(object sender, RoutedEventArgs e)
+        {
+            Controller.Instance.SwitchToDevView();
+        }
+
+        private void SwitchToClick(object sender, RoutedEventArgs e)
+        {
+            
+            ViewModel.SwitchToTask();
+            if (ViewModel.StatusMessage == "Nothing to commit")
+            {
+                StatusMessage.Visibility = Visibility.Visible;
+                SwitchTo.Visibility = Visibility.Hidden;
+                new Action(delegate ()
+                {
+                    StatusMessage.Visibility = Visibility.Hidden;
+                    ViewModel.StatusMessage = String.Empty;
+                    SwitchTo.Visibility = Visibility.Visible;
+                })
+                    .RunAfter(TimeSpan.FromSeconds(5));
             }
         }
     }

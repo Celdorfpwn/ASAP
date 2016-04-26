@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -15,7 +16,7 @@ namespace BL
 
         private IIssuesTracking _issuesTracking { get; set; }
 
-        private Issue Issue { get; set; }
+        public Issue Issue { get; set; }
 
         private bool _isDone { get; set; }
 
@@ -32,38 +33,6 @@ namespace BL
             }
         }
 
-        public string Reporter
-        {
-            get
-            {
-                return Issue.Field.Reporter.DisplayName;
-            }
-        }
-
-        public string Summary
-        {
-            get
-            {
-                return Issue.Field.Summary;
-            }
-        }
-
-        public string Description
-        {
-            get
-            {
-                return Issue.Field.Description;
-            }
-        }
-
-
-        public string Priority
-        {
-            get
-            {
-                return Issue.Field.Priority.Name;
-            }
-        }
 
         public bool Current
         {
@@ -72,6 +41,8 @@ namespace BL
                 return Issue.Key == _sourceControl.GetCurrentBranch();
             }
         }
+
+
 
         public ItVersion FixedVersion { get; set; }
 
@@ -199,6 +170,17 @@ namespace BL
             }
         }
 
+        public void OpenFile(object fileId)
+        {
+            if (Issue.Field.Attachment != null)
+            {
+                var file = Issue.Field.Attachment.FirstOrDefault(attachment => attachment.Id.Equals(fileId));
+                if (file != null)
+                {
+                    Process.Start(file.Content);
+                }
+            }
+        }
 
         /// <summary>
         /// Updates the jira status to In Progress
@@ -209,6 +191,7 @@ namespace BL
             {
                 _issuesTracking.SetStatus(Issue, JiraTransition.StartProgress, null, FixedVersion);
                 Issue.Field.Status.Id = (int)JiraItemStatus.InProgress;
+                Issue.Field.Status.Name = "In Progress";
             }
         }
 
@@ -221,6 +204,7 @@ namespace BL
             {
                 _issuesTracking.SetStatus(Issue, JiraTransition.StopProgress, null, FixedVersion);
                 Issue.Field.Status.Id = (int)JiraItemStatus.Open;
+                Issue.Field.Status.Name = "In Open";
             }
         }
 
@@ -233,13 +217,11 @@ namespace BL
             {
                 _issuesTracking.SetStatus(Issue, JiraTransition.Resolve, Issue.Key + " " + Issue.Field.Summary + ". " + _resolveMessage, FixedVersion);
                 Issue.Field.Status.Id = (int)JiraItemStatus.Resolved;
+                Issue.Field.Status.Name = "Done";
                 _sourceControl.Checkout("master");
                 _sourceControl.Merge(Key);
             }
         }
-
-
-
 
 
 
@@ -250,8 +232,6 @@ namespace BL
                 return Issue.Key + " " + Issue.Field.Summary;
             }
         }
-
-
 
 
         /// <summary>

@@ -16,6 +16,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using SushiPikant.UI.Helpers;
+using SushiPikant.UI.UIController;
 using SushiPikant.UI.ViewModels;
 using SushiPikant.UI.Views;
 
@@ -105,7 +106,7 @@ namespace SushiPikant.UI.SettigsViews
 
         private void DetailsClick(object sender, RoutedEventArgs e)
         {
-            DevView.Instance.PopupDetails(ViewModel);
+            Controller.Instance.SwitchToTaskDetails(ViewModel);
         }
     }
 }
