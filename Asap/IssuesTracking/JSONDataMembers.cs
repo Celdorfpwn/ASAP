@@ -6,6 +6,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using IssuesTracking;
+using System.Collections;
 
 namespace IssuesTracking
 {
@@ -130,10 +131,68 @@ namespace IssuesTracking
             }
         }
 
+        [DataMember(Name = "customfield_10322")]
+        private object Customfield_10322
+        {
+            get
+            {
+                return _customfield_10322;
+            }
+            set
+            {
+                _customfield_10322 = value;
+                Iteration = ParseToIteration(_customfield_10322);
+            }
+        }
+
+        /// <summary>
+        /// Parses the given object into iteration string
+        /// </summary>
+        /// <param name="_customfield_10322">The _customfield_10322.</param>
+        private string ParseToIteration(object customfield_10322)
+        {
+            string iteration = string.Empty;
+
+            if (customfield_10322 != null)
+            {
+                IEnumerable enumerable = customfield_10322 as IEnumerable;
+                if (enumerable != null)
+                {
+                    foreach (object element in enumerable)
+                    {
+                        if (element != null)
+                        {
+
+                            int nameIndex = (element as String).IndexOf("name=");
+                            int startDateIndex = (element as String).IndexOf(",startDate=");
+                            if (nameIndex > 0 && startDateIndex > 0 && startDateIndex > nameIndex)
+                            {
+                                return (element as String).Substring(nameIndex + 5, startDateIndex - nameIndex - "name=".Length);
+                            }
+                        }
+                    }
+                }
+            }
+
+
+            return iteration;
+        }
+
+        /// <summary>
+        /// Gets the iteration for this issue
+        /// </summary>
+        /// <value>
+        /// The iteration.
+        /// </value>
+        public string Iteration
+        {
+            get; private set;
+        }
 
         private string _createdDate;
         private string _updatedDate;
         private string _summary;
+        private object _customfield_10322;
 
         private void ExtractUSName()
         {
