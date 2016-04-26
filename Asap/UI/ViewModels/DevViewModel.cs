@@ -182,6 +182,10 @@ namespace SushiPikant.UI.ViewModels
                     Update(taskView);
                 }
             }
+            else
+            {
+                Update(taskView);
+            }
         }
     }
 
