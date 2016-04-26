@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Media;
 using BL;
 using IssuesTracking;
@@ -21,9 +20,7 @@ namespace SushiPikant.UI.ViewModels
                 return Model.Key;
             }
         }
-
-            
-
+           
         public string Title
         {
             get
@@ -40,6 +37,14 @@ namespace SushiPikant.UI.ViewModels
             }
         }
 
+        public string Summary
+        {
+            get
+            {
+                return Model.Summary;
+            }
+        }
+
         public string Description
         {
             get
@@ -52,7 +57,7 @@ namespace SushiPikant.UI.ViewModels
         {
             get
             {
-                return SeverityEnum.ToString();
+                return TaskSeverity.ToString();
             }
         }
 
@@ -60,7 +65,7 @@ namespace SushiPikant.UI.ViewModels
         {
             get
             {
-                switch (SeverityEnum)
+                switch (TaskSeverity)
                 {
                     case SeverityEnum.Blocker:
                         return Brushes.Red;
@@ -76,11 +81,12 @@ namespace SushiPikant.UI.ViewModels
             }
         }
 
+
         public int SeverityValue
         {
             get
             {
-                return (int)SeverityEnum;
+                return (int)TaskSeverity;
             }
         }
 
@@ -97,6 +103,20 @@ namespace SushiPikant.UI.ViewModels
             }
         }
 
+        public Visibility CurrentTask
+        {
+            get
+            {
+                if (Model.Current)
+                {
+                    return Visibility.Visible;
+                }
+                else
+                {
+                    return Visibility.Hidden;
+                }
+            }
+        }
 
         public IEnumerable<ItVersion> AvailableVersions
         {
@@ -118,17 +138,43 @@ namespace SushiPikant.UI.ViewModels
             }
         }
 
+        public IEnumerable<Attachment> Attachments
+        {
+            get
+            {
+                return Model.Attachments;
+            }
+        }
+
+        public ObservableCollection<string> FixedVersions { get; private set; }
+
+        public ObservableCollection<Comments> Comments
+        {
+            get
+            {
+                if (_comments == null)
+                {
+                    _comments = new ObservableCollection<Comments>(Model.Comments); 
+                }
+
+                return _comments;
+            }
+        }
+
 
         private string _statusMessage { get; set; }
 
-        public void SetResolveMessage(string message)
+
+        private SeverityEnum TaskSeverity
         {
-            Model.SetResolveMessage(message);
+            get
+            {
+                return (SeverityEnum)Enum.Parse(typeof(SeverityEnum), Model.Priority);
+            }
         }
 
-        public ObservableCollection<Comments> Comments { get;private set; }
 
-        private SeverityEnum SeverityEnum { get; set; }
+        private ObservableCollection<Comments> _comments { get; set; }
 
         private TaskModel Model { get;set; }
 
@@ -136,40 +182,55 @@ namespace SushiPikant.UI.ViewModels
         {
             Model = model;
 
-            SeverityEnum = (SeverityEnum)Enum.Parse(typeof(SeverityEnum), model.Priority);
+            FixedVersions = new ObservableCollection<string>(model.FixedVersions.Select(version => version.Name));
 
+        }
+
+        public void UpdateModel(TaskModel model)
+        {
+            Model = model;
+
+            FixedVersions.Clear();
+
+            _comments = null;
+
+            foreach (var fixedVersion in Model.FixedVersions)
+            {
+                FixedVersions.Add(fixedVersion.Name);
+            }
+
+            RaisePropertyChangedForAll();
+
+        }
+
+        public void SetResolveMessage(string message)
+        {
+            Model.SetResolveMessage(message);
         }
 
         public void AddComment(string text)
         {
-            var model = new Comments();
-            model.Body = text;
-
-
-            Comments.Add(model);
-
-            Model.AddComment(text);
+            Comments.Add(Model.AddComment(text));      
         }
 
-        /// <summary>
-        /// Populates the issue comments
-        /// </summary>
-        public void PopulateComments()
+        public void SaveFile(string filepath, object fileId)
         {
-            Comments = new ObservableCollection<Comments>(Model.Comments);
+            Model.SaveAttachemnt(filepath, fileId);
         }
+
+
 
         public void InProgress()
         {
             Model.UpdateStatusInProgress();
+            RaisePropertyChanged("CurrentTask");
         }
 
-        internal void ToDo()
+        public void ToDo()
         {
             Model.UpdateStatusOpen();
+            RaisePropertyChanged("CurrentTask");
         }
-
-
 
         /// <summary>
         /// Switch or creates to the issue branch
@@ -177,6 +238,7 @@ namespace SushiPikant.UI.ViewModels
         public void SwitchToBranch()
         {
             Model.CheckoutBranch();
+            RaisePropertyChanged("CurrentTask");
         }
 
         /// <summary>
@@ -185,11 +247,16 @@ namespace SushiPikant.UI.ViewModels
         public void SaveBranch()
         {
             Model.CommitBranchInProgress();
+            RaisePropertyChanged("CurrentTask");
         }
 
-        internal void Resolve()
+        public void Resolve()
         {
             Model.UpdateStatusResolved();
+            if (FixedVersion != null)
+            {
+                FixedVersions.Add(FixedVersion.Name);
+            }
         }
 
 
@@ -200,7 +267,10 @@ namespace SushiPikant.UI.ViewModels
         {
             if (Model.CommitBranchDone())
             {
+                Resolve();
+                RaisePropertyChanged("CurrentTask");
                 StatusMessage = "Code Review";
+
                 return true;
             }
             else

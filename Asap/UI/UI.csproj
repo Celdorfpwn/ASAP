@@ -165,6 +165,9 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration\CodeReviewView.xaml.cs">
+      <DependentUpon>CodeReviewView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Configuration\ConfigurationView.xaml.cs">
       <DependentUpon>ConfigurationView.xaml</DependentUpon>
     </Compile>
@@ -199,6 +202,9 @@
     </Compile>
     <Compile Include="Views\DevView.xaml.cs">
       <DependentUpon>DevView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TaskDetailsView.xaml.cs">
+      <DependentUpon>TaskDetailsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\TaskView.xaml.cs">
       <DependentUpon>TaskView.xaml</DependentUpon>
@@ -257,6 +263,10 @@
     <Content Include="Resources\Package.ico" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Configuration\CodeReviewView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Configuration\ConfigurationView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -286,6 +296,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\DevView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\TaskDetailsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

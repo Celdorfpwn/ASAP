@@ -45,6 +45,7 @@
     <Compile Include="ConfigurationModel.cs" />
     <Compile Include="AsapCredentials.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="FishEyeConfig.cs" />
     <Compile Include="GitConfig.cs" />
     <Compile Include="JiraConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

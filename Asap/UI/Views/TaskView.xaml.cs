@@ -17,6 +17,7 @@ using System.Windows.Shapes;
 using System.Windows.Threading;
 using SushiPikant.UI.Helpers;
 using SushiPikant.UI.ViewModels;
+using SushiPikant.UI.Views;
 
 namespace SushiPikant.UI.SettigsViews
 {
@@ -44,7 +45,6 @@ namespace SushiPikant.UI.SettigsViews
             else
             {
                 Popup.IsOpen = true;
-                ViewModel.PopulateComments();
                 Comments.ItemsSource = ViewModel.Comments;
                 PopupTextBox.Focus();
             }
@@ -101,6 +101,11 @@ namespace SushiPikant.UI.SettigsViews
                 LastCommentTextBox.Focus();
                 Keyboard.Focus(LastCommentTextBox);
             }));
+        }
+
+        private void DetailsClick(object sender, RoutedEventArgs e)
+        {
+            DevView.Instance.PopupDetails(ViewModel);
         }
     }
 }

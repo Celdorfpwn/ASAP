@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,6 +21,8 @@ namespace BL
 
         private string _resolveMessage { get; set; }
 
+        private IEnumerable<ItVersion> _availableVersions { get; set; }
+
 
         public string Key
         {
@@ -37,13 +40,22 @@ namespace BL
             }
         }
 
-        public string Description
+        public string Summary
         {
             get
             {
                 return Issue.Field.Summary;
             }
         }
+
+        public string Description
+        {
+            get
+            {
+                return Issue.Field.Description;
+            }
+        }
+
 
         public string Priority
         {
@@ -53,13 +65,52 @@ namespace BL
             }
         }
 
+        public bool Current
+        {
+            get
+            {
+                return Issue.Key == _sourceControl.GetCurrentBranch();
+            }
+        }
+
         public ItVersion FixedVersion { get; set; }
 
-        public IEnumerable<ItVersion> AvailableVersions { get; internal set; }
+        public IEnumerable<ItVersion> FixedVersions
+        {
+            get
+            {
+                return Issue.Field.FixVersions;
+            }
+        }
+
+        public IEnumerable<ItVersion> AvailableVersions
+        {
+            get
+            {
+                return _availableVersions.Where(version => Issue.Field.FixVersions.FirstOrDefault(fixedVersion => fixedVersion.Id == version.Id) == null);
+            }
+            set
+            {
+                _availableVersions = value;
+            }
+        }
+
+        public IEnumerable<Attachment> Attachments
+        {
+            get
+            {
+                if (Issue.Field.Attachment == null)
+                {
+                    Issue.Field.Attachment = _issuesTracking.AppendAttachmentForIssue(Issue);
+                }
+                return Issue.Field.Attachment;
+
+            }
+        }
 
 
 
-        public TaskModel(ISourceControl sourceControl, IIssuesTracking issuesTracking,Issue issue)
+        public TaskModel(ISourceControl sourceControl, IIssuesTracking issuesTracking, Issue issue)
         {
             _sourceControl = sourceControl;
             _issuesTracking = issuesTracking;
@@ -85,6 +136,19 @@ namespace BL
             UpdateStatusResolved();
         }
 
+        /// <summary>
+        /// Adds a comment to Jira bug
+        /// </summary>
+        /// <param name="text"></param>
+        public Comments AddComment(string text)
+        {
+            var comment = new Comments();
+            comment.Author = Issue.Field.Assignee;
+            comment.Body = text;
+            _issuesTracking.AddMessage(Issue, text);
+            return comment;
+        }
+
 
         /// <summary>
         /// Checks if the Issue is Open or Reopen
@@ -94,21 +158,22 @@ namespace BL
         {
             get
             {
-                var status = Issue.Field.Status.Name;
 
-                return status == "Open" || status == "Reopened";
+                return Issue.Field.Status.Id == (int)JiraItemStatus.Open || Issue.Field.Status.Id == (int)JiraItemStatus.Reopened;
             }
         }
 
         /// <summary>
-        /// Adds a comment to Jira bug
+        /// Checks if the Issue is in progress
         /// </summary>
-        /// <param name="text"></param>
-        public void AddComment(string text)
+        /// <returns>True or false</returns>
+        public bool IsInProgress
         {
-            _issuesTracking.AddMessage(Issue, text);
+            get
+            {
+                return Issue.Field.Status.Id == (int)JiraItemStatus.InProgress;
+            }
         }
-
 
         /// <summary>
         /// Checks if a task is done
@@ -122,6 +187,19 @@ namespace BL
             }
         }
 
+        public void SaveAttachemnt(string filepath, object fileId)
+        {
+            if (Issue.Field.Attachment != null)
+            {
+                var file = Issue.Field.Attachment.FirstOrDefault(attachment => attachment.Id.Equals(fileId));
+                if (file != null)
+                {
+                    File.WriteAllText(filepath, file.Content);
+                }
+            }
+        }
+
+
         /// <summary>
         /// Updates the jira status to In Progress
         /// </summary>
@@ -129,7 +207,7 @@ namespace BL
         {
             if (Issue.Field.Status.Id == (int)JiraItemStatus.Open || Issue.Field.Status.Id == (int)JiraItemStatus.Reopened)
             {
-                _issuesTracking.SetStatus(Issue, JiraTransition.StartProgress,null, FixedVersion);
+                _issuesTracking.SetStatus(Issue, JiraTransition.StartProgress, null, FixedVersion);
                 Issue.Field.Status.Id = (int)JiraItemStatus.InProgress;
             }
         }
@@ -141,7 +219,7 @@ namespace BL
         {
             if (Issue.Field.Status.Id == (int)JiraItemStatus.InProgress)
             {
-                _issuesTracking.SetStatus(Issue, JiraTransition.StopProgress,null, FixedVersion);
+                _issuesTracking.SetStatus(Issue, JiraTransition.StopProgress, null, FixedVersion);
                 Issue.Field.Status.Id = (int)JiraItemStatus.Open;
             }
         }
@@ -163,19 +241,7 @@ namespace BL
 
 
 
-        /// <summary>
-        /// Checks if the Issue is in progress
-        /// </summary>
-        /// <returns>True or false</returns>
-        public bool IsInProgress
-        {
-            get
-            {
-                var status = Issue.Field.Status.Name;
 
-                return status == "In Progress";
-            }
-        }
 
         private string DoneCommitMessage
         {
@@ -184,6 +250,8 @@ namespace BL
                 return Issue.Key + " " + Issue.Field.Summary;
             }
         }
+
+
 
 
         /// <summary>
@@ -230,7 +298,6 @@ namespace BL
             {
                 return false;
             }
-            _sourceControl.Checkout("master");
             return true;
         }
     }

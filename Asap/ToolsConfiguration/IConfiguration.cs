@@ -14,6 +14,8 @@ namespace ToolsConfiguration
 
         IIssuesTrackingConfig IssuesTrackingConfig { get; }
 
+        ICodeReviewConfig CodeReviewConfig { get; }
+
         void Save();
     }
 }

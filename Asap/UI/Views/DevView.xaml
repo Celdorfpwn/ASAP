@@ -18,7 +18,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        
+
         <Style TargetType="Border" x:Key="ListViewBorder" BasedOn="{StaticResource CardBorder}">
             <Setter Property="Margin" Value="5"></Setter>
             <Setter Property="Background" Value="#D4D6D6"></Setter>
@@ -80,7 +80,7 @@
                             <Label Grid.Column="1" HorizontalContentAlignment="Right" Content="{Binding ToDo.Count,UpdateSourceTrigger=PropertyChanged}"></Label>
                             <Label Margin="0,0,2,0" Grid.Column="2" Content="Left"></Label>
                         </Grid>
-                        
+
                     </Border>
                     <ListView Name="ToDoListView" Grid.Row="1" ItemsSource="{Binding ToDo,UpdateSourceTrigger=PropertyChanged}">
                     </ListView>
@@ -152,5 +152,25 @@
                 </Grid>
             </Border>
         </Grid>
+
+        <Popup x:Name="DetailsPopup" PlacementTarget="{Binding ElementName=MainGrid}" Placement="Center" Width="1200" Height="1000">
+
+            <Border BorderBrush="White" BorderThickness="2">
+                <Border.Background>
+                    <SolidColorBrush Color="White"></SolidColorBrush>
+                </Border.Background>
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="10" Color="Black" Direction="235" Opacity=".5" RenderingBias="Quality" ShadowDepth="5" />
+                </Border.Effect>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="20"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Button Grid.Row="0" HorizontalAlignment="Right" Width="20" Content="X" Click="ClosePopup"></Button>
+                    <ContentControl Name="DetailsContent" Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></ContentControl>
+                </Grid>
+            </Border>
+        </Popup>
     </Grid>
 </UserControl>

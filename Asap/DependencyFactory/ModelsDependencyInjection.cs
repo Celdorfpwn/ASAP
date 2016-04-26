@@ -40,7 +40,6 @@ namespace ModelsDI
             }
 
             return instance;
-
         }
     }
 }

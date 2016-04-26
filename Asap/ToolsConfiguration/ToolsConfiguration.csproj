@@ -39,6 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ICodeReviewConfig.cs" />
     <Compile Include="ICredentials.cs" />
     <Compile Include="IConfiguration.cs" />
     <Compile Include="IIssuesTrackingConfig.cs" />

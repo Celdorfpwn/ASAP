@@ -125,34 +125,21 @@ namespace SushiPikant.UI.ViewModels
         }
 
 
+
+        public bool IsCurrent(string key)
+        {
+            return Current != null && Current.ViewModel.Key.Equals(key);
+        }
+
         /// <summary>
         /// Removes an items from the view model collections
         /// </summary>
         /// <param name="item"></param>
         private void RemoveItemFromCollections(TaskView item)
         {
-            var current = _inProgress.FirstOrDefault(task => task.ViewModel.Title.Equals(item.ViewModel.Title));
-            if (current == null)
-            {
-                current = _toDo.FirstOrDefault(task => task.ViewModel.Title.Equals(item.ViewModel.Title));
-                if (current == null)
-                {
-                    current =_done.FirstOrDefault(task => task.ViewModel.Title.Equals(item.ViewModel.Title));
-                    if (current != null)
-                    {
-                        _done.Remove(current);
-                    }
-                }
-                else
-                {
-                    _toDo.Remove(current);
-                }
-            }
-            else
-            {
-                _inProgress.Remove(current);
-            }
-            
+            _toDo.RemoveByKey(item.ViewModel.Key);
+            _inProgress.RemoveByKey(item.ViewModel.Key);
+            _done.RemoveByKey(item.ViewModel.Key);
         }
 
 

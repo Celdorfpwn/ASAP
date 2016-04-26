@@ -37,6 +37,7 @@ namespace SushiPikant.UI.Configuration
             _credentialsView.Model = Model.Credentials;
             _sourceControlView.Model = Model.SourceControlConfig;
             _issuesTrackingView.Model = Model.IssuesTrackingConfig;
+            _codeReviewView.Model = Model.CodeReviewConfig;
             
         }
 
