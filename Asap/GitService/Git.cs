@@ -410,7 +410,7 @@ namespace GitService
             {
                 using (var repo = new Repository(repositoryPath))
                 {
-                    return repo.Head.Name.ToString();
+                    return repo.Head.FriendlyName.ToString();
                 }
             }
             catch(Exception ex)

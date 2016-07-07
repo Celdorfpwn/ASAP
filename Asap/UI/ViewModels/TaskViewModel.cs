@@ -234,13 +234,9 @@ namespace SushiPikant.UI.ViewModels
         {
             get
             {
-                if (_comments == null)
-                {
-                    _comments = new ObservableCollection<Comments>(Model.Comments);
-                }
-
-                return _comments;
+                return new ObservableCollection<Comments>(Model.Comments);
             }
+
         }
 
 
@@ -286,8 +282,6 @@ namespace SushiPikant.UI.ViewModels
             Model = model;
 
             FixedVersions.Clear();
-
-            _comments = null;
 
             foreach (var fixedVersion in Model.FixedVersions)
             {

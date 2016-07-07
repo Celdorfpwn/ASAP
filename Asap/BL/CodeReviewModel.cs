@@ -4,6 +4,7 @@ using IssuesTracking;
 using Repository;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -58,7 +59,7 @@ namespace BL
             }
             catch(Exception e)
             {
-                
+                Debug.WriteLine(e.ToString());
             }
         }
 
@@ -76,7 +77,7 @@ namespace BL
             }
             catch (Exception e)
             {
-
+                Debug.WriteLine(e.ToString());
             }
         }
 
@@ -93,7 +94,7 @@ namespace BL
         {
             using (var repository = _repositoryFactory.NewRepository)
             {
-                return repository.All<AsapTask>().ToList();
+                return repository.All<AsapTask>().Where(task => task.ReviewFinished == false).ToList();
             }
         }
     }
