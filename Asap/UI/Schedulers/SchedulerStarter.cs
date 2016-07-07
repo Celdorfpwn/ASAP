@@ -12,7 +12,8 @@ namespace SushiPikant.UI.Schedulers
     public static class SchedulerStarter
     {
 
-        const int INTERVAL = 30;
+        const int TASKUPDATE_INTERVAL = 30;
+        const int CODEREVIEW_INTERVAL = 120;
 
         public static void StartTaskUpdateScheduler()
         {
@@ -20,13 +21,22 @@ namespace SushiPikant.UI.Schedulers
 
             scheduler.Start();
 
-            var job = JobBuilder.Create<TasksUpdateJob>().Build();
+            var taskUpdate = JobBuilder.Create<TasksUpdateJob>().Build();
 
-            var trigger = TriggerBuilder.Create()
-                .WithDailyTimeIntervalSchedule(s => s.WithIntervalInSeconds(INTERVAL))
+            var codeReview = JobBuilder.Create<CodeReviewJob>().Build();
+
+            var taskUpdateTrigger = TriggerBuilder.Create()
+                .WithDailyTimeIntervalSchedule(s => s.WithIntervalInSeconds(TASKUPDATE_INTERVAL))
                 .Build();
 
-            scheduler.ScheduleJob(job, trigger);
+            var codeReviewTrigger = TriggerBuilder.Create()
+                .WithDailyTimeIntervalSchedule(s => s.WithIntervalInSeconds(CODEREVIEW_INTERVAL))
+                .Build();
+
+
+
+            scheduler.ScheduleJob(taskUpdate, taskUpdateTrigger);
+            scheduler.ScheduleJob(codeReview,codeReviewTrigger);
                 
         }
     }

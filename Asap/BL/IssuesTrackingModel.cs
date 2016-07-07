@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using IssuesTracking;
 using SourceControl;
+using Repository;
+using CodeReview;
 
 namespace BL
 {
@@ -14,10 +16,13 @@ namespace BL
 
         private ISourceControl _sourceControl { get; set; }
 
-        public IssuesTrackingModel(ISourceControl sourceControl,IIssuesTracking issuesTracking)
+        private IRepositoryFactory _repositoryFactory { get; set; }
+
+        public IssuesTrackingModel(ISourceControl sourceControl,IIssuesTracking issuesTracking,IRepositoryFactory repositoryFactory)
         {
             _issuesTracking = issuesTracking;
             _sourceControl = sourceControl;
+            _repositoryFactory = repositoryFactory;
         }
 
 
@@ -36,7 +41,7 @@ namespace BL
             var versions = _issuesTracking.GetVersions().OrderByDescending(version => version.Name);
             foreach (var issue in issues)
             {
-                var model = new TaskModel(_sourceControl, _issuesTracking, issue);
+                var model = new TaskModel(_sourceControl, _issuesTracking,_repositoryFactory, issue);
                 model.AvailableVersions = versions;
                 models.Add(model);
             }

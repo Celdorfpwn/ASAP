@@ -62,9 +62,17 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CodeReview\CodeReview.csproj">
+      <Project>{4aa39927-1c6e-4289-8a0e-338e1d09ee78}</Project>
+      <Name>CodeReview</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ConfigurationDI\ConfigurationDI.csproj">
       <Project>{e684d351-994a-4f5a-928b-e81acf057cf3}</Project>
       <Name>ConfigurationDI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FishEyeService\FishEyeService.csproj">
+      <Project>{234e97f9-d3ac-484d-8b41-b50670ed5db8}</Project>
+      <Name>FishEyeService</Name>
     </ProjectReference>
     <ProjectReference Include="..\GitService\GitService.csproj">
       <Project>{6c3e2abb-8571-45f8-81fb-ce70b74556b7}</Project>

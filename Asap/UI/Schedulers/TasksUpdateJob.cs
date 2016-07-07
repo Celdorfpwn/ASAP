@@ -35,13 +35,13 @@ namespace SushiPikant.UI.Schedulers
                             .Concat(View.ViewModel.InProgress)
                             .Select(view => view.ViewModel.Key);
 
-            UpdateNewModels(models,keys);
+            UpdateNewModels(models, keys);
 
-            RemoveModels(models,keys);
+            RemoveModels(models, keys);
 
             var views = View.ViewModel.ToDo
                             .Concat(View.ViewModel.Done)
-                            .Concat(View.ViewModel.InProgress);
+                            .Concat(View.ViewModel.InProgress).ToList();
 
             if (View.ViewModel.Current != null)
             {
@@ -98,7 +98,7 @@ namespace SushiPikant.UI.Schedulers
             }
         }
 
-        private void RemoveModels(IEnumerable<TaskModel> models,IEnumerable<string> keys)
+        private void RemoveModels(IEnumerable<TaskModel> models, IEnumerable<string> keys)
         {
             var newKeys = models.Select(model => model.Key);
 
@@ -111,7 +111,7 @@ namespace SushiPikant.UI.Schedulers
             }
         }
 
-        private void UpdateNewModels(IEnumerable<TaskModel> models,IEnumerable<string> keys)
+        private void UpdateNewModels(IEnumerable<TaskModel> models, IEnumerable<string> keys)
         {
             var newModels = models
                     .Where(model => !keys.Contains(model.Key)).ToList();

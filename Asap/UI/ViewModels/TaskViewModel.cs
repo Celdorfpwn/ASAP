@@ -20,7 +20,7 @@ namespace SushiPikant.UI.ViewModels
                 return Model.Key;
             }
         }
-           
+
         public string Title
         {
             get
@@ -89,7 +89,14 @@ namespace SushiPikant.UI.ViewModels
         {
             get
             {
-                return Model.Issue.Field.Resolution.Name;
+                if (Model.Issue.Field.Resolution != null)
+                {
+                    return Model.Issue.Field.Resolution.Name;
+                }
+                else
+                {
+                    return String.Empty;
+                }
             }
         }
 
@@ -132,7 +139,7 @@ namespace SushiPikant.UI.ViewModels
                 else
                 {
                     return "Current"; ;
-                }  
+                }
             }
         }
 
@@ -164,6 +171,11 @@ namespace SushiPikant.UI.ViewModels
         {
             get
             {
+
+                if (Model.IsInCodeReview)
+                {
+                    return "Code Review";
+                }
                 return _statusMessage;
             }
             set
@@ -224,7 +236,7 @@ namespace SushiPikant.UI.ViewModels
             {
                 if (_comments == null)
                 {
-                    _comments = new ObservableCollection<Comments>(Model.Comments); 
+                    _comments = new ObservableCollection<Comments>(Model.Comments);
                 }
 
                 return _comments;
@@ -246,7 +258,7 @@ namespace SushiPikant.UI.ViewModels
 
         private ObservableCollection<Comments> _comments { get; set; }
 
-        private TaskModel Model { get;set; }
+        private TaskModel Model { get; set; }
 
         public TaskViewModel(TaskModel model)
         {
@@ -293,7 +305,7 @@ namespace SushiPikant.UI.ViewModels
 
         public void AddComment(string text)
         {
-            Comments.Add(Model.AddComment(text));      
+            Comments.Add(Model.AddComment(text));
         }
 
         public void SaveFile(string filepath, object fileId)
@@ -354,18 +366,13 @@ namespace SushiPikant.UI.ViewModels
         /// </summary>
         public bool CommitBranch()
         {
-            if (Model.CommitBranchDone())
-            {
-                Resolve();
-                RaisePropertyChanged("CurrentTask");
-                StatusMessage = "Code Review";
+            Model.CommitBranchDone();
+            Resolve();
+            RaisePropertyChanged("CurrentTask");
+            StatusMessage = "Code Review";
 
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return true;
+
 
         }
 

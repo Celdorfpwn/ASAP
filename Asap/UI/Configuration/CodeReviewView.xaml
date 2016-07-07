@@ -19,6 +19,8 @@
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="100"></ColumnDefinition>
@@ -30,10 +32,14 @@
         <Label Grid.Column="0" Grid.Row="2" Content="Password" Style="{StaticResource SettingLabel}"></Label>
         <Label Grid.Column="0" Grid.Row="3" Content="BaseUrl" Style="{StaticResource SettingLabel}"></Label>
         <Label Grid.Column="0" Grid.Row="4" Content="Project" Style="{StaticResource SettingLabel}"></Label>
+        <Label Grid.Column="0" Grid.Row="5" Content="Repository" Style="{StaticResource SettingLabel}"></Label>
+        <Label Grid.Column="0" Grid.Row="6" Content="Committer" Style="{StaticResource SettingLabel}"></Label>
 
         <TextBox Grid.Column="1" Grid.Row="1" Text="{Binding Username}" Style="{StaticResource SettingsTextBox}"></TextBox>
         <PasswordBox Grid.Column="1" Grid.Row="2"  Style="{StaticResource SettingsPasswords}"></PasswordBox>
         <TextBox Grid.Column="1" Grid.Row="3" Text="{Binding BaseUrl}" Style="{StaticResource SettingsTextBox}"></TextBox>
         <TextBox Grid.Column="1" Grid.Row="4" Text="{Binding Project}" Style="{StaticResource SettingsTextBox}"></TextBox>
+        <TextBox Grid.Column="1" Grid.Row="5" Text="{Binding Repository}" Style="{StaticResource SettingsTextBox}"></TextBox>
+        <TextBox Grid.Column="1" Grid.Row="6" Text="{Binding Committer}" Style="{StaticResource SettingsTextBox}"></TextBox>
     </Grid>
 </UserControl>

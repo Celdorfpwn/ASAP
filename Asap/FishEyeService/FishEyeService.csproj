@@ -42,11 +42,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Enums.cs" />
-    <Compile Include="IFishEye.cs" />
-    <Compile Include="JSONDataMembers.cs" />
     <Compile Include="FishEye.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CodeReview\CodeReview.csproj">
+      <Project>{4aa39927-1c6e-4289-8a0e-338e1d09ee78}</Project>
+      <Name>CodeReview</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ToolsConfiguration\ToolsConfiguration.csproj">
+      <Project>{8364b339-6499-493f-acc3-dc8534bf3e94}</Project>
+      <Name>ToolsConfiguration</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

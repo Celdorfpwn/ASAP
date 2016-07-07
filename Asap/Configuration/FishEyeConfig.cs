@@ -63,6 +63,30 @@ namespace GitJiraConfiguration
             }
         }
 
+        public string Repository
+        {
+            get
+            {
+                return FisheyeRepository.Value.Decrypt();
+            }
+            set
+            {
+                FisheyeRepository.Value = value.Encrypt();
+            }
+        }
+
+        public string Committer
+        {
+            get
+            {
+                return FisheyeCommitter.Value.Decrypt();
+            }
+            set
+            {
+                FisheyeCommitter.Value = value.Encrypt();
+            }
+        }
+
         internal Setting FisheyeUsername { get; set; }
 
         internal Setting FisheyePassword { get; set; }
@@ -70,5 +94,10 @@ namespace GitJiraConfiguration
         internal Setting FisheyeProject { get; set; }
 
         internal Setting FisheyeBaseUrl { get; set; }
+
+        internal Setting FisheyeRepository { get; set; }
+
+        internal Setting FisheyeCommitter { get; set; }
+
     }
 }

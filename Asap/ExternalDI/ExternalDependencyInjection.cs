@@ -10,6 +10,8 @@ using JiraService;
 using Microsoft.Practices.Unity;
 using SourceControl;
 using ToolsConfiguration;
+using CodeReview;
+using FishEyeService;
 
 namespace ExternalDI
 {
@@ -29,6 +31,7 @@ namespace ExternalDI
             var configuration = ConfigurationDependencyInjection.Resolve<IConfiguration>();
             _container.RegisterType<ISourceControl, Git>(new InjectionConstructor(configuration.SourceControlConfig));
             _container.RegisterType<IIssuesTracking, Jira>(new InjectionConstructor(configuration.IssuesTrackingConfig));
+            _container.RegisterType<ICodeReview, FishEye>(new InjectionConstructor(configuration.CodeReviewConfig));
         }
 
         public static Dependency Resolve<Dependency>()

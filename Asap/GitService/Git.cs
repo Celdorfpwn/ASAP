@@ -3,7 +3,7 @@ using LibGit2Sharp;
 using LibGit2Sharp.Handlers;
 using SourceControl;
 using ToolsConfiguration;
-
+using System.Linq;
 namespace GitService
 {
     /// <summary>
@@ -64,6 +64,7 @@ namespace GitService
         /// <returns>CommandStatus</returns>
         public ECommandStatus Branch(string branchName, bool delete = false, bool isRemote = false)
         {
+            Pull(Config.Path);
             return Branch(Config.Path, branchName, delete, isRemote);
         }
 
@@ -124,6 +125,22 @@ namespace GitService
         public string GetLastCommit()
         {
             return GetLastCommit(Config.Path);
+        }
+
+        public string GetCommitId(string key)
+        {
+            try
+            {
+                using (var repo = new Repository(Config.Path))
+                {
+                    return repo.Head.Commits.FirstOrDefault(commit => commit.Message.StartsWith(key)).Id.Sha;
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                return string.Empty;
+            }
         }
 
         #endregion

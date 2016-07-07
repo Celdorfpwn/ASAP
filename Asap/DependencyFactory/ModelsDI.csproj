@@ -69,6 +69,14 @@
       <Project>{ebbb6b94-38ac-473c-a474-018a1eb17a9e}</Project>
       <Name>BL</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CodeReview\CodeReview.csproj">
+      <Project>{4aa39927-1c6e-4289-8a0e-338e1d09ee78}</Project>
+      <Name>CodeReview</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DatabaseDI\DatabaseDI.csproj">
+      <Project>{2f4b7199-16ca-416c-959c-c7a7c3365c61}</Project>
+      <Name>DatabaseDI</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ExternalDI\ExternalDI.csproj">
       <Project>{6f082638-03bd-4edc-b049-8e0bfe42bab6}</Project>
       <Name>ExternalDI</Name>
@@ -76,6 +84,10 @@
     <ProjectReference Include="..\IssuesTracking\IssuesTracking.csproj">
       <Project>{07410fd9-44c8-4635-bad9-5526024f8da4}</Project>
       <Name>IssuesTracking</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Repository\Repository.csproj">
+      <Project>{b6d3cac1-35d7-477e-9549-3e490df38aad}</Project>
+      <Name>Repository</Name>
     </ProjectReference>
     <ProjectReference Include="..\SourceControl\SourceControl.csproj">
       <Project>{65c01e51-42c5-49d3-96df-f6a454e2e2c1}</Project>

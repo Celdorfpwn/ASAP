@@ -1,42 +1,89 @@
-﻿using System;
+﻿using CodeReview;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Xml;
+using ToolsConfiguration;
 
 namespace FishEyeService
 {
-    public class FishEye 
+    public class FishEye : ICodeReview
     {   
-        public readonly string FISHEYE_PROJECT = "SOCHEU";
-    //    private readonly string BASE_FISHEYE_URL = "https://fisheye.softvision.ro/rest-service-fe/";
-        private readonly string BASE_CRUCIBLE_URL = "https://fisheye.softvision.ro/rest-service/";
-    //    private readonly string BASE_FECRU_URL = "https://fisheye.softvision.ro/rest-service-fecru/";
 
-        private string _userName = "";
-        private string _password = "";
 
-        public string UserName
+        private ICodeReviewConfig Config { get; set; }
+
+        public FishEye(ICodeReviewConfig config)
         {
-            get { return _userName; }
-            set { _userName = value; }
+            Config = config;
         }
 
-        public string Password
+
+        public ReviewData CreateReview(string commit, string name, string description, string summary, string jiraKey)
         {
-            get { return _password; }
-            set { _password = value; }
+            if(CheckChangeset(commit))
+            {
+
+         
+            var newReview = new CreateReview();
+            newReview.ChangeSets = new ChangeSet { 
+                    ChangeSets = new IdType[] { 
+                    new IdType { Id = commit} 
+                },
+                    Repository = Config.Repository 
+            };
+              
+            var user = FishEyeUser;
+
+            newReview.ReviewData = new ReviewData
+            {
+                Author = user,
+                Moderator = user,
+                Creator = user,
+                AllowReviewersToJoin = true,
+                Name = name,
+                ProjectKey = Config.Project,
+                Description = description,
+                State = "Review",
+                PermaId = new IdType { Id = ""},
+                Type = "REVIEW",
+                CreateDate = CurrentDate,
+                JiraIssueKey = jiraKey,
+                Summary = summary,
+            };
+
+
+            return JsonConvert.DeserializeObject<ReviewData>(CreateReview(newReview));
+            }
+            else
+            {
+                return null;
+            }
         }
 
-        public void CreateReview(CreateReview newReview)
+        private bool CheckChangeset(string commit)
+        {
+            string query = string.Format("revisionData-v1/changeset/{0}/{1}", Config.Repository, commit);
+            var result = RunFeQuery(query);
+            return result.Contains(commit);
+        }
+
+        public int CountReviewers(string id)
+        {
+            return GetCompletedReviewers(id).Reviewer.Length;
+        }
+
+        private string CreateReview(CreateReview newReview)
         {
             string query = "reviews-v1";
 
-            string data = Newtonsoft.Json.JsonConvert.SerializeObject(newReview);
+           string data = JsonConvert.SerializeObject(newReview);
 
-            string response = RunQuery(query, data, "POST");           
+           return RunQuery(query, data, "POST");           
         }
 
         /// <summary>
@@ -44,12 +91,12 @@ namespace FishEyeService
         /// </summary>
         /// <param name="id"></param>
         /// <returns>Review</returns>
-        public ReviewData GetReview(int id)
+        private ReviewData GetReview(int id)
         {
-            string query = string.Format("reviews-v1/{0}-{1}", FISHEYE_PROJECT, id);
+            string query = string.Format("reviews-v1/{0}-{1}", Config.Project, id);
             string response = RunQuery(query);
 
-            var review = Newtonsoft.Json.JsonConvert.DeserializeObject<ReviewData>(response);
+            var review = JsonConvert.DeserializeObject<ReviewData>(response);
             return review;
         }
 
@@ -58,25 +105,22 @@ namespace FishEyeService
         /// </summary>
         /// <param name="id"></param>
         /// <returns>Review</returns>
-        public ReviewData GetReview(string id)
+        private ReviewData GetReview(string id)
         {
             string query = string.Format("reviews-v1/{0}", id);
             string response = RunQuery(query);
-
-            var review = Newtonsoft.Json.JsonConvert.DeserializeObject<ReviewData>(response);
-            return review;
+            return JsonConvert.DeserializeObject<ReviewData>(response);
         }
 
         /// <summary>
         /// Returns an array of all reviews out for review for the current user.
         /// </summary>
         /// <returns>Reviews array</returns>
-        public ReviewArray GetReviewsOutForReview()
+        private ReviewArray GetReviewsOutForReview()
         {
             string query = string.Format("reviews-v1/filter/outForReview");
             string response = RunQuery(query);
-
-            var reviews = Newtonsoft.Json.JsonConvert.DeserializeObject<ReviewArray>(response);
+            var reviews = JsonConvert.DeserializeObject<ReviewArray>(response);
 
             return reviews;
         }
@@ -86,12 +130,12 @@ namespace FishEyeService
         /// </summary>
         /// <param name="id"></param>
         /// <returns>Reviewers array</returns>
-        public ReviewerArray GetCompletedReviewers(string id)
+        private ReviewerArray GetCompletedReviewers(string id)
         {
             string query = string.Format("reviews-v1/{0}/reviewers/completed", id);
             string response = RunQuery(query);
 
-            var reviewers = Newtonsoft.Json.JsonConvert.DeserializeObject<ReviewerArray>(response);
+            var reviewers = JsonConvert.DeserializeObject<ReviewerArray>(response);
 
             return reviewers;
         }
@@ -101,12 +145,12 @@ namespace FishEyeService
         /// </summary>
         /// <param name="id"></param>
         /// <returns>Reviewers array</returns>
-        public ReviewerArray GetCompletedReviewers(int id)
+        private ReviewerArray GetCompletedReviewers(int id)
         {
-            string query = string.Format("reviews-v1/{0}-{1}/reviewers/completed",FISHEYE_PROJECT, id);
+            string query = string.Format("reviews-v1/{0}-{1}/reviewers/completed",Config.Project, id);
             string response = RunQuery(query);
 
-            var reviewers = Newtonsoft.Json.JsonConvert.DeserializeObject<ReviewerArray>(response);
+            var reviewers = JsonConvert.DeserializeObject<ReviewerArray>(response);
 
             return reviewers;
         }
@@ -116,12 +160,12 @@ namespace FishEyeService
         /// </summary>
         /// <param name="id"></param>
         /// <returns>Reviewers array</returns>
-        public ReviewerArray GetUncompletedReviewers(string id)
+        private ReviewerArray GetUncompletedReviewers(string id)
         {
             string query = string.Format("reviews-v1/{0}/reviewers/uncompleted", id);
             string response = RunQuery(query);
 
-            var reviewers = Newtonsoft.Json.JsonConvert.DeserializeObject<ReviewerArray>(response);
+            var reviewers = JsonConvert.DeserializeObject<ReviewerArray>(response);
 
             return reviewers;
         }
@@ -131,12 +175,12 @@ namespace FishEyeService
         /// </summary>
         /// <param name="id"></param>
         /// <returns>Reviewers array</returns>
-        public ReviewerArray GetUncompletedReviewers(int id)
+        private ReviewerArray GetUncompletedReviewers(int id)
         {
-            string query = string.Format("reviews-v1/{0}-{1}/reviewers/uncompleted", FISHEYE_PROJECT, id);
+            string query = string.Format("reviews-v1/{0}-{1}/reviewers/uncompleted", Config.Project, id);
             string response = RunQuery(query);
 
-            var reviewers = Newtonsoft.Json.JsonConvert.DeserializeObject<ReviewerArray>(response);
+            var reviewers = JsonConvert.DeserializeObject<ReviewerArray>(response);
 
             return reviewers;
         }
@@ -152,7 +196,7 @@ namespace FishEyeService
         {
             string url = string.Empty;
 
-            url = string.Format("{0}{1}", BASE_CRUCIBLE_URL, argument);
+            url = string.Format("{0}{1}", Config.BaseUrl, argument);
 
             ServicePointManager.Expect100Continue = false;
             HttpWebRequest request = WebRequest.Create(url) as HttpWebRequest;
@@ -160,7 +204,7 @@ namespace FishEyeService
             request.Accept = "application/json";
             request.Method = method;
 
-            string base64Credentials = Base64Encode(_userName + ":" + _password);
+            string base64Credentials = Base64Encode(Config.Username + ":" + Config.Password);
             request.Headers.Add("Authorization", "Basic " + base64Credentials);
 
             if (data != null)
@@ -172,9 +216,19 @@ namespace FishEyeService
                     requestStream.Write(bytes, 0, bytes.Length);
                 }
             }
+            HttpWebResponse response = null;
+            string pageContent = String.Empty;
+            try
+            {
 
-
-            HttpWebResponse response = request.GetResponse() as HttpWebResponse;
+                response = request.GetResponse() as HttpWebResponse;
+            }
+            catch (WebException wex)
+            {
+                pageContent = new StreamReader(wex.Response.GetResponseStream())
+                                      .ReadToEnd();
+                
+            }
 
 
             if (response.StatusCode != HttpStatusCode.OK && response.StatusCode != HttpStatusCode.Created)
@@ -190,10 +244,83 @@ namespace FishEyeService
             return result;
         }
 
-        private static string Base64Encode(string plainText)
+        private string RunFeQuery(string argument = null, string data = null, string method = "GET")
+        {
+            string url = string.Empty;
+
+            url = string.Format("{0}{1}", Config.BaseUrl.Replace("rest-service", "rest-service-fe"), argument);
+
+            ServicePointManager.Expect100Continue = false;
+            HttpWebRequest request = WebRequest.Create(url) as HttpWebRequest;
+            request.ContentType = "application/json";
+            request.Accept = "application/json";
+            request.Method = method;
+
+            string base64Credentials = Base64Encode(Config.Username + ":" + Config.Password);
+            request.Headers.Add("Authorization", "Basic " + base64Credentials);
+
+            if (data != null)
+            {
+                UTF8Encoding encoding = new UTF8Encoding();
+                byte[] bytes = encoding.GetBytes(data);
+                using (Stream requestStream = request.GetRequestStream())
+                {
+                    requestStream.Write(bytes, 0, bytes.Length);
+                }
+            }
+            HttpWebResponse response = null;
+            string pageContent = String.Empty;
+            try
+            {
+
+                response = request.GetResponse() as HttpWebResponse;
+            }
+            catch (WebException wex)
+            {
+                pageContent = new StreamReader(wex.Response.GetResponseStream())
+                                      .ReadToEnd();
+
+            }
+
+
+            if (response.StatusCode != HttpStatusCode.OK && response.StatusCode != HttpStatusCode.Created)
+            {
+                throw new Exception(String.Format("Server error (HTTP {0}: {1}).", response.StatusCode, response.StatusDescription));
+            }
+
+            string result = string.Empty;
+            using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+            {
+                result = reader.ReadToEnd();
+            }
+            return result;
+        }
+
+
+
+        private UserData FishEyeUser
+        {
+            get
+            {
+                return JsonConvert.DeserializeObject<User>(RunQuery("users-v1?username=" + Config.Username)).Data[0];
+            }
+        }
+
+        private string CurrentDate
+        {
+            get
+            {
+                var splitt = DateTimeOffset.UtcNow.ToString("yyyy-MM-ddThh:mm:sszzz").Split('+');
+
+                return splitt[0]+".123" + "+" + splitt[1].Replace(":", "");
+            }
+        }
+
+        private string Base64Encode(string plainText)
         {
             var plainTextBytes = Encoding.UTF8.GetBytes(plainText);
             return Convert.ToBase64String(plainTextBytes);
         }
+
     }
 }

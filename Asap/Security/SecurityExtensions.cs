@@ -19,7 +19,14 @@ namespace Security
 
         public static string Decrypt(this string value)
         {
-            return Cryptography.Decrypt<AesManaged>(value, password);
+            if (String.IsNullOrEmpty(value))
+            {
+                return String.Empty;
+            }
+            else
+            {
+                return Cryptography.Decrypt<AesManaged>(value, password);
+            }
         }
     }
 }

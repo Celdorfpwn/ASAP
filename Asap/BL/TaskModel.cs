@@ -7,6 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 using IssuesTracking;
 using SourceControl;
+using Repository;
+using Entities;
 
 namespace BL
 {
@@ -16,6 +18,8 @@ namespace BL
 
         private IIssuesTracking _issuesTracking { get; set; }
 
+        private IRepositoryFactory _repositoryFactory { get; set; }
+
         public Issue Issue { get; set; }
 
         private bool _isDone { get; set; }
@@ -23,7 +27,6 @@ namespace BL
         private string _resolveMessage { get; set; }
 
         private IEnumerable<ItVersion> _availableVersions { get; set; }
-
 
         public string Key
         {
@@ -33,7 +36,6 @@ namespace BL
             }
         }
 
-
         public bool Current
         {
             get
@@ -41,8 +43,6 @@ namespace BL
                 return Issue.Key == _sourceControl.GetCurrentBranch();
             }
         }
-
-
 
         public ItVersion FixedVersion { get; set; }
 
@@ -79,12 +79,11 @@ namespace BL
             }
         }
 
-
-
-        public TaskModel(ISourceControl sourceControl, IIssuesTracking issuesTracking, Issue issue)
+        public TaskModel(ISourceControl sourceControl, IIssuesTracking issuesTracking, IRepositoryFactory repositoryFactory, Issue issue)
         {
             _sourceControl = sourceControl;
             _issuesTracking = issuesTracking;
+            _repositoryFactory = repositoryFactory;
             Issue = issue;
         }
 
@@ -158,6 +157,7 @@ namespace BL
             }
         }
 
+
         public void SaveAttachemnt(string filepath, object fileId)
         {
             if (Issue.Field.Attachment != null)
@@ -189,7 +189,7 @@ namespace BL
         {
             if (Issue.Field.Status.Id == (int)JiraItemStatus.Open || Issue.Field.Status.Id == (int)JiraItemStatus.Reopened)
             {
-                _issuesTracking.SetStatus(Issue, JiraTransition.StartProgress, null, FixedVersion);
+                Task.Run(() => _issuesTracking.SetStatus(Issue, JiraTransition.StartProgress, null, FixedVersion));
                 Issue.Field.Status.Id = (int)JiraItemStatus.InProgress;
                 Issue.Field.Status.Name = "In Progress";
             }
@@ -202,7 +202,7 @@ namespace BL
         {
             if (Issue.Field.Status.Id == (int)JiraItemStatus.InProgress)
             {
-                _issuesTracking.SetStatus(Issue, JiraTransition.StopProgress, null, FixedVersion);
+                Task.Run(() => _issuesTracking.SetStatus(Issue, JiraTransition.StopProgress, null, FixedVersion));
                 Issue.Field.Status.Id = (int)JiraItemStatus.Open;
                 Issue.Field.Status.Name = "In Open";
             }
@@ -215,11 +215,23 @@ namespace BL
         {
             if (Issue.Field.Status.Id == (int)JiraItemStatus.InProgress)
             {
-                _issuesTracking.SetStatus(Issue, JiraTransition.Resolve, Issue.Key + " " + Issue.Field.Summary + ". " + _resolveMessage, FixedVersion);
+                Task.Run(() => _issuesTracking.SetStatus(Issue, JiraTransition.Resolve, Issue.Key + " " + Issue.Field.Summary + ". " + _resolveMessage, FixedVersion));
                 Issue.Field.Status.Id = (int)JiraItemStatus.Resolved;
                 Issue.Field.Status.Name = "Done";
-                _sourceControl.Checkout("master");
-                _sourceControl.Merge(Key);
+                //_sourceControl.Merge(Key);
+            }
+        }
+
+        private void SaveIssue()
+        {
+            var asapTask = new AsapTask();
+            asapTask.JiraId = Issue.Key;
+            asapTask.CommitId = _sourceControl.GetCommitId(Key);
+            asapTask.ReviewFinished = false;
+            using(var repository = _repositoryFactory.NewRepository)
+            {
+                repository.Add<AsapTask>(asapTask);
+                repository.Save();
             }
         }
 
@@ -238,6 +250,12 @@ namespace BL
         /// Checks out the issue branch.If doesn't exists it will be created.
         /// </summary>
         public void CheckoutBranch()
+        {
+            Task.Run(() => CheckoutCurrentBranch());
+        }
+
+
+        private void CheckoutCurrentBranch()
         {
             CreateBranchIfDoesntExists();
             _sourceControl.Checkout(Issue.Key);
@@ -261,7 +279,7 @@ namespace BL
         {
             CreateBranchIfDoesntExists();
             _sourceControl.Commit(Issue.Key + "  work in progress " + DateTime.Today.ToShortDateString());
-            _sourceControl.Push(Issue.Key);
+            _sourceControl.Push("origin",Issue.Key);
             _sourceControl.Checkout("master");
         }
 
@@ -271,14 +289,39 @@ namespace BL
         /// </summary>
         public bool CommitBranchDone()
         {
-            CreateBranchIfDoesntExists();
-            var result = _sourceControl.Commit(DoneCommitMessage);
+            Task.Run(() => CommitCurrentBranchDone());
+            return true;
+        }
 
-            if (result != ECommandStatus.OK)
+        private void CommitCurrentBranchDone()
+        {
+            CreateBranchIfDoesntExists();
+
+            var result = _sourceControl.Commit(DoneCommitMessage);
+            _sourceControl.Push("origin", Issue.Key);
+            if (result == ECommandStatus.OK)
             {
+                SaveIssue();
+                _sourceControl.Checkout("master");
+            }
+        }
+
+        public bool IsInCodeReview
+        {
+            get
+            {
+                using(var repository = _repositoryFactory.NewRepository)
+                {
+                    var dbTask = repository.Get<AsapTask>(Issue.Key);
+
+                    if(dbTask!= null)
+                    {
+                        return !dbTask.ReviewFinished;
+                    }
+                }
+
                 return false;
             }
-            return true;
         }
     }
 }

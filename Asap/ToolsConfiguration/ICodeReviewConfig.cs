@@ -15,5 +15,9 @@ namespace ToolsConfiguration
         string Project { get; set; }
 
         string BaseUrl { get; set; }
+
+        string Repository { get; set; }
+
+        string Committer { get; set; }
     }
 }

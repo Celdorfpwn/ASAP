@@ -7,6 +7,9 @@ using ExternalDI;
 using IssuesTracking;
 using Microsoft.Practices.Unity;
 using SourceControl;
+using CodeReview;
+using DatabaseDI;
+using Repository;
 
 
 namespace ModelsDI
@@ -26,8 +29,17 @@ namespace ModelsDI
         private static void ConfigureDIs()
         {
 
-            _container.RegisterType<TasksModel>(new InjectionConstructor(ExternalDependencyInjection.Resolve<ISourceControl>(), ExternalDependencyInjection.Resolve<IIssuesTracking>()));
-            _container.RegisterType<IssuesTrackingModel>(new InjectionConstructor(ExternalDependencyInjection.Resolve<ISourceControl>(), ExternalDependencyInjection.Resolve<IIssuesTracking>()));
+            _container.RegisterType<TasksModel>(new InjectionConstructor(ExternalDependencyInjection.Resolve<ISourceControl>()
+                , ExternalDependencyInjection.Resolve<IIssuesTracking>()
+                , DatabaseDependencyInjection.Resolve<IRepositoryFactory>()));
+
+            _container.RegisterType<IssuesTrackingModel>(new InjectionConstructor(ExternalDependencyInjection.Resolve<ISourceControl>() 
+                , ExternalDependencyInjection.Resolve<IIssuesTracking>()
+                , DatabaseDependencyInjection.Resolve<IRepositoryFactory>()));
+
+            _container.RegisterType<CodeReviewModel>(new InjectionConstructor(ExternalDependencyInjection.Resolve<IIssuesTracking>()
+                , ExternalDependencyInjection.Resolve<ICodeReview>()
+                , DatabaseDependencyInjection.Resolve<IRepositoryFactory>()));
         }
 
         public static Dependency Resolve<Dependency>()

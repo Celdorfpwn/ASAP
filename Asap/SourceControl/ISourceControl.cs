@@ -17,5 +17,6 @@ namespace SourceControl
         ECommandStatus Merge(string branchName);
         string GetCurrentBranch();
         string GetLastCommit();
+        string GetCommitId(string key);
     }
 }

@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using IssuesTracking;
 using SourceControl;
+using CodeReview;
+using Repository;
 
 namespace BL
 {
@@ -15,16 +17,18 @@ namespace BL
 
         private IIssuesTracking _issuesTracking { get;set; }
 
+        private IRepositoryFactory _repositoryFactory { get; set; }
         private Issue[] Issues { get; set; }
 
         private List<TaskModel> Models { get;set; }
 
         private IEnumerable<ItVersion> Versions { get; set; }
 
-        public TasksModel(ISourceControl sourceControl,IIssuesTracking issuesTracking)
+        public TasksModel(ISourceControl sourceControl, IIssuesTracking issuesTracking, IRepositoryFactory repositoryFactory)
         {
             _sourceControl = sourceControl;
             _issuesTracking = issuesTracking;
+            _repositoryFactory = repositoryFactory;
             LoadModels();
         }
 
@@ -62,7 +66,7 @@ namespace BL
             Versions = _issuesTracking.GetVersions().OrderByDescending(version => version.Name);
             foreach (var issue in Issues)
             {
-                var model = new TaskModel(_sourceControl, _issuesTracking, issue);
+                var model = new TaskModel(_sourceControl, _issuesTracking,_repositoryFactory ,issue);
                 model.AvailableVersions = Versions;
                 models.Add(model);
             }

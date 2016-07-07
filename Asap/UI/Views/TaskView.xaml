@@ -24,11 +24,11 @@
                 <Grid >
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="2*"></ColumnDefinition>
-                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="2*"></ColumnDefinition>
                         <ColumnDefinition Width="2*"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
                     <Label Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center"  VerticalContentAlignment="Center" Content="{Binding Title}"></Label>
-                    <ComboBox Margin="4" Grid.Column="1" Width="100" ItemsSource="{Binding AvailableVersions}" DisplayMemberPath="Name" SelectedValue="{Binding FixedVersion}" Style="{StaticResource {x:Static ToolBar.ComboBoxStyleKey}}" SelectedIndex="2" Visibility="{Binding CurrentTask,UpdateSourceTrigger=PropertyChanged}" ></ComboBox>
+                    <ComboBox Margin="4" Grid.Column="1" HorizontalAlignment="Stretch" ItemsSource="{Binding AvailableVersions}" DisplayMemberPath="Name" SelectedValue="{Binding FixedVersion}" Style="{StaticResource {x:Static ToolBar.ComboBoxStyleKey}}" SelectedIndex="2" Visibility="{Binding CurrentTask,UpdateSourceTrigger=PropertyChanged}" ></ComboBox>
                     <Label Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center" VerticalContentAlignment="Center" Content="{Binding Reporter}"></Label>
 
                 </Grid>

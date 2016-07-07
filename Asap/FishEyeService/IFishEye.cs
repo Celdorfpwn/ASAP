@@ -1,6 +1,0 @@
-﻿namespace FishEyeService
-{
-    interface IFishEye
-    {
-    }
-}

@@ -195,6 +195,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Schedulers\CodeReviewJob.cs" />
     <Compile Include="Schedulers\SchedulerStarter.cs" />
     <Compile Include="Schedulers\TasksUpdateJob.cs" />
     <Compile Include="Security\LoginView.xaml.cs">

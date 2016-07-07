@@ -54,6 +54,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CodeReviewModel.cs" />
     <Compile Include="IssuesTrackingModel.cs" />
     <Compile Include="TasksModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -65,9 +66,21 @@
     <Compile Include="TaskModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CodeReview\CodeReview.csproj">
+      <Project>{4aa39927-1c6e-4289-8a0e-338e1d09ee78}</Project>
+      <Name>CodeReview</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Entities\Entities.csproj">
+      <Project>{5bb3019b-9db6-4f2d-a795-eebdf47ff067}</Project>
+      <Name>Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\IssuesTracking\IssuesTracking.csproj">
       <Project>{07410fd9-44c8-4635-bad9-5526024f8da4}</Project>
       <Name>IssuesTracking</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Repository\Repository.csproj">
+      <Project>{b6d3cac1-35d7-477e-9549-3e490df38aad}</Project>
+      <Name>Repository</Name>
     </ProjectReference>
     <ProjectReference Include="..\SourceControl\SourceControl.csproj">
       <Project>{65c01e51-42c5-49d3-96df-f6a454e2e2c1}</Project>

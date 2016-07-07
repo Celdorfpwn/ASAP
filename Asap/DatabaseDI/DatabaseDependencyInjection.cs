@@ -23,6 +23,7 @@ namespace DatabaseDI
         private static void ConfigureDIs()
         {
             _container.RegisterType<IRepository, EntityFrameworkRepository>();
+            _container.RegisterType<IRepositoryFactory,EntityFrameworkFactory>();
         }
 
         public static Dependency Resolve<Dependency>()
